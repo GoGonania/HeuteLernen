@@ -42,20 +42,6 @@ public class ScreenMain extends Screen{
 	}
 	
 	public void menu(Menu m){
-		m.add("Profil").setIcon(R.drawable.profil).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
-			public boolean onMenuItemClick(MenuItem p1){
-				ScreenProfil.show(Sitzung.info);
-				return true;
-			}
-		}).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		
-		m.add("Chats").setIcon(R.drawable.chat).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
-			public boolean onMenuItemClick(MenuItem p1){
-				Util.setScreen(new ScreenChats());
-				return true;
-			}
-		}).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-			
 		m.add("Ausloggen").setIcon(R.drawable.logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
 			public boolean onMenuItemClick(MenuItem p1){
 				Dialog.confirm("Willst du dich wirklich ausloggen?", new ConfirmListener() {

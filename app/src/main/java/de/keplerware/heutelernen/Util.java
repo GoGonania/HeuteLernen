@@ -10,7 +10,9 @@ import android.os.PowerManager.WakeLock;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ public class Util{
     public static TabLayout tabs;
     public static Toolbar bar;
     private static FragmentManager fm;
+    public static boolean selected;
 	
 	public static String fileDir;
 	public static String appname;
@@ -51,11 +54,17 @@ public class Util{
             bar = (Toolbar) MainActivity.a.findViewById(R.id.toolbar);
             fm = MainActivity.a.getSupportFragmentManager();
 
+            MainActivity.a.setSupportActionBar(bar);
+
             tabs.addTab(tabs.newTab().setText("Chats"));
             tabs.addTab(tabs.newTab().setText("Startmenu"));
             tabs.addTab(tabs.newTab().setText("Profil"));
             tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 public void onTabSelected(TabLayout.Tab tab){
+                    if(selected){
+                        selected = false;
+                        return;
+                    }
                     switch(tab.getPosition()){
                         case 0:
                             Util.setScreen(new ScreenChats());
@@ -86,6 +95,14 @@ public class Util{
 			serviceIntent = new Intent(c, MyService.class);
 		}
 	}
+
+    public static void selectTab(int tab){
+        TabLayout.Tab t = tabs.getTabAt(tab);
+        if(!t.isSelected()){
+            selected = true;
+            t.select();
+        }
+    }
 	
 	public static void startService(){
 		c.startService(serviceIntent);
@@ -114,10 +131,12 @@ public class Util{
         boolean v = s.tab != -1;
         tabs.setVisibility(v ? View.VISIBLE : View.GONE);
         FragmentTransaction transaction = fm.beginTransaction();
+        if(!v) transaction.setCustomAnimations(R.anim.in, 0);
         transaction.replace(R.id.app, s);
         transaction.commit();
+        fm.executePendingTransactions();
 		bar.setTitle(v ? appname : s.getTitle());
-		bar.setCollapsible(s.parent != null);
+		MainActivity.a.getSupportActionBar().setDisplayHomeAsUpEnabled(s.parent != null && !v);
 		MainActivity.a.invalidateOptionsMenu();
 	}
 	

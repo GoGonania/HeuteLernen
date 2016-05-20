@@ -1,6 +1,7 @@
 package de.keplerware.heutelernen;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import de.keplerware.heutelernen.Dialog.ConfirmListener;
@@ -26,7 +27,7 @@ public abstract class Screen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         root = inflater.inflate(getLayout(), container, false);
         if(tab != -1){
-            Util.tabs.getTabAt(tab).select();
+            Util.selectTab(tab);
         }
         show();
         return root;
