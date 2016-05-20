@@ -24,6 +24,10 @@ public class ScreenMain extends Screen{
 	private MySpinner s;
 	private LinearLayout l;
 	private static Angebot[] angebote;
+
+	public ScreenMain(){
+		super(1);
+	}
 	
 	public Screen getParentScreen(){
 		return null;
@@ -34,7 +38,7 @@ public class ScreenMain extends Screen{
 	}
 
 	public String getTitle(){
-		return Util.appname;
+		return null;
 	}
 	
 	public void menu(Menu m){

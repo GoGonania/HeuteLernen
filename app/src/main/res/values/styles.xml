@@ -1,14 +1,12 @@
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/actionbar</item>
         <item name="colorPrimaryDark">@color/actionbarDunkler</item>
         <item name="colorAccent">@color/actionbar</item>
-        <item name="tabBackground">@color/actionbar</item>
-        <item name="tabIndicatorColor">@color/actionbarDunkler</item>
     </style>
 
     <style name="TabLayoutTheme" parent="Widget.Design.TabLayout">
         <item name="tabBackground">@color/actionbar</item>
-        <item name="tabIndicatorColor">@color/actionbarDunkler</item>
+        <item name="tabIndicatorColor">#000000</item>
     </style>
 </resources>

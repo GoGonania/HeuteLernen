@@ -1,22 +1,38 @@
 package de.keplerware.heutelernen;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import de.keplerware.heutelernen.Dialog.ConfirmListener;
 import android.view.*;
 
-public abstract class Screen{
+public abstract class Screen extends Fragment {
 	public Screen parent;
+    private View root;
+    public int tab;
+
+    public Screen(){this(-1);}
 	
-	public Screen(){
+	public Screen(int tab){
 		parent = getParentScreen();
+        this.tab = tab;
 	}
 	
 	protected abstract Screen getParentScreen();
 	protected abstract int getLayout();
 	public abstract String getTitle();
 	public abstract void show();
-	
-	public void onBack(){
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        root = inflater.inflate(getLayout(), container, false);
+        if(tab != -1){
+            Util.tabs.getTabAt(tab).select();
+        }
+        show();
+        return root;
+    }
+
+    public void onBack(){
 		if(parent != null){
 			Util.setScreen(parent);
 		} else{
@@ -31,5 +47,5 @@ public abstract class Screen{
 	public boolean event(int t, Object... d){return false;}
 	public void menu(Menu m){}
 	
-	public View find(int i){return MainActivity.a.findViewById(i);}
+	public View find(int i){return root.findViewById(i);}
 }

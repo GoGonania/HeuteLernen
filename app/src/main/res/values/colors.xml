@@ -2,4 +2,7 @@
 <resources>
     <color name="actionbar">#0F9D58</color>
     <color name="actionbarDunkler">#007733</color>
+
+    <color name="gray">#b0b0b0</color>
+    <color name="grayDark">#808080</color>
 </resources>

@@ -1,6 +1,5 @@
 package de.keplerware.heutelernen;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -12,6 +11,8 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.support.v4.app.NotificationCompat;
+
 import de.keplerware.heutelernen.Internet.InfoListener;
 import de.keplerware.heutelernen.Internet.LoginListener;
 import de.keplerware.heutelernen.Internet.Nachricht;
@@ -68,7 +69,7 @@ public class MyService extends Service{
 				h = new Handler(){
 					public void handleMessage(Message msg){
 						login();
-					};
+					}
 				};
 				login();
 			}
@@ -83,7 +84,7 @@ public class MyService extends Service{
 				if(!running) return;
 				check();
 				sendEmptyMessageDelayed(0, internet?checkTimeout:checkTimeoutNI);
-			};
+			}
 		}.sendEmptyMessage(0);
 	}
 	
@@ -137,14 +138,14 @@ public class MyService extends Service{
 		if(!Util.event(Event.MESSAGE, n)){
 			int unread = chat.unread();
 			
-			Notification.Builder b = new Notification.Builder(c);
+			NotificationCompat.Builder b = new NotificationCompat.Builder(c);
 			b.setSmallIcon(R.drawable.logo_form);
 			b.setLargeIcon(logo);
 			b.setContentTitle(n.info.name);
-			b.setDefaults(Notification.DEFAULT_ALL);
+			b.setDefaults(NotificationCompat.DEFAULT_ALL);
 			b.setAutoCancel(true);
 			b.setOnlyAlertOnce(true);
-			b.setPriority(Notification.PRIORITY_HIGH);
+			b.setPriority(NotificationCompat.PRIORITY_HIGH);
 			
 			if(unread == 1){
 				b.setContentText(n.text);
@@ -164,7 +165,7 @@ public class MyService extends Service{
 					}
 				}
 				
-				b.setStyle(new Notification.BigTextStyle()
+				b.setStyle(new NotificationCompat.BigTextStyle()
 						.setSummaryText(t)
 						.bigText(aus.substring(1))
 					);

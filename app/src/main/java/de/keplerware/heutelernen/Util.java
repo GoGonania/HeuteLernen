@@ -8,11 +8,19 @@ import android.content.Intent;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
+
+import de.keplerware.heutelernen.screens.ScreenChat;
+import de.keplerware.heutelernen.screens.ScreenChats;
+import de.keplerware.heutelernen.screens.ScreenMain;
+import de.keplerware.heutelernen.screens.ScreenProfil;
 
 public class Util{
 	private static final String host = "http://www.heutelernen.de/";
@@ -22,27 +30,47 @@ public class Util{
 	private static InputMethodManager input;
 	private static Toast t;
 	private static Intent serviceIntent;
-    private static TabLayout tabs;
+    public static TabLayout tabs;
+    public static Toolbar bar;
+    private static FragmentManager fm;
 	
 	public static String fileDir;
 	public static String appname;
 	public static Screen screen;
 	
-	public static interface Listener{
-		public void ok(String data);
-		public void fail(Exception e);
+	public interface Listener{
+		void ok(String data);
+		void fail(Exception e);
 	}
 	
 	public static void init(Context c){
 		if(c instanceof MainActivity){
 			in = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			input = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);
+            tabs = (TabLayout) MainActivity.a.findViewById(R.id.tab_layout);
+            bar = (Toolbar) MainActivity.a.findViewById(R.id.toolbar);
+            fm = MainActivity.a.getSupportFragmentManager();
 
-            tabs = new TabLayout(c);
-            tabs.setsty
-            tabs.addTab(tabs.newTab().setText("Chat"));
+            tabs.addTab(tabs.newTab().setText("Chats"));
+            tabs.addTab(tabs.newTab().setText("Startmenu"));
             tabs.addTab(tabs.newTab().setText("Profil"));
-            tabs.addTab(tabs.newTab().setText("Start"));
+            tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                public void onTabSelected(TabLayout.Tab tab){
+                    switch(tab.getPosition()){
+                        case 0:
+                            Util.setScreen(new ScreenChats());
+                            break;
+                        case 1:
+                            Util.setScreen(new ScreenMain());
+                            break;
+                        case 2:
+                            ScreenProfil.show(Sitzung.info);
+                    }
+                }
+
+                public void onTabUnselected(TabLayout.Tab tab){}
+                public void onTabReselected(TabLayout.Tab tab){}
+            });
 		}
 		
 		if(Util.c == null){
@@ -67,10 +95,6 @@ public class Util{
 		c.stopService(serviceIntent);
 	}
 	
-	public static void sleep(long t){
-		try{Thread.sleep(t);}catch(InterruptedException e){}
-	}
-	
 	public static void wakeLock(boolean a){
 		if(a){
 			if(!wakelock.isHeld()) wakelock.acquire();
@@ -86,13 +110,14 @@ public class Util{
 	public static void setScreen(Screen s){
 		hideKeyboard();
 		screen = s;
-		MainActivity.bar.setSubtitle(null);
-		ViewGroup v = inflate(s.getLayout());
-		v.addView(tabs, 0);
-		MainActivity.a.setContentView(v);
-		MainActivity.bar.setTitle(s.getTitle());
-		MainActivity.bar.setDisplayHomeAsUpEnabled(s.parent != null);
-		s.show();
+		bar.setSubtitle(null);
+        boolean v = s.tab != -1;
+        tabs.setVisibility(v ? View.VISIBLE : View.GONE);
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.app, s);
+        transaction.commit();
+		bar.setTitle(v ? appname : s.getTitle());
+		bar.setCollapsible(s.parent != null);
 		MainActivity.a.invalidateOptionsMenu();
 	}
 	
@@ -129,8 +154,7 @@ public class Util{
 	public static ViewGroup inflate(int id){return (ViewGroup) in.inflate(id, null);}
 	
 	public static boolean event(int type, Object... d){
-		if(screen == null) return false;
-		return screen.event(type, d);
+		return screen != null && screen.event(type, d);
 	}
 	
 	public static void internet(final String name, final String p, final Listener l){
@@ -140,7 +164,7 @@ public class Util{
 						URL url = new URL(""+host+""+name+".php?"+p+"");
 						InputStream in = url.openStream();
 						String s = "";
-						int b = 0;
+						int b;
 						while((b = in.read()) != -1){
 							s += (char) b;
 						}

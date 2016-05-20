@@ -15,6 +15,10 @@ import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MyText;
 
 public class ScreenChats extends Screen{
+	public ScreenChats(){
+		super(0);
+	}
+
 	protected Screen getParentScreen(){
 		return new ScreenMain();
 	}
@@ -24,7 +28,7 @@ public class ScreenChats extends Screen{
 	}
 
 	public String getTitle(){
-		return "Deine Chats";
+		return null;
 	}
 	
 	public boolean event(int t, Object... d){

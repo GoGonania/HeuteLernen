@@ -22,6 +22,10 @@ import de.keplerware.heutelernen.ui.MyText;
 public class ScreenProfil extends Screen{
 	public static UserInfo info;
 	private static boolean owner;
+
+	public ScreenProfil(){
+		super(owner?2:-1);
+	}
 	
 	public static void show(UserInfo i){
 		info = i;
@@ -38,7 +42,7 @@ public class ScreenProfil extends Screen{
 	}
 
 	public String getTitle(){
-		return owner?"Dein Profil":"Profil";
+		return owner?null:"Profil";
 	}
 	
 	public void menu(Menu m){

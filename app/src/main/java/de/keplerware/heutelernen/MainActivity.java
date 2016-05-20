@@ -22,7 +22,6 @@ import de.keplerware.heutelernen.screens.ScreenMain;
 
 public class MainActivity extends AppCompatActivity {
 	public static MainActivity a;
-	public static ActionBar bar;
 	public static boolean pause = true;
 	
 	public static int aktivChat = -1;
@@ -55,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		a = this;
+		setContentView(R.layout.app);
 		Util.init(a);
-		bar = getSupportActionBar();
 		onNewIntent(getIntent());
 	}
 

@@ -102,10 +102,10 @@ public class ScreenChat extends Screen{
 			if(((Integer) d[0]) == info.id){
 				Object o = d[1];
 				if(o == null){
-					MainActivity.bar.setSubtitle(null);
+					Util.bar.setSubtitle(null);
 				} else{
 					String l = (String) o;
-					MainActivity.bar.setSubtitle((l.length() == 1)?"online":"zuletzt online: "+(l.isEmpty()?"nie":l)); 
+					Util.bar.setSubtitle((l.length() == 1)?"online":"zuletzt online: "+(l.isEmpty()?"nie":l));
 				}
 			}
 		}
