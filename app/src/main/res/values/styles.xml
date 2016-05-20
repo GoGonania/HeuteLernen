@@ -1,7 +1,14 @@
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <item name="colorPrimary">#0F9D58</item>
-        <item name="colorPrimaryDark">#007733</item>
-        <item name="colorAccent">#0F9D58</item>
+        <item name="colorPrimary">@color/actionbar</item>
+        <item name="colorPrimaryDark">@color/actionbarDunkler</item>
+        <item name="colorAccent">@color/actionbar</item>
+        <item name="tabBackground">@color/actionbar</item>
+        <item name="tabIndicatorColor">@color/actionbarDunkler</item>
+    </style>
+
+    <style name="TabLayoutTheme" parent="Widget.Design.TabLayout">
+        <item name="tabBackground">@color/actionbar</item>
+        <item name="tabIndicatorColor">@color/actionbarDunkler</item>
     </style>
 </resources>

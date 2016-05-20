@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class Util{
 	private static InputMethodManager input;
 	private static Toast t;
 	private static Intent serviceIntent;
+    private static TabLayout tabs;
 	
 	public static String fileDir;
 	public static String appname;
@@ -35,6 +37,12 @@ public class Util{
 		if(c instanceof MainActivity){
 			in = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			input = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+            tabs = new TabLayout(c);
+            tabs.setsty
+            tabs.addTab(tabs.newTab().setText("Chat"));
+            tabs.addTab(tabs.newTab().setText("Profil"));
+            tabs.addTab(tabs.newTab().setText("Start"));
 		}
 		
 		if(Util.c == null){
@@ -80,6 +88,7 @@ public class Util{
 		screen = s;
 		MainActivity.bar.setSubtitle(null);
 		ViewGroup v = inflate(s.getLayout());
+		v.addView(tabs, 0);
 		MainActivity.a.setContentView(v);
 		MainActivity.bar.setTitle(s.getTitle());
 		MainActivity.bar.setDisplayHomeAsUpEnabled(s.parent != null);
@@ -131,7 +140,7 @@ public class Util{
 						URL url = new URL(""+host+""+name+".php?"+p+"");
 						InputStream in = url.openStream();
 						String s = "";
-						int b = 0; 
+						int b = 0;
 						while((b = in.read()) != -1){
 							s += (char) b;
 						}
