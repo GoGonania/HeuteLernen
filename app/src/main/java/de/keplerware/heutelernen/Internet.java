@@ -8,25 +8,30 @@ import de.keplerware.heutelernen.manager.NachrichtenManager;
 import de.keplerware.heutelernen.manager.ProfilManager;
 
 public class Internet{
-	public static interface InfoListener{
-		public void ok(UserInfo info);
-		public void fail();
+	public interface InfoListener{
+		void ok(UserInfo info);
+		void fail();
 	}
 	
-	public static interface AngebotListener{
-		public void ok(Angebot[] as);
-		public void fail();
+	public interface AngebotListener{
+		void ok(Angebot[] as);
+		void fail();
 	}
 	
-	public static interface NachrichtenListener{
-		public void ok(Nachricht[] ns);
-		public void fail();
+	public interface NachrichtenListener{
+		void ok(Nachricht[] ns);
+		void fail();
 	}
 	
-	public static interface LoginListener{
-		public void ok(UserInfo info);
-		public void fail(boolean connection);
+	public interface LoginListener{
+		void ok(UserInfo info);
+		void fail(int error);
 	}
+
+    public interface RegisterListener{
+        void ok();
+        void fail(boolean c);
+    }
 	
 	public static class UserInfo{
 		public int id;
@@ -38,6 +43,7 @@ public class Internet{
 		public String klasse;
 		public String mail;
 		public int rang;
+        public String beschreibung;
 	}
 	
 	public static class Nachricht{
@@ -116,8 +122,20 @@ public class Internet{
 		}, new String[]{"id"}, new String[]{""+id});
 	}
 	
-	public static void register(String vn, String nn, int jahrgang, String mail, String ort, String p, final Listener l){
-		internet("register", "Registriere...", false, l, new String[]{"vname", "nname", "jahrgang", "mail", "ort", "p"}, new String[]{vn, nn, ""+jahrgang, mail, ort, p});
+	public static void register(String vn, String nn, int jahrgang, String mail, String ort, String p, final RegisterListener l){
+		internet("register", "Registriere...", false, new Listener() {
+            public void ok(String data){
+                if(data.equals("X")){
+                    l.fail(false);
+                } else{
+                    l.fail(true);
+                }
+            }
+
+            public void fail(Exception e){
+                l.fail(true);
+            }
+        }, new String[]{"vname", "nname", "jahrgang", "mail", "ort", "p"}, new String[]{vn, nn, "" + jahrgang, mail, ort, p});
 	}
 	
 	public static void sql(String code, Listener l){
@@ -138,6 +156,7 @@ public class Internet{
 				i.mail = s[3];
 				i.ort = s[4];
 				i.rang = Integer.parseInt(s[5]);
+                i.beschreibung = s[6];
 				l.ok(i);
 			}
 			
@@ -158,22 +177,26 @@ public class Internet{
 		internet("login", "Logge ein...", false, new Listener(){
 			public void ok(String data){
 				if(data.isEmpty()){
-					info.fail(false);
+					info.fail(LoginError.Passwort);
 				} else{
-					ProfilManager.get(Integer.parseInt(data), new InfoListener() {
-						public void ok(UserInfo i){
-							info.ok(i);
-						}
-						
-						public void fail(){
-							info.fail(true);
-						}
-					});
+					if(data.equals("X")){
+						info.fail(LoginError.Bestaetigen);
+					} else {
+						ProfilManager.get(Integer.parseInt(data), new InfoListener() {
+							public void ok(UserInfo i) {
+								info.ok(i);
+							}
+
+							public void fail() {
+								info.fail(LoginError.Connection);
+							}
+						});
+					}
 				}
 			}
 			
 			public void fail(Exception e){
-				info.fail(true);
+				info.fail(LoginError.Connection);
 			}
 		}, new String[]{"mail", "p"}, new String[]{m, p});
 	}

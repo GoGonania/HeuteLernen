@@ -96,10 +96,10 @@ public class MyService extends Service{
 				checkLoop();
 			}
 
-			public void fail(boolean c){
+			public void fail(int e){
 				System.out.println("SERVICE: login fail ("+c+")");
 
-				if(c){
+				if(e != LoginError.Passwort){
 					System.out.println("SERVICE: try to login in "+loginTimeout+" ms");
 					h.sendEmptyMessageDelayed(0, loginTimeout);
 				} else{

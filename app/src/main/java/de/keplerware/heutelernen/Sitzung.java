@@ -22,15 +22,15 @@ public class Sitzung{
 						
 						public void fail(Exception e){
 							reset(service);
-							l.fail(true);
+							l.fail(LoginError.Connection);
 						}
 					});
 				}
 			}
 			
-			public void fail(boolean c){
+			public void fail(int e){
 				reset(service);
-				l.fail(c);
+				l.fail(e);
 			}
 		});
 	}

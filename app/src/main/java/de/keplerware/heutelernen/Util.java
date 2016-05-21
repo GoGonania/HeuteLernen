@@ -25,7 +25,7 @@ import de.keplerware.heutelernen.screens.ScreenMain;
 import de.keplerware.heutelernen.screens.ScreenProfil;
 
 public class Util{
-	private static final String host = "http://www.heutelernen.de/";
+	private static final String host = "http://www.heutelernen.de/app/";
 	private static Context c;
 	private static LayoutInflater in;
 	private static WakeLock wakelock;

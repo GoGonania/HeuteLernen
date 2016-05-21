@@ -5,6 +5,7 @@ import android.widget.EditText;
 import de.keplerware.heutelernen.Internet.InfoListener;
 import de.keplerware.heutelernen.Internet.LoginListener;
 import de.keplerware.heutelernen.Internet.UserInfo;
+import de.keplerware.heutelernen.LoginError;
 import de.keplerware.heutelernen.MainActivity;
 import de.keplerware.heutelernen.MyService;
 import de.keplerware.heutelernen.R;
@@ -74,8 +75,9 @@ public class ScreenLogin extends Screen{
 				MainActivity.aktivChat = -1;
 			}
 
-			public void fail(boolean connection) {
-				if(!connection) Util.toast("Fehler beim Einloggen!\nFalsches Passwort ?");
+			public void fail(int e) {
+				if(e == LoginError.Passwort) Util.toast("Fehler beim Einloggen!\nFalsches Passwort ?");
+				if(e == LoginError.Bestaetigen) Util.toast("Du hast deine E-Mail noch nicht bestätigt!");
 			}
 		});
 	}

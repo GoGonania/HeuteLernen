@@ -21,6 +21,9 @@ public class ScreenRegistrieren extends Screen{
 	private EditText v_mail;
 	private EditText v_ort;
 	private EditText v_klasse;
+
+	private RadioButton klasseFrei;
+    private RadioButton klasseNichtFrei;
 	
 	private boolean frei = true;
 	
@@ -47,6 +50,17 @@ public class ScreenRegistrieren extends Screen{
 		v_ort = (EditText) find(R.id.start_ort);
 		v_mail = (EditText) find(R.id.login_email);
 		v_klasse = (EditText) find(R.id.start_klasse);
+        klasseFrei = (RadioButton) find(R.id.start_alterfrei);
+        klasseNichtFrei = (RadioButton) find(R.id.start_alternichtfrei);
+
+        klasseFrei.setChecked(true);
+
+        klasseFrei.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b){
+                frei = b;
+                v_klasse.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
+            }
+        });
 		
 		find(R.id.login_register).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -78,14 +92,16 @@ public class ScreenRegistrieren extends Screen{
 						if(p1.equals(p2)){
 							if(mail.contains("@")){
 								if(!frei || (klasse >= 5 && klasse <= 12)){
-									Internet.register(vname, nname, klasse, mail, ort, p1, new Listener(){
-										public void ok(String data){
+									Internet.register(vname, nname, klasse, mail, ort, p1, new Internet.RegisterListener(){
+										public void ok(){
 											Util.toast("Registriert!");
 											Save.setData(mail, p1, -1);
 											Util.setScreen(new ScreenLogin());
 										}
 										
-										public void fail(Exception e){}
+										public void fail(boolean c){
+                                            if(!c) Util.toast("Diese E-Mail wurde bereits verwendet!");
+                                        }
 									});
 								} else{
 									Util.toast("Erlaubte Klasse: 5-12");
