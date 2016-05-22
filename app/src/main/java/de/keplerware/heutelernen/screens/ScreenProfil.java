@@ -27,10 +27,10 @@ public class ScreenProfil extends Screen{
 		super(owner?2:-1);
 	}
 	
-	public static void show(UserInfo i){
+	public static Screen show(UserInfo i){
 		info = i;
 		owner = (i.id == Sitzung.info.id);
-		Util.setScreen(new ScreenProfil());
+		return new ScreenProfil();
 	}
 	
 	public Screen getParentScreen(){

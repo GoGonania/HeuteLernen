@@ -17,9 +17,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.7"
-            android:ems="10" >
-
-            <requestFocus />
+            android:inputType="text"
+            android:ems="10"
+            android:imeOptions="actionSend">
         </EditText>
 
         <Button

@@ -156,7 +156,7 @@ public class Internet{
 				i.mail = s[3];
 				i.ort = s[4];
 				i.rang = Integer.parseInt(s[5]);
-                i.beschreibung = s[6];
+                try{i.beschreibung = s[6];}catch(Exception e){i.beschreibung = "";}
 				l.ok(i);
 			}
 			

@@ -8,9 +8,12 @@ import android.content.Intent;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -35,11 +38,14 @@ public class Util{
     public static TabLayout tabs;
     public static Toolbar bar;
     private static FragmentManager fm;
-    public static boolean selected;
+    private static ViewPager pager;
+    private static boolean tabsVisible;
 	
 	public static String fileDir;
 	public static String appname;
 	public static Screen screen;
+
+    private static FragmentStatePagerAdapter adapter;
 	
 	public interface Listener{
 		void ok(String data);
@@ -52,34 +58,49 @@ public class Util{
 			input = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);
             tabs = (TabLayout) MainActivity.a.findViewById(R.id.tab_layout);
             bar = (Toolbar) MainActivity.a.findViewById(R.id.toolbar);
+            pager = (ViewPager) MainActivity.a.findViewById(R.id.app);
             fm = MainActivity.a.getSupportFragmentManager();
+
+            adapter = new FragmentStatePagerAdapter(fm){
+                public Fragment getItem(int position){
+                    if(!tabsVisible) return screen;
+                    switch(position){
+                        case 0:
+                            return new ScreenChats();
+                        case 1:
+                            return new ScreenMain();
+                        case 2:
+                            return ScreenProfil.show(Sitzung.info);
+                    }
+                    return null;
+                }
+
+                public int getCount(){
+                    return tabsVisible?3:1;
+                }
+
+                public CharSequence getPageTitle(int position){
+                    if(!tabsVisible) return null;
+                    switch(position){
+                        case 0:
+                            return "Chats";
+                        case 1:
+                            return "Startmenu";
+                        case 2:
+                            return "Profil";
+                    }
+                    return null;
+                }
+            };
+
+            pager.setAdapter(adapter);
 
             MainActivity.a.setSupportActionBar(bar);
 
-            tabs.addTab(tabs.newTab().setText("Chats"));
-            tabs.addTab(tabs.newTab().setText("Startmenu"));
-            tabs.addTab(tabs.newTab().setText("Profil"));
-            tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                public void onTabSelected(TabLayout.Tab tab){
-                    if(selected){
-                        selected = false;
-                        return;
-                    }
-                    switch(tab.getPosition()){
-                        case 0:
-                            Util.setScreen(new ScreenChats());
-                            break;
-                        case 1:
-                            Util.setScreen(new ScreenMain());
-                            break;
-                        case 2:
-                            ScreenProfil.show(Sitzung.info);
-                    }
-                }
-
-                public void onTabUnselected(TabLayout.Tab tab){}
-                public void onTabReselected(TabLayout.Tab tab){}
-            });
+            boolean v = tabsVisible;
+            tabsVisible = true;
+            tabs.setupWithViewPager(pager);
+            tabsVisible = v;
 		}
 		
 		if(Util.c == null){
@@ -96,14 +117,6 @@ public class Util{
 		}
 	}
 
-    public static void selectTab(int tab){
-        TabLayout.Tab t = tabs.getTabAt(tab);
-        if(!t.isSelected()){
-            selected = true;
-            t.select();
-        }
-    }
-	
 	public static void startService(){
 		c.startService(serviceIntent);
 	}
@@ -128,15 +141,12 @@ public class Util{
 		hideKeyboard();
 		screen = s;
 		bar.setSubtitle(null);
-        boolean v = s.tab != -1;
-        tabs.setVisibility(v ? View.VISIBLE : View.GONE);
-        FragmentTransaction transaction = fm.beginTransaction();
-        if(!v) transaction.setCustomAnimations(R.anim.in, 0);
-        transaction.replace(R.id.app, s);
-        transaction.commit();
-        fm.executePendingTransactions();
-		bar.setTitle(v ? appname : s.getTitle());
-		MainActivity.a.getSupportActionBar().setDisplayHomeAsUpEnabled(s.parent != null && !v);
+        tabsVisible = s.tab != -1;
+        tabs.setVisibility(tabsVisible ? View.VISIBLE : View.GONE);
+        pager.setAdapter(adapter);
+        pager.setCurrentItem(s.tab);
+		bar.setTitle(tabsVisible ? appname : s.getTitle());
+		MainActivity.a.getSupportActionBar().setDisplayHomeAsUpEnabled(s.parent != null && !tabsVisible);
 		MainActivity.a.invalidateOptionsMenu();
 	}
 	

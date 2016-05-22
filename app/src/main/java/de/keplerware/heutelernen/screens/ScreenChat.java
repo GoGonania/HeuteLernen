@@ -5,16 +5,20 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
+import android.widget.TextView;
+
 import de.keplerware.heutelernen.Event;
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.Internet.Nachricht;
@@ -147,6 +151,15 @@ public class ScreenChat extends Screen{
 
 	public void show(){
 		text = (EditText) find(R.id.chat_text);
+		text.setOnEditorActionListener(new TextView.OnEditorActionListener(){
+			public boolean onEditorAction(TextView v, int action, KeyEvent event){
+                if (action == EditorInfo.IME_ACTION_SEND){
+					send();
+                    return true;
+				}
+				return false;
+			}
+		});
 		content = (LinearLayout) find(R.id.chat_content);
 		scroller = (ScrollView) content.getParent();
 		find(R.id.chat_senden).setOnClickListener(new View.OnClickListener(){

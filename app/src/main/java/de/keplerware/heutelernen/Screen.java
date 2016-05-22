@@ -26,9 +26,6 @@ public abstract class Screen extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         root = inflater.inflate(getLayout(), container, false);
-        if(tab != -1){
-            Util.selectTab(tab);
-        }
         show();
         return root;
     }

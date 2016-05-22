@@ -65,7 +65,7 @@ public class ScreenMain extends Screen{
 					View r = Util.inflate(R.layout.angebot_item);
 					r.setOnClickListener(new View.OnClickListener(){
 						public void onClick(View v){
-							ScreenProfil.show(a.info);
+							Util.setScreen(ScreenProfil.show(a.info));
 						}
 					});
 					((TextView) r.findViewById(R.id.angeboteitem_detail)).setText(a.info.klasse);
