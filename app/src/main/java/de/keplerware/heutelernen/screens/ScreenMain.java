@@ -41,19 +41,6 @@ public class ScreenMain extends Screen{
 		return null;
 	}
 	
-	public void menu(Menu m){
-		m.add("Ausloggen").setIcon(R.drawable.logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
-			public boolean onMenuItemClick(MenuItem p1){
-				Dialog.confirm("Willst du dich wirklich ausloggen?", new ConfirmListener() {
-					public void ok() {
-						Sitzung.logout();
-					}
-				});
-				return true;
-			}
-		}).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-	}
-	
 	public void showAngebote(){
 		if(angebote.length == 0){
 			TextView v = new TextView(MainActivity.a);

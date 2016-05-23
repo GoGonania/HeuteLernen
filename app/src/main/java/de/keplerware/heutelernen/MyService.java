@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 
 import de.keplerware.heutelernen.Internet.InfoListener;
@@ -114,17 +115,23 @@ public class MyService extends Service{
 	
 	private static void work(){
 		final Nachricht n = nachrichten[nid];
-		ProfilManager.get(n.id, new InfoListener(){
-			public void ok(UserInfo info){
-				n.info = info;
-				nachricht(n);
-				workF();
-			}
-			
-			public void fail(){
-				workF();
-			}
-		});
+        System.out.println("NAchricht!");
+		if(n.id == -1){
+			nachricht(n);
+			workF();
+		} else{
+			ProfilManager.get(n.id, new InfoListener(){
+				public void ok(UserInfo info){
+					n.info = info;
+					nachricht(n);
+					workF();
+				}
+
+				public void fail(){
+					workF();
+				}
+			});
+		}
 	}
 	
 	private static void workF(){
@@ -133,52 +140,69 @@ public class MyService extends Service{
 	}
 	
 	private static void nachricht(Nachricht n){
-		Chat chat = NachrichtenManager.add(id, n.id, false, n.text, n.info);
-		
-		if(!Util.event(Event.MESSAGE, n)){
-			int unread = chat.unread();
-			
-			NotificationCompat.Builder b = new NotificationCompat.Builder(c);
-			b.setSmallIcon(R.drawable.logo_form);
-			b.setLargeIcon(logo);
-			b.setContentTitle(n.info.name);
-			b.setDefaults(NotificationCompat.DEFAULT_ALL);
-			b.setAutoCancel(true);
-			b.setOnlyAlertOnce(true);
-			b.setPriority(NotificationCompat.PRIORITY_HIGH);
-			
-			if(unread == 1){
-				b.setContentText(n.text);
-			} else{
-				String t = unread+" neue Nachrichten";
-				b.setContentText(t);
-				
-				String aus = "";
-				int f = 0;
-				
-				for(int i = 0; f < unread; i++){
-					NachrichtenManager.Message m = chat.ms.get(i);
-					
-					if(!m.owner){
-						f++;
-						aus += "\n"+m.text+"";
-					}
-				}
-				
-				b.setStyle(new NotificationCompat.BigTextStyle()
-						.setSummaryText(t)
-						.bigText(aus.substring(1))
-					);
-			}
-			
-			Intent i = new Intent(c, MainActivity.class);
-			i.putExtra("chat", n.id);
-			i.putExtra("id", id);
-			PendingIntent pi = PendingIntent.getActivity(c, n.id, i, PendingIntent.FLAG_CANCEL_CURRENT);
-			b.setContentIntent(pi);
-			
-			manager.notify(n.id, b.build());
-		}
+        System.out.println("Typ: "+n.typ);
+        switch (n.typ){
+            case "chat":
+                Chat chat = NachrichtenManager.add(id, n.id, false, n.text, n.info);
+
+                if(!Util.event(Event.MESSAGE, n)){
+                    int unread = chat.unread();
+
+                    NotificationCompat.Builder b = new NotificationCompat.Builder(c);
+                    b.setSmallIcon(R.drawable.logo_form);
+                    b.setLargeIcon(logo);
+                    b.setContentTitle(n.info.name);
+                    b.setDefaults(NotificationCompat.DEFAULT_ALL);
+                    b.setAutoCancel(true);
+                    b.setOnlyAlertOnce(true);
+                    b.setPriority(NotificationCompat.PRIORITY_HIGH);
+
+                    if(unread == 1){
+                        b.setContentText(n.text);
+                    } else{
+                        String t = unread+" neue Nachrichten";
+                        b.setContentText(t);
+
+                        String aus = "";
+                        int f = 0;
+
+                        for(int i = 0; f < unread; i++){
+                            NachrichtenManager.Message m = chat.ms.get(i);
+
+                            if(!m.owner){
+                                f++;
+                                aus += "\n"+m.text+"";
+                            }
+                        }
+
+                        b.setStyle(new NotificationCompat.BigTextStyle()
+                                .setSummaryText(t)
+                                .bigText(aus.substring(1))
+                        );
+                    }
+
+                    Intent i = new Intent(c, MainActivity.class);
+                    i.putExtra("chat", n.id);
+                    i.putExtra("id", id);
+                    PendingIntent pi = PendingIntent.getActivity(c, n.id, i, PendingIntent.FLAG_CANCEL_CURRENT);
+                    b.setContentIntent(pi);
+
+                    manager.notify(n.id, b.build());
+                }
+                break;
+            case "system":
+                NotificationCompat.Builder b = new NotificationCompat.Builder(c);
+                b.setSmallIcon(R.drawable.logo_form);
+                b.setLargeIcon(logo);
+                b.setContentTitle(Util.appname);
+                b.setContentText(n.text);
+                b.setDefaults(NotificationCompat.DEFAULT_ALL);
+                b.setAutoCancel(true);
+                b.setOnlyAlertOnce(true);
+                b.setPriority(NotificationCompat.PRIORITY_HIGH);
+                manager.notify(Integer.MAX_VALUE, b.build());
+                break;
+        }
 	}
 	
 	public static void check(){

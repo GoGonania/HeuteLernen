@@ -1,9 +1,12 @@
 package de.keplerware.heutelernen.screens;
 
+import android.graphics.Typeface;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import de.keplerware.heutelernen.Dialog;
@@ -68,27 +71,60 @@ public class ScreenProfil extends Screen{
 	public void show(){
 		((TextView) find(R.id.profil_name)).setText(info.name);
 		((TextView) find(R.id.profil_details)).setText(info.klasse+"\nWohnort: "+info.ort+"");
+		final TextView tB = (TextView) find(R.id.profil_beschreibung);
+        if(info.beschreibung.isEmpty()){
+            tB.setTypeface(null, Typeface.ITALIC);
+            tB.setText("Keine Beschreibung");
+        } else{
+            tB.setText(info.beschreibung);
+        }
 		final LinearLayout angebote = (LinearLayout) find(R.id.profil_angebote);
-		
-		Button suchen = new MyButton("Nachhilfefächer", true){
-			public void klick(){
-				Internet.angebote(info, new AngebotListener(){
-					public void ok(Angebot[] as){
-						angebote.removeAllViews();
-						if(as.length == 0){
-							angebote.addView(new MyText("Keine Angebote gefunden!"));
-						} else{
-							for(Angebot a : as){
-								angebote.addView(new MyText(a.fach));
-							}
-						}
-					}
-					
-					public void fail(){}
-				});
-			}
-		};
-		
-		angebote.addView(suchen);
+
+        boolean editP = Sitzung.rang(Rang.MODERATOR) || owner;
+
+        ImageView editB = (ImageView) find(R.id.profil_edit_beschreibung);
+
+        editB.setVisibility(editP ? View.VISIBLE : View.GONE);
+
+        if(editP){
+            editB.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    String b = info.beschreibung;
+                    Dialog.prompt(b.isEmpty() ? "Wähle deine Beschreibung" : "Ändere deine Beschreibung", b, new Dialog.PromptListener(){
+                        public void ok(String text){
+                            if(text.isEmpty()) return;
+                            if(text.length() > 100){
+                                Util.toast("Deine Beschreibung wurde auf 100 Zeichen gekürzt");
+                                text = text.substring(0, 100);
+                            }
+                            final String text2 = text;
+                            Internet.beschreibung(info.id, text, new Util.Listener(){
+                                public void ok(String data){
+                                    info.beschreibung = text2;
+                                    tB.setText(text2);
+                                }
+
+                                public void fail(Exception e){}
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        Internet.angebote(info, new AngebotListener(){
+            public void ok(Angebot[] as){
+                angebote.removeAllViews();
+                if(as.length == 0){
+                    angebote.addView(new MyText("Keine Angebote gefunden!"));
+                } else{
+                    for(Angebot a : as){
+                        angebote.addView(new MyText(a.fach));
+                    }
+                }
+            }
+
+            public void fail(){}
+        });
 	}
 }

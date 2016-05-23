@@ -39,7 +39,7 @@ public class Util{
     public static Toolbar bar;
     private static FragmentManager fm;
     private static ViewPager pager;
-    private static boolean tabsVisible;
+    public static boolean tabsVisible;
 	
 	public static String fileDir;
 	public static String appname;

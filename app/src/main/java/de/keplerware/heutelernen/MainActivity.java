@@ -61,7 +61,20 @@ public class MainActivity extends AppCompatActivity {
 
 	public boolean onPrepareOptionsMenu(Menu menu){
 		menu.clear();
-		Util.screen.menu(menu);
+		if(Util.tabsVisible){
+            menu.add("Ausloggen").setIcon(R.drawable.logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+                public boolean onMenuItemClick(MenuItem p1){
+                    Dialog.confirm("Willst du dich wirklich ausloggen?", new Dialog.ConfirmListener() {
+                        public void ok() {
+                            Sitzung.logout();
+                        }
+                    });
+                    return true;
+                }
+            });
+		} else{
+            Util.screen.menu(menu);
+		}
 		return true;
 	}
 	

@@ -47,6 +47,7 @@ public class Internet{
 	}
 	
 	public static class Nachricht{
+        public String typ;
 		public String text;
 		public int id;
 		public UserInfo info;
@@ -84,6 +85,10 @@ public class Internet{
 			}
 		});
 	}
+
+	public static void beschreibung(int id, String t, Listener l){
+		internet("beschreibung", "Beschreibung wird geändert...", false, l, new String[]{"id", "b"}, new String[]{""+id, t});
+	}
 	
 	public static void last(final int id){
 		internet("last", null, true, new Listener() {
@@ -108,8 +113,9 @@ public class Internet{
 					for(int i = 0; i < p.length; i++){
 						String[] s = p[i].split("\t");
 						Nachricht n = new Nachricht();
-						n.id = Integer.parseInt(s[0]);
-						n.text = s[1];
+                        n.typ = s[0];
+						n.id = Integer.parseInt(s[1]);
+						n.text = s[2];
 						ns[i] = n;
 					}
 					li.ok(ns);
@@ -210,11 +216,11 @@ public class Internet{
 
 			public void fail(Exception e){
 				l.fail(e);
-			}}, new String[]{"von", "zu", "text"}, new String[]{""+Sitzung.info.id, ""+zu.id, text});
+			}}, new String[]{"typ", "von", "zu", "text"}, new String[]{"chat", ""+Sitzung.info.id, ""+zu.id, text});
 	}
 	
 	public static void angebote(final UserInfo info, final AngebotListener li){
-		internet("auflistenID", "Suche Angebote von "+info.name+"...", false, new Listener(){
+		internet("auflistenID", null, false, new Listener(){
 			public void ok(String data){
 				if(data.isEmpty()){
 					li.ok(new Angebot[]{});
