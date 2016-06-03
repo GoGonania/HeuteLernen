@@ -1,49 +1,47 @@
 package de.keplerware.heutelernen;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.view.View;
-import de.keplerware.heutelernen.Dialog.ConfirmListener;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.*;
 
-public abstract class Screen extends Fragment {
-	public Screen parent;
-    private View root;
-    public int tab;
+public abstract class Screen extends AppCompatActivity{
+    private LayoutInflater inflater;
+    public Toolbar bar;
 
-    public Screen(){this(-1);}
-	
-	public Screen(int tab){
-		parent = getParentScreen();
-        this.tab = tab;
-	}
-	
-	protected abstract Screen getParentScreen();
-	protected abstract int getLayout();
-	public abstract String getTitle();
-	public abstract void show();
+    public abstract int getLayout();
+    public abstract void show();
+    public abstract String getTitel();
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        root = inflater.inflate(getLayout(), container, false);
+    protected void onCreate(Bundle savedInstanceState){
+        inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        ViewGroup base = inflate(R.layout.base);
+        ViewGroup content = (ViewGroup) base.findViewById(R.id.content);
+        super.onCreate(savedInstanceState);
+        Util.screen = this;
+        System.out.println("Creating "+getClass().getSimpleName());
+        content.removeAllViews();
+        content.addView(inflate(getLayout()));
+        setContentView(base);
         show();
-        return root;
+        Toolbar bar = (Toolbar) findViewById(R.id.toolbar);
+        bar.setTitle(getTitel());
+        bar.setSubtitle(null);
     }
 
-    public void onBack(){
-		if(parent != null){
-			Util.setScreen(parent);
-		} else{
-			Dialog.confirm("Willst du die App schließen?", new ConfirmListener() {
-				public void ok(){
-					System.exit(0);
-				}
-			});
-		}
-	}
+    public ViewGroup inflate(int r){
+        return (ViewGroup) inflater.inflate(r, null);
+    }
+
+    protected void onPause(){
+        super.onPause();
+        HeuteLernen.pause = true;
+    }
+
+    protected void onResume(){
+        super.onResume();
+        HeuteLernen.pause = false;
+    }
 	
 	public boolean event(int t, Object... d){return false;}
-	public void menu(Menu m){}
-	
-	public View find(int i){return root.findViewById(i);}
 }

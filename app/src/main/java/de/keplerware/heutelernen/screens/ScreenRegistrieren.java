@@ -10,8 +10,8 @@ import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Save;
 import de.keplerware.heutelernen.Screen;
+import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
-import de.keplerware.heutelernen.Util.Listener;
 
 public class ScreenRegistrieren extends Screen{
 	private EditText v_vname;
@@ -26,32 +26,28 @@ public class ScreenRegistrieren extends Screen{
     private RadioButton klasseNichtFrei;
 	
 	private boolean frei = true;
-	
-	public int getLayout(){
-		return R.layout.start;
-	}
 
-	public String getTitle(){
-		return "Konto erstellen";
-	}
+    public int getLayout(){
+        return R.layout.start;
+    }
 
 	public void show(){
-		((RadioButton) find(R.id.start_alterfrei)).setOnCheckedChangeListener(new OnCheckedChangeListener(){
+		((RadioButton) findViewById(R.id.start_alterfrei)).setOnCheckedChangeListener(new OnCheckedChangeListener(){
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
 				frei = isChecked;
-				find(R.id.start_klasse).setActivated(isChecked);
+				findViewById(R.id.start_klasse).setActivated(isChecked);
 			}
 		});
 		
-		v_vname = (EditText) find(R.id.start_vname);
-		v_nname = (EditText) find(R.id.start_nname);
-		v_passwort1 = (EditText) find(R.id.login_passwort);
-		v_passwort2 = (EditText) find(R.id.start_passwort2);
-		v_ort = (EditText) find(R.id.start_ort);
-		v_mail = (EditText) find(R.id.login_email);
-		v_klasse = (EditText) find(R.id.start_klasse);
-        klasseFrei = (RadioButton) find(R.id.start_alterfrei);
-        klasseNichtFrei = (RadioButton) find(R.id.start_alternichtfrei);
+		v_vname = (EditText) findViewById(R.id.start_vname);
+		v_nname = (EditText) findViewById(R.id.start_nname);
+		v_passwort1 = (EditText) findViewById(R.id.login_passwort);
+		v_passwort2 = (EditText) findViewById(R.id.start_passwort2);
+		v_ort = (EditText) findViewById(R.id.start_ort);
+		v_mail = (EditText) findViewById(R.id.login_email);
+		v_klasse = (EditText) findViewById(R.id.start_klasse);
+        klasseFrei = (RadioButton) findViewById(R.id.start_alterfrei);
+        klasseNichtFrei = (RadioButton) findViewById(R.id.start_alternichtfrei);
 
         klasseFrei.setChecked(true);
 
@@ -62,13 +58,13 @@ public class ScreenRegistrieren extends Screen{
             }
         });
 		
-		find(R.id.login_register).setOnClickListener(new OnClickListener() {
+		findViewById(R.id.login_register).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Util.setScreen(new ScreenLogin());
+				new Starter(ScreenLogin.class).send();
 			}
 		});
 		
-		find(R.id.login_login).setOnClickListener(new OnClickListener(){
+		findViewById(R.id.login_login).setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				String vname = v_vname.getEditableText().toString().trim();
 				String nname = v_nname.getEditableText().toString().trim();
@@ -96,7 +92,7 @@ public class ScreenRegistrieren extends Screen{
 										public void ok(){
 											Util.toast("Registriert!");
 											Save.setData(mail, p1, -1);
-											Util.setScreen(new ScreenLogin());
+											new Starter(ScreenLogin.class).send();
 										}
 										
 										public void fail(boolean c){
@@ -120,7 +116,11 @@ public class ScreenRegistrieren extends Screen{
 		});
 	}
 
-	public Screen getParentScreen(){
+    public String getTitel(){
+        return "Konto erstellen";
+    }
+
+    public Screen getParentScreen(){
 		return new ScreenLogin();
 	}
 }

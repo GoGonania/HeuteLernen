@@ -44,6 +44,10 @@ public class Internet{
 		public String mail;
 		public int rang;
         public String beschreibung;
+
+		public boolean owner(){
+			return id == Sitzung.info.id;
+		}
 	}
 	
 	public static class Nachricht{
@@ -59,7 +63,7 @@ public class Internet{
 	}
 	
 	private static void internet(String file, String text, final boolean hidden, final Listener l, String[] pk, String[] pv){
-		final Runnable r = MainActivity.pause?null:Util.progress(text);
+		final Runnable r = HeuteLernen.pause?null:Util.progress(text);
 		String p = "";
 		for(int i = 0; i < pk.length; i++){
 			try{p += "&"+pk[i]+"="+URLEncoder.encode(pv[i], "UTF-8")+"";}catch (UnsupportedEncodingException e){e.printStackTrace();}
@@ -142,10 +146,6 @@ public class Internet{
                 l.fail(true);
             }
         }, new String[]{"vname", "nname", "jahrgang", "mail", "ort", "p"}, new String[]{vn, nn, "" + jahrgang, mail, ort, p});
-	}
-	
-	public static void sql(String code, Listener l){
-		internet("run", "Anfrage wird bearbeitet!", false, l, new String[]{"c"}, new String[]{code});
 	}
 	
 	public static void info(final int id, final InfoListener l){

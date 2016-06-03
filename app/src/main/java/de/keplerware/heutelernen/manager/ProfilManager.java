@@ -1,5 +1,7 @@
 package de.keplerware.heutelernen.manager;
 
+import android.os.Bundle;
+
 import java.util.ArrayList;
 
 import de.keplerware.heutelernen.Internet;
@@ -27,4 +29,15 @@ public class ProfilManager{
 			}
 		});
 	}
+
+	public static Bundle create(UserInfo info){
+        Bundle b = new Bundle();
+        int index = infos.indexOf(info);
+        b.putInt("user", index);
+        return b;
+	}
+
+    public static UserInfo get(Bundle b){
+        return infos.get(b.getInt("user"));
+    }
 }

@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 
 import de.keplerware.heutelernen.Internet.InfoListener;
@@ -22,6 +21,7 @@ import de.keplerware.heutelernen.Internet.UserInfo;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager.Chat;
 import de.keplerware.heutelernen.manager.ProfilManager;
+import de.keplerware.heutelernen.screens.ScreenChat;
 
 public class MyService extends Service{
 	private static final long loginTimeout = 2000;
@@ -115,7 +115,6 @@ public class MyService extends Service{
 	
 	private static void work(){
 		final Nachricht n = nachrichten[nid];
-        System.out.println("NAchricht!");
 		if(n.id == -1){
 			nachricht(n);
 			workF();
@@ -140,7 +139,6 @@ public class MyService extends Service{
 	}
 	
 	private static void nachricht(Nachricht n){
-        System.out.println("Typ: "+n.typ);
         switch (n.typ){
             case "chat":
                 Chat chat = NachrichtenManager.add(id, n.id, false, n.text, n.info);
@@ -181,7 +179,7 @@ public class MyService extends Service{
                         );
                     }
 
-                    Intent i = new Intent(c, MainActivity.class);
+                    Intent i = new Intent(c, ScreenChat.class);
                     i.putExtra("chat", n.id);
                     i.putExtra("id", id);
                     PendingIntent pi = PendingIntent.getActivity(c, n.id, i, PendingIntent.FLAG_CANCEL_CURRENT);

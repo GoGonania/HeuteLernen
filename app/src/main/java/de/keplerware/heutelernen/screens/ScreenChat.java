@@ -20,23 +20,24 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import de.keplerware.heutelernen.Event;
+import de.keplerware.heutelernen.HeuteLernen;
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.Internet.Nachricht;
 import de.keplerware.heutelernen.Internet.UserInfo;
-import de.keplerware.heutelernen.MainActivity;
 import de.keplerware.heutelernen.MyService;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
+import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.Util.Listener;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager.Chat;
 import de.keplerware.heutelernen.manager.NachrichtenManager.Message;
+import de.keplerware.heutelernen.manager.ProfilManager;
 import de.keplerware.heutelernen.ui.MyText;
 
 public class ScreenChat extends Screen{
-	private static boolean profil;
 	private static UserInfo info;
 	
 	private ScrollView scroller;
@@ -44,23 +45,15 @@ public class ScreenChat extends Screen{
 	private EditText text;
 	private Chat c;
 	
-	public static void show(UserInfo i, boolean p){
-		info = i;
-		profil = p;
-		Util.setScreen(new ScreenChat());
-	}
-	
-	protected Screen getParentScreen(){
-		return profil?new ScreenProfil():new ScreenChats();
+	public static void show(UserInfo i){
+		Starter s = new Starter(ScreenChat.class);
+        s.intent.putExtras(ProfilManager.create(info));
+        s.send();
 	}
 
-	protected int getLayout(){
-		return R.layout.chat;
-	}
-
-	public String getTitle(){
-		return info.name;
-	}
+    public int getLayout(){
+        return R.layout.chat;
+    }
 	
 	public void send(){
 		final String t = text.getEditableText().toString().trim();
@@ -99,17 +92,17 @@ public class ScreenChat extends Screen{
 			Nachricht n = (Nachricht) d[0];
 			addContent(false, n.text);
 			scroll();
-			return !MainActivity.pause;
+			return !HeuteLernen.pause;
 		}
 		if(t == Event.LAST){
 			MyService.aktivID = info.id;
 			if(((Integer) d[0]) == info.id){
 				Object o = d[1];
 				if(o == null){
-					Util.bar.setSubtitle(null);
+					bar.setSubtitle(null);
 				} else{
 					String l = (String) o;
-					Util.bar.setSubtitle((l.length() == 1)?"online":"zuletzt online: "+(l.isEmpty()?"nie":l));
+					bar.setSubtitle((l.length() == 1)?"online":"zuletzt online: "+(l.isEmpty()?"nie":l));
 				}
 			}
 		}
@@ -117,7 +110,7 @@ public class ScreenChat extends Screen{
 	}
 	
 	public View addContent(boolean i, final String text){
-		LinearLayout parent = new LinearLayout(MainActivity.a);
+		LinearLayout parent = new LinearLayout(HeuteLernen.context);
 		parent.setGravity(i?Gravity.END:Gravity.START);
 		LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		p.bottomMargin = p.topMargin = 5;
@@ -128,7 +121,7 @@ public class ScreenChat extends Screen{
 		tv.setLongClickable(true);
 		tv.setOnLongClickListener(new OnLongClickListener(){
 			public boolean onLongClick(View v){
-				((ClipboardManager) MainActivity.a.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Nachricht von "+info.name+"", text));
+				((ClipboardManager) HeuteLernen.context.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Nachricht von "+info.name+"", text));
 				Util.toast("Nachricht wurde kopiert!");
 				return true;
 			}
@@ -150,7 +143,8 @@ public class ScreenChat extends Screen{
 	}
 
 	public void show(){
-		text = (EditText) find(R.id.chat_text);
+        info = ProfilManager.get(getIntent().getExtras());
+		text = (EditText) findViewById(R.id.chat_text);
 		text.setOnEditorActionListener(new TextView.OnEditorActionListener(){
 			public boolean onEditorAction(TextView v, int action, KeyEvent event){
                 if (action == EditorInfo.IME_ACTION_SEND){
@@ -160,9 +154,9 @@ public class ScreenChat extends Screen{
 				return false;
 			}
 		});
-		content = (LinearLayout) find(R.id.chat_content);
+		content = (LinearLayout) findViewById(R.id.chat_content);
 		scroller = (ScrollView) content.getParent();
-		find(R.id.chat_senden).setOnClickListener(new View.OnClickListener(){
+		findViewById(R.id.chat_senden).setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
 				send();
 			}
@@ -174,5 +168,10 @@ public class ScreenChat extends Screen{
 		}
 		Internet.last(info.id);
 		scroll();
+        bar.setTitle(info.name);
 	}
+
+    public String getTitel(){
+        return null;
+    }
 }

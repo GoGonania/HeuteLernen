@@ -1,6 +1,6 @@
 package de.keplerware.heutelernen;
 
-import android.Manifest;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -20,8 +20,8 @@ public class Dialog{
 	}
 
     public static void prompt(String text, String input, final PromptListener l){
-        AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.a);
-        final EditText t = new EditText(MainActivity.a);
+        AlertDialog.Builder b = new AlertDialog.Builder(Util.screen);
+        final EditText t = new EditText(Util.screen);
         t.setText(input);
         b.setTitle(Util.appname);
         b.setView(t);
@@ -42,7 +42,7 @@ public class Dialog{
     }
 	
 	public static void confirm(int icon, String text, final ConfirmListener l){
-		AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.a);
+		AlertDialog.Builder b = new AlertDialog.Builder(Util.screen);
 		b.setTitle(Util.appname);
 		b.setMessage(text);
 		b.setIcon(icon == -1 ? R.drawable.help : icon);
@@ -59,9 +59,17 @@ public class Dialog{
 		
 		b.create().show();
 	}
+
+	public static void confirmClose(){
+		Dialog.confirm("Willst du die App schließen?", new ConfirmListener() {
+			public void ok(){
+				System.exit(0);
+			}
+		});
+	}
 	
 	public static void alert(String titel, String text){
-		AlertDialog.Builder b = new AlertDialog.Builder(MainActivity.a);
+		AlertDialog.Builder b = new AlertDialog.Builder(Util.screen);
 		b.setTitle(titel);
 		b.setMessage(text);
 		b.setIcon(R.drawable.logo);

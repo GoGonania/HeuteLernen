@@ -8,12 +8,12 @@ import de.keplerware.heutelernen.Internet.UserInfo;
 import de.keplerware.heutelernen.Dialog;
 import de.keplerware.heutelernen.MyService;
 import de.keplerware.heutelernen.R;
+import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.Dialog.ConfirmListener;
 import de.keplerware.heutelernen.Util.Listener;
 import de.keplerware.heutelernen.io.Datei;
-import de.keplerware.heutelernen.screens.ScreenChats;
 import de.keplerware.heutelernen.screens.ScreenMain;
 
 public class NachrichtenManager{
@@ -61,7 +61,7 @@ public class NachrichtenManager{
 			Dialog.confirm(R.drawable.delete, "Willst du den Chat mit "+info.name+" wirklich löschen?", new ConfirmListener(){
 				public void ok() {
 					delete();
-					Util.setScreen(NachrichtenManager.get().length == 0?new ScreenMain():new ScreenChats());
+					ScreenMain.show(NachrichtenManager.get().length == 0?1:0).send();
 				}
 			});
 		}
