@@ -19,6 +19,7 @@ public class Util{
 	public static String fileDir;
 	public static String appname;
 	public static Screen screen;
+	public static String[] schulen;
 	
 	public interface Listener{
 		void ok(String data);
@@ -31,6 +32,7 @@ public class Util{
 			Util.c = c;
 			
 			appname = c.getResources().getString(R.string.app_name);
+			schulen = c.getResources().getStringArray(R.array.schulen);
 	        wakelock = ((PowerManager) c.getSystemService(Context.POWER_SERVICE)).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
 	        fileDir = c.getFilesDir().getAbsolutePath();
 	        
@@ -92,20 +94,5 @@ public class Util{
 						l.fail(e);
 					}
 				}}).start();
-	}
-	
-	public static Runnable progress(String text){
-		if(text == null || HeuteLernen.pause) return null;
-		final ProgressDialog d = new ProgressDialog(Util.screen);
-		d.setMessage(text);
-		d.setTitle(null);
-		d.setCancelable(false);
-		d.setCanceledOnTouchOutside(false);
-		d.show();
-		return new Runnable(){
-			public void run(){
-				d.dismiss();
-			}
-		};
 	}
 }

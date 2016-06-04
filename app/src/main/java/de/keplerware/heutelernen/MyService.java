@@ -180,8 +180,7 @@ public class MyService extends Service{
                     }
 
                     Intent i = new Intent(c, ScreenChat.class);
-                    i.putExtra("chat", n.id);
-                    i.putExtra("id", id);
+                    i.putExtras(ProfilManager.create(n.info));
                     PendingIntent pi = PendingIntent.getActivity(c, n.id, i, PendingIntent.FLAG_CANCEL_CURRENT);
                     b.setContentIntent(pi);
 

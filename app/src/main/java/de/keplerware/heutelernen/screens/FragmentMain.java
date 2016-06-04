@@ -57,7 +57,7 @@ public class FragmentMain extends Fragment{
                                             ScreenProfil.show(a.info);
                                         }
                                     });
-                                    ((TextView) r.findViewById(R.id.angeboteitem_detail)).setText(a.info.klasse);
+                                    ((TextView) r.findViewById(R.id.angeboteitem_detail)).setText(a.info.klasse+" | "+a.info.schuleText);
                                     ((TextView) r.findViewById(R.id.angebotitem_name)).setText(a.info.name);
                                     return r;
                                 }

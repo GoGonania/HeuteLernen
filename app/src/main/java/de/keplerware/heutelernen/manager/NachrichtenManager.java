@@ -80,6 +80,14 @@ public class NachrichtenManager{
 	private static boolean f;
 	private static int p;
 	private static Listener l;
+
+	public static int unread(){
+		int u = 0;
+		for(Chat c : chats){
+			u += c.unread();
+		}
+		return u;
+	}
 	
 	public static void load(int id, Util.Listener li){
 		f = false;

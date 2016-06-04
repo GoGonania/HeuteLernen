@@ -2,6 +2,7 @@ package de.keplerware.heutelernen;
 
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.widget.EditText;
@@ -75,5 +76,20 @@ public class Dialog{
 		b.setIcon(R.drawable.logo);
 		b.setPositiveButton("OK", null);
 		b.create().show();
+	}
+
+	public static Runnable progress(String text){
+		if(text == null || HeuteLernen.pause) return null;
+		final ProgressDialog d = new ProgressDialog(Util.screen);
+		d.setMessage(text);
+		d.setTitle(null);
+		d.setCancelable(false);
+		d.setCanceledOnTouchOutside(false);
+		d.show();
+		return new Runnable(){
+			public void run(){
+				d.dismiss();
+			}
+		};
 	}
 }

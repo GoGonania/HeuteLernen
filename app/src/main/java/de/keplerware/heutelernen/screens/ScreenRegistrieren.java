@@ -2,6 +2,7 @@ package de.keplerware.heutelernen.screens;
 
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
@@ -12,8 +13,10 @@ import de.keplerware.heutelernen.Save;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
+import de.keplerware.heutelernen.ui.MySpinner;
 
 public class ScreenRegistrieren extends Screen{
+	private MySpinner schule;
 	private EditText v_vname;
 	private EditText v_nname;
 	private EditText v_passwort1;
@@ -38,7 +41,8 @@ public class ScreenRegistrieren extends Screen{
 				findViewById(R.id.start_klasse).setActivated(isChecked);
 			}
 		});
-		
+		schule = new MySpinner(R.array.schulen);
+		((ViewGroup) findViewById(R.id.start_schule)).addView(schule);
 		v_vname = (EditText) findViewById(R.id.start_vname);
 		v_nname = (EditText) findViewById(R.id.start_nname);
 		v_passwort1 = (EditText) findViewById(R.id.login_passwort);
@@ -60,7 +64,7 @@ public class ScreenRegistrieren extends Screen{
 		
 		findViewById(R.id.login_register).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				new Starter(ScreenLogin.class).send();
+				finish();
 			}
 		});
 		
@@ -88,7 +92,7 @@ public class ScreenRegistrieren extends Screen{
 						if(p1.equals(p2)){
 							if(mail.contains("@")){
 								if(!frei || (klasse >= 5 && klasse <= 12)){
-									Internet.register(vname, nname, klasse, mail, ort, p1, new Internet.RegisterListener(){
+									Internet.register(vname, nname, klasse, mail, ort, p1, schule.getSelectedItemPosition(), new Internet.RegisterListener(){
 										public void ok(){
 											Util.toast("Registriert!");
 											Save.setData(mail, p1, -1);
@@ -119,8 +123,4 @@ public class ScreenRegistrieren extends Screen{
     public String getTitel(){
         return "Konto erstellen";
     }
-
-    public Screen getParentScreen(){
-		return new ScreenLogin();
-	}
 }

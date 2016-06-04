@@ -4,19 +4,26 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import de.keplerware.heutelernen.Dialog;
+import de.keplerware.heutelernen.Event;
+import de.keplerware.heutelernen.HeuteLernen;
+import de.keplerware.heutelernen.Internet;
+import de.keplerware.heutelernen.MyService;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
+import de.keplerware.heutelernen.manager.NachrichtenManager;
 import de.keplerware.heutelernen.ui.MySpinner;
 
 public class ScreenMain extends Screen{
-	private MySpinner s;
-	private LinearLayout l;
+    private FragmentChats chats;
+    private TabLayout tabs;
 
     public static Starter show(int tab){
         Starter s = new Starter(ScreenMain.class);
@@ -33,12 +40,13 @@ public class ScreenMain extends Screen{
     }
 
     public void show(){
+        chats = new FragmentChats();
         ViewPager pager = (ViewPager) findViewById(R.id.app);
         FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager()){
             public Fragment getItem(int position){
                 switch(position){
                     case 0:
-                        return new FragmentChats();
+                        return chats;
                     case 1:
                         return new FragmentMain();
                     case 2:
@@ -65,7 +73,8 @@ public class ScreenMain extends Screen{
         };
 
         pager.setAdapter(adapter);
-        ((TabLayout) findViewById(R.id.tab_layout)).setupWithViewPager(pager);
+        tabs = ((TabLayout) findViewById(R.id.tab_layout));
+        tabs.setupWithViewPager(pager);
 
         if(getIntent().hasExtra("tab")){
             int tab = getIntent().getIntExtra("tab", 0);
@@ -75,7 +84,42 @@ public class ScreenMain extends Screen{
         }
 	}
 
+    public boolean event(int t, Object... d){
+        if(t == Event.MESSAGE){
+            resume();
+        }
+        return false;
+    }
+
+    public void resume(){
+        chats.resume();
+        int u = NachrichtenManager.unread();
+        if(u == 0){
+            tabs.getTabAt(0).setText("Chats");
+        } else {
+            tabs.getTabAt(0).setText("Chats ("+u+")");
+        }
+    }
+
+    protected void onResume(){
+        super.onResume();
+        resume();
+    }
+
     public String getTitel(){
         return Util.appname;
+    }
+
+    public void menu(Menu m){
+        m.add("Ausloggen").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+            public boolean onMenuItemClick(MenuItem p1){
+                Dialog.confirm("Willst du dich wirklich ausloggen?", new Dialog.ConfirmListener() {
+                    public void ok() {
+                        Sitzung.logout();
+                    }
+                });
+                return true;
+            }
+        });
     }
 }

@@ -44,6 +44,8 @@ public class Internet{
 		public String mail;
 		public int rang;
         public String beschreibung;
+		public int schule;
+		public String schuleText;
 
 		public boolean owner(){
 			return id == Sitzung.info.id;
@@ -63,7 +65,7 @@ public class Internet{
 	}
 	
 	private static void internet(String file, String text, final boolean hidden, final Listener l, String[] pk, String[] pv){
-		final Runnable r = HeuteLernen.pause?null:Util.progress(text);
+		final Runnable r = HeuteLernen.pause?null:Dialog.progress(text);
 		String p = "";
 		for(int i = 0; i < pk.length; i++){
 			try{p += "&"+pk[i]+"="+URLEncoder.encode(pv[i], "UTF-8")+"";}catch (UnsupportedEncodingException e){e.printStackTrace();}
@@ -119,7 +121,7 @@ public class Internet{
 						Nachricht n = new Nachricht();
                         n.typ = s[0];
 						n.id = Integer.parseInt(s[1]);
-						n.text = s[2];
+						n.text = s[2].replace("euro", "€");
 						ns[i] = n;
 					}
 					li.ok(ns);
@@ -132,20 +134,21 @@ public class Internet{
 		}, new String[]{"id"}, new String[]{""+id});
 	}
 	
-	public static void register(String vn, String nn, int jahrgang, String mail, String ort, String p, final RegisterListener l){
+	public static void register(String vn, String nn, int jahrgang, String mail, String ort, String p, int schule, final RegisterListener l){
 		internet("register", "Registriere...", false, new Listener() {
             public void ok(String data){
+                System.out.println("Registrieren: _"+data+"_");
                 if(data.equals("X")){
                     l.fail(false);
                 } else{
-                    l.fail(true);
+                    l.ok();
                 }
             }
 
             public void fail(Exception e){
                 l.fail(true);
             }
-        }, new String[]{"vname", "nname", "jahrgang", "mail", "ort", "p"}, new String[]{vn, nn, "" + jahrgang, mail, ort, p});
+        }, new String[]{"vname", "nname", "jahrgang", "mail", "ort", "p", "schule"}, new String[]{vn, nn, "" + jahrgang, mail, ort, p, ""+schule});
 	}
 	
 	public static void info(final int id, final InfoListener l){
@@ -163,6 +166,8 @@ public class Internet{
 				i.ort = s[4];
 				i.rang = Integer.parseInt(s[5]);
                 try{i.beschreibung = s[6];}catch(Exception e){i.beschreibung = "";}
+				i.schule = Integer.parseInt(s[7]);
+				try{i.schuleText = Util.schulen[i.schule];}catch(Exception e){i.schuleText = "Unbekannte Schule!";}
 				l.ok(i);
 			}
 			
@@ -216,7 +221,7 @@ public class Internet{
 
 			public void fail(Exception e){
 				l.fail(e);
-			}}, new String[]{"typ", "von", "zu", "text"}, new String[]{"chat", ""+Sitzung.info.id, ""+zu.id, text});
+			}}, new String[]{"typ", "von", "zu", "text"}, new String[]{"chat", ""+Sitzung.info.id, ""+zu.id, text.replace("€", "euro")});
 	}
 	
 	public static void angebote(final UserInfo info, final AngebotListener li){

@@ -23,6 +23,7 @@ import de.keplerware.heutelernen.ui.MyText;
 public class FragmentProfil extends Fragment{
     public UserInfo info;
     public boolean owner;
+    private LinearLayout angebote;
 
     public static FragmentProfil show(UserInfo info){
         FragmentProfil f = new FragmentProfil();
@@ -39,7 +40,7 @@ public class FragmentProfil extends Fragment{
         }
         View v = inflater.inflate(R.layout.profil, null);
         ((TextView) v.findViewById(R.id.profil_name)).setText(info.name);
-        ((TextView) v.findViewById(R.id.profil_details)).setText(info.klasse+"\nWohnort: "+info.ort+"");
+        ((TextView) v.findViewById(R.id.profil_details)).setText(info.klasse+"\nWohnort: "+info.ort+"\nSchule: "+info.schuleText);
         final TextView tB = (TextView) v.findViewById(R.id.profil_beschreibung);
         if(info.beschreibung.isEmpty()){
             tB.setTypeface(null, Typeface.ITALIC);
@@ -47,7 +48,7 @@ public class FragmentProfil extends Fragment{
         } else{
             tB.setText(info.beschreibung);
         }
-        final LinearLayout angebote = (LinearLayout) v.findViewById(R.id.profil_angebote);
+        angebote = (LinearLayout) v.findViewById(R.id.profil_angebote);
 
         boolean editP = Sitzung.rang(Rang.MODERATOR) || owner;
 
@@ -81,6 +82,12 @@ public class FragmentProfil extends Fragment{
             });
         }
 
+
+        return v;
+    }
+
+    public void onResume(){
+        super.onResume();
         Internet.angebote(info, new Internet.AngebotListener(){
             public void ok(Internet.Angebot[] as){
                 angebote.removeAllViews();
@@ -93,8 +100,10 @@ public class FragmentProfil extends Fragment{
                 }
             }
 
-            public void fail(){}
+            public void fail(){
+                angebote.removeAllViews();
+                angebote.addView(new MyText("Keine Internetverbindung!"));
+            }
         });
-        return v;
     }
 }

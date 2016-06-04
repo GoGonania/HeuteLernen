@@ -24,4 +24,11 @@
         <item>Kunst</item>
         <item>Sport</item>
     </string-array>
+
+    <string-array name="schulen">
+        <item>Kepler Gymnasium Weiden</item>
+        <item>Augustinus Weiden</item>
+        <item>FOS/BOS Weiden</item>
+        <item>HAW Weiden</item>
+    </string-array>
 </resources>

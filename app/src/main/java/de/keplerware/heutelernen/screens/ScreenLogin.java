@@ -56,6 +56,7 @@ public class ScreenLogin extends Screen{
 			public void ok(UserInfo info){
 				Util.toast("Eingeloggt als "+info.name+"!");
 				new Starter(ScreenMain.class).send();
+				finish();
 				/*if(MainActivity.aktivChat != -1 && MainActivity.aktivID == Sitzung.info.id){
 					ProfilManager.get(MainActivity.aktivChat, new InfoListener(){
 						public void ok(UserInfo info){

@@ -38,7 +38,7 @@ import de.keplerware.heutelernen.manager.ProfilManager;
 import de.keplerware.heutelernen.ui.MyText;
 
 public class ScreenChat extends Screen{
-	private static UserInfo info;
+	private UserInfo info;
 	
 	private ScrollView scroller;
 	private LinearLayout content;
@@ -47,7 +47,7 @@ public class ScreenChat extends Screen{
 	
 	public static void show(UserInfo i){
 		Starter s = new Starter(ScreenChat.class);
-        s.intent.putExtras(ProfilManager.create(info));
+        s.intent.putExtras(ProfilManager.create(i));
         s.send();
 	}
 
@@ -143,6 +143,11 @@ public class ScreenChat extends Screen{
 	}
 
 	public void show(){
+        bar.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                ScreenProfil.show(info);
+            }
+        });
         info = ProfilManager.get(getIntent().getExtras());
 		text = (EditText) findViewById(R.id.chat_text);
 		text.setOnEditorActionListener(new TextView.OnEditorActionListener(){
@@ -168,10 +173,9 @@ public class ScreenChat extends Screen{
 		}
 		Internet.last(info.id);
 		scroll();
-        bar.setTitle(info.name);
 	}
 
     public String getTitel(){
-        return null;
+        return info.name;
     }
 }

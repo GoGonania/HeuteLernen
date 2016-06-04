@@ -10,22 +10,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import de.keplerware.heutelernen.R;
+import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager.Chat;
 import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MyText;
 
 public class FragmentChats extends Fragment{
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.chats, null);
-        LinearLayout main = (LinearLayout) v.findViewById(R.id.chats_main);
+    private LinearLayout main;
+
+    public void resume(){
+        System.out.println("Resume");
+        if(main == null) return;
+        main.removeAllViews();
         Chat[] c = NachrichtenManager.get();
         if(c.length == 0){
             main.addView(new MyText("Du hast gerade keine aktive Chats"){{setGravity(Gravity.CENTER);}});
         } else{
             MyList<Chat> liste = new MyList<Chat>(NachrichtenManager.get()){
                 public View view(final Chat t){
-                    View r = inflater.inflate(R.layout.chat_item, null);
+                    View r = Screen.inflater.inflate(R.layout.chat_item, null);
                     r.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View v){
                             ScreenChat.show(t.info);
@@ -56,6 +60,16 @@ public class FragmentChats extends Fragment{
             };
             main.addView(liste);
         }
+    }
+
+    public void onResume(){
+        super.onResume();
+        resume();
+    }
+
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        View v = inflater.inflate(R.layout.chats, null);
+        main = (LinearLayout) v.findViewById(R.id.chats_main);
         return v;
     }
 }
