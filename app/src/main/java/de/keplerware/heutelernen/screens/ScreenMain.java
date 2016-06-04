@@ -6,20 +6,15 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 
 import de.keplerware.heutelernen.Dialog;
 import de.keplerware.heutelernen.Event;
-import de.keplerware.heutelernen.HeuteLernen;
-import de.keplerware.heutelernen.Internet;
-import de.keplerware.heutelernen.MyService;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
-import de.keplerware.heutelernen.ui.MySpinner;
 
 public class ScreenMain extends Screen{
     private FragmentChats chats;
@@ -86,13 +81,13 @@ public class ScreenMain extends Screen{
 
     public boolean event(int t, Object... d){
         if(t == Event.MESSAGE){
+            if(!chats.paused) chats.resume();
             resume();
         }
         return false;
     }
 
     public void resume(){
-        chats.resume();
         int u = NachrichtenManager.unread();
         if(u == 0){
             tabs.getTabAt(0).setText("Chats");

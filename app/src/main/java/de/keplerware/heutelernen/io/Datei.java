@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter;
 import de.keplerware.heutelernen.Util;
 
 public class Datei{
-	private File f;
+	private final File f;
 	
 	public static Datei root(String name){return new Datei(Util.fileDir+"/"+name);}
 	
@@ -62,7 +62,7 @@ public class Datei{
 			InputStreamReader in = new InputStreamReader(new FileInputStream(f), "UTF-8");
 			String d = "";
 			
-			int b = 0;
+			int b;
 			while((b = in.read()) != -1){
 				d += (char) b;
 			}

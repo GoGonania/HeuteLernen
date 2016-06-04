@@ -25,8 +25,8 @@ public class ScreenLogin extends Screen{
 		mail = (EditText) findViewById(R.id.login_email);
 		passwort = (EditText) findViewById(R.id.login_passwort);
 		
-		String m = Save.mail();
-		String p = Save.passwort();
+		String m = Save.mail;
+		String p = Save.passwort;
 		
 		if(m != null) mail.setText(m);
 		if(p != null) passwort.setText(p);
@@ -57,18 +57,6 @@ public class ScreenLogin extends Screen{
 				Util.toast("Eingeloggt als "+info.name+"!");
 				new Starter(ScreenMain.class).send();
 				finish();
-				/*if(MainActivity.aktivChat != -1 && MainActivity.aktivID == Sitzung.info.id){
-					ProfilManager.get(MainActivity.aktivChat, new InfoListener(){
-						public void ok(UserInfo info){
-							ScreenChat.show(info, false);
-						}
-						
-						public void fail(){}
-					});
-				} else{
-					Util.setScreen(new ScreenMain());
-				}
-				MainActivity.aktivChat = -1;*/
 			}
 
 			public void fail(int e) {

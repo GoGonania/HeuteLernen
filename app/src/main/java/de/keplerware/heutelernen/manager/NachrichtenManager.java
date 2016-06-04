@@ -8,7 +8,6 @@ import de.keplerware.heutelernen.Internet.UserInfo;
 import de.keplerware.heutelernen.Dialog;
 import de.keplerware.heutelernen.MyService;
 import de.keplerware.heutelernen.R;
-import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.Dialog.ConfirmListener;
@@ -103,7 +102,6 @@ public class NachrichtenManager{
 				if(c.ms.isEmpty()){
 					loadC();
 					c.delete();
-					continue;
 				} else{
 					if(c.info == null){
 						ProfilManager.get(c.partner, new InfoListener(){
@@ -142,7 +140,7 @@ public class NachrichtenManager{
 		}
 		Chat[] aus = new Chat[cache.size()];
 		for(int i = 0; i < cache.size(); i++){
-			aus[i] = chats.get(((int) i));
+			aus[i] = chats.get(i);
 		}
 		cache.clear();
 		return aus;

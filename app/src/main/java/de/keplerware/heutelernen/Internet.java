@@ -133,6 +133,16 @@ public class Internet{
 			}
 		}, new String[]{"id"}, new String[]{""+id});
 	}
+
+	public static void deleteUser(UserInfo info){
+		internet("delete", "Lösche Benutzer...", false, new Listener() {
+			public void ok(String data){
+				Util.toast("Benutzer wurde gelöscht!");
+			}
+
+			public void fail(Exception e) {}
+		}, new String[]{"id"}, new String[]{""+info.id});
+	}
 	
 	public static void register(String vn, String nn, int jahrgang, String mail, String ort, String p, int schule, final RegisterListener l){
 		internet("register", "Registriere...", false, new Listener() {
@@ -210,6 +220,10 @@ public class Internet{
 				info.fail(LoginError.Connection);
 			}
 		}, new String[]{"mail", "p"}, new String[]{m, p});
+	}
+
+	public static void nachrichtSystem(final UserInfo zu, final String text, Listener l){
+		internet("nachricht_senden", "Nachricht wird gesendet...", false, l, new String[]{"typ", "von", "zu", "text"}, new String[]{"system", ""+Sitzung.info.id, ""+zu.id, text.replace("€", "euro")});
 	}
 	
 	public static void nachricht(final UserInfo zu, final String text, final Listener l){

@@ -2,7 +2,6 @@ package de.keplerware.heutelernen;
 import java.io.InputStream;
 import java.net.URL;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;

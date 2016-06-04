@@ -18,6 +18,7 @@ import de.keplerware.heutelernen.ui.MyText;
 
 public class FragmentChats extends Fragment{
     private LinearLayout main;
+    public boolean paused = true;
 
     public void resume(){
         System.out.println("Resume");
@@ -64,7 +65,13 @@ public class FragmentChats extends Fragment{
 
     public void onResume(){
         super.onResume();
+        paused = false;
         resume();
+    }
+
+    public void onPause(){
+        super.onPause();
+        paused = true;
     }
 
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){

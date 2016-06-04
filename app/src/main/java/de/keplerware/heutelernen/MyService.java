@@ -21,7 +21,6 @@ import de.keplerware.heutelernen.Internet.UserInfo;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager.Chat;
 import de.keplerware.heutelernen.manager.ProfilManager;
-import de.keplerware.heutelernen.screens.ScreenChat;
 
 public class MyService extends Service{
 	private static final long loginTimeout = 2000;
@@ -61,8 +60,8 @@ public class MyService extends Service{
 		if(login){
 			System.out.println("SERVICE: try to login after boot");
 			login = false;
-			m = Save.mail();
-			p = Save.passwort();
+			m = Save.mail;
+			p = Save.passwort;
 			if(m == null || p == null){
 				System.out.println("SERVICE: account-daten nicht vorhanden");
 				stopSelf();
@@ -179,9 +178,9 @@ public class MyService extends Service{
                         );
                     }
 
-                    Intent i = new Intent(c, ScreenChat.class);
+                    Intent i = new Intent(c, NotificationClick.class);
                     i.putExtras(ProfilManager.create(n.info));
-                    PendingIntent pi = PendingIntent.getActivity(c, n.id, i, PendingIntent.FLAG_CANCEL_CURRENT);
+                    PendingIntent pi = PendingIntent.getBroadcast(c, n.id, i, PendingIntent.FLAG_CANCEL_CURRENT);
                     b.setContentIntent(pi);
 
                     manager.notify(n.id, b.build());
@@ -202,10 +201,10 @@ public class MyService extends Service{
         }
 	}
 	
-	public static void check(){
+	private static void check(){
 		if(id == -1){
 			System.out.println("SERVICE: get id from save");
-			id = Save.id();
+			id = Save.id;
 		}
 		if(aktivID != -1){
 			Internet.last(aktivID);

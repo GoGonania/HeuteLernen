@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 public abstract class MyAdapter<T> extends BaseAdapter{
-	private T[] items;
+	private final T[] items;
 	
 	public abstract View view(T item);
 	

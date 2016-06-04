@@ -24,9 +24,6 @@ public class ScreenRegistrieren extends Screen{
 	private EditText v_mail;
 	private EditText v_ort;
 	private EditText v_klasse;
-
-	private RadioButton klasseFrei;
-    private RadioButton klasseNichtFrei;
 	
 	private boolean frei = true;
 
@@ -50,8 +47,8 @@ public class ScreenRegistrieren extends Screen{
 		v_ort = (EditText) findViewById(R.id.start_ort);
 		v_mail = (EditText) findViewById(R.id.login_email);
 		v_klasse = (EditText) findViewById(R.id.start_klasse);
-        klasseFrei = (RadioButton) findViewById(R.id.start_alterfrei);
-        klasseNichtFrei = (RadioButton) findViewById(R.id.start_alternichtfrei);
+        RadioButton klasseFrei = (RadioButton) findViewById(R.id.start_alterfrei);
+        RadioButton klasseNichtFrei = (RadioButton) findViewById(R.id.start_alternichtfrei);
 
         klasseFrei.setChecked(true);
 
