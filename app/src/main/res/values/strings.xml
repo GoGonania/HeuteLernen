@@ -26,9 +26,14 @@
     </string-array>
 
     <string-array name="schulen">
-        <item>Kepler Gymnasium Weiden</item>
+        <item>Kepler Gym. Weiden</item>
         <item>Augustinus Weiden</item>
         <item>FOS/BOS Weiden</item>
         <item>HAW Weiden</item>
+        <item>OTH Weiden</item>
+        <item>Hans-Scholl Reals.</item>
+        <item>Sophie-Scholl Reals.</item>
+        <item>Elly Heuss Weiden</item>
+        <item>Stiftland Gym. Tirschenr.</item>
     </string-array>
 </resources>
