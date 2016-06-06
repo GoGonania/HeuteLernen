@@ -58,6 +58,7 @@ public class Sitzung{
 		Util.toast("Du hast dich ausgeloggt!");
 		Save.setData(info.mail, null, -1);
 		reset(false);
+		Util.screen.finish();
 		new Starter(ScreenLogin.class).send();
 	}
 }

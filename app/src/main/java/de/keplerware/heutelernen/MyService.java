@@ -52,7 +52,7 @@ public class MyService extends Service{
 		
 		if(manager == null){
 			manager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
-			logo = BitmapFactory.decodeResource(c.getResources(), R.drawable.logo_notif);
+			logo = BitmapFactory.decodeResource(c.getResources(), R.drawable.logo);
 		}
 		
 		System.out.println("SERVICE: create boot="+login+"");

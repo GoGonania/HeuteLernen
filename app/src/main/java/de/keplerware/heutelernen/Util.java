@@ -19,22 +19,22 @@ public class Util{
 	public static String appname;
 	public static Screen screen;
 	public static String[] schulen;
-	
+
 	public interface Listener{
 		void ok(String data);
 		void fail(Exception e);
 	}
-	
+
 	public static void init(Context c){
 		if(Util.c == null){
 			System.out.println("UTIL: init");
 			Util.c = c;
-			
+
 			appname = c.getResources().getString(R.string.app_name);
 			schulen = c.getResources().getStringArray(R.array.schulen);
 	        wakelock = ((PowerManager) c.getSystemService(Context.POWER_SERVICE)).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
 	        fileDir = c.getFilesDir().getAbsolutePath();
-	        
+
 			Save.init(c);
 			
 			serviceIntent = new Intent(c, MyService.class);
@@ -76,22 +76,23 @@ public class Util{
 	public static boolean event(int type, Object... d){
 		return screen != null && screen.event(type, d);
 	}
-	
+
 	public static void internet(final String name, final String p, final Listener l){
 		new Thread(new Runnable(){
-				public void run() {
+				public void run(){
 					try{
-						URL url = new URL(""+host+""+name+".php?"+p+"");
-						InputStream in = url.openStream();
+						InputStream in = new URL(""+host+""+name+".php?"+p+"").openStream();
+
 						String s = "";
 						int b;
 						while((b = in.read()) != -1){
 							s += (char) b;
 						}
 						l.ok(s);
-					}catch (final Exception e){
+					}catch(final Exception e){
 						l.fail(e);
 					}
-				}}).start();
+				}
+		}).start();
 	}
 }

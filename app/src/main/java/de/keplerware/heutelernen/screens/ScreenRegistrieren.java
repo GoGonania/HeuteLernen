@@ -48,7 +48,6 @@ public class ScreenRegistrieren extends Screen{
 		v_mail = (EditText) findViewById(R.id.login_email);
 		v_klasse = (EditText) findViewById(R.id.start_klasse);
         RadioButton klasseFrei = (RadioButton) findViewById(R.id.start_alterfrei);
-        RadioButton klasseNichtFrei = (RadioButton) findViewById(R.id.start_alternichtfrei);
 
         klasseFrei.setChecked(true);
 

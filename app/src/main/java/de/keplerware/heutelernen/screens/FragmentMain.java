@@ -1,7 +1,6 @@
 package de.keplerware.heutelernen.screens;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +9,14 @@ import android.widget.TextView;
 
 import de.keplerware.heutelernen.HeuteLernen;
 import de.keplerware.heutelernen.Internet;
+import de.keplerware.heutelernen.MyFragment;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MySpinner;
 
-public class FragmentMain extends Fragment{
+public class FragmentMain extends MyFragment {
     private MySpinner s;
     private LinearLayout l;
 

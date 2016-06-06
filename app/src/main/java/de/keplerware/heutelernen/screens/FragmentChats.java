@@ -1,7 +1,6 @@
 package de.keplerware.heutelernen.screens;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import de.keplerware.heutelernen.MyFragment;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
@@ -16,12 +16,10 @@ import de.keplerware.heutelernen.manager.NachrichtenManager.Chat;
 import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MyText;
 
-public class FragmentChats extends Fragment{
+public class FragmentChats extends MyFragment {
     private LinearLayout main;
-    public boolean paused = true;
 
     public void resume(){
-        System.out.println("Resume");
         if(main == null) return;
         main.removeAllViews();
         Chat[] c = NachrichtenManager.get();
@@ -65,13 +63,7 @@ public class FragmentChats extends Fragment{
 
     public void onResume(){
         super.onResume();
-        paused = false;
         resume();
-    }
-
-    public void onPause(){
-        super.onPause();
-        paused = true;
     }
 
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){

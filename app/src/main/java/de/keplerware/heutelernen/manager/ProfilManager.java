@@ -9,7 +9,7 @@ import de.keplerware.heutelernen.Internet.InfoListener;
 import de.keplerware.heutelernen.Internet.UserInfo;
 
 public class ProfilManager{
-	private final static ArrayList<UserInfo> infos = new ArrayList<UserInfo>();
+	private final static ArrayList<UserInfo> infos = new ArrayList<>();
 	
 	public static void get(int id, final InfoListener l){
 		for(int i = 0; i < infos.size(); i++){

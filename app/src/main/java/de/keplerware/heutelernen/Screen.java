@@ -21,7 +21,6 @@ public abstract class Screen extends AppCompatActivity{
         ViewGroup base = inflate(R.layout.base);
         ViewGroup content = (ViewGroup) base.findViewById(R.id.content);
         super.onCreate(savedInstanceState);
-        System.out.println("Creating "+getClass().getSimpleName());
         content.removeAllViews();
         content.addView(inflate(getLayout()));
         setContentView(base);

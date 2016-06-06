@@ -23,7 +23,7 @@ public class NachrichtenManager{
 		public long readTime;
 		public int id;
 		public int partner;
-		public ArrayList<Message> ms = new ArrayList<Message>();
+		public ArrayList<Message> ms = new ArrayList<>();
 		
 		public void add(String g, boolean o, long time){
 			Message m = new Message();
@@ -73,8 +73,8 @@ public class NachrichtenManager{
 	}
 	
 	private static Datei main = Datei.root("chat");
-	private static ArrayList<Chat> chats = new ArrayList<Chat>();
-	private static ArrayList<Integer> cache = new ArrayList<Integer>();
+	private static ArrayList<Chat> chats = new ArrayList<>();
+	private static ArrayList<Integer> cache = new ArrayList<>();
 	
 	private static boolean f;
 	private static int p;

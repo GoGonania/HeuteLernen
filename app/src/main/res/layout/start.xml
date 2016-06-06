@@ -154,11 +154,9 @@
                      android:text="Deine Klasse:" />
 
                  <RadioButton
-                     android:id="@+id/start_alternichtfrei"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
-                     android:text="Schule geschafft"
-                     android:layout_column="1" />
+                     android:text="Schule geschafft" />
 
              </RadioGroup>
 
@@ -166,7 +164,6 @@
                  android:id="@+id/start_klasse"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
-                 android:layout_toRightOf="@+id/start_alterfrei"
                  android:layout_weight="1"
                  android:ems="10"
                  android:hint="z.B. 9"
@@ -201,6 +198,6 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/button_gray"
         android:text="Bereits ein Konto? Einloggen >>"
-        android:width="250dp" />
+        android:width="260dp" />
 
 </LinearLayout>

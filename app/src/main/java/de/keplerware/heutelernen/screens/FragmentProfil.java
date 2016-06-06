@@ -2,7 +2,6 @@ package de.keplerware.heutelernen.screens;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import de.keplerware.heutelernen.Dialog;
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.Internet.UserInfo;
+import de.keplerware.heutelernen.MyFragment;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Rang;
 import de.keplerware.heutelernen.Sitzung;
@@ -20,7 +20,7 @@ import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.manager.ProfilManager;
 import de.keplerware.heutelernen.ui.MyText;
 
-public class FragmentProfil extends Fragment{
+public class FragmentProfil extends MyFragment {
     public UserInfo info;
     public boolean owner;
     private LinearLayout angebote;
