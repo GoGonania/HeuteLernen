@@ -42,7 +42,7 @@ public class MyService extends Service{
 	
 	public IBinder onBind(Intent intent){return null;}
 	public int onStartCommand(Intent intent, int flags, int startId){return Service.START_STICKY;}
-	public void onDestroy(){running = false; System.out.println("SERVICE: destroy");}
+	public void onDestroy(){running = false; System.out.println("Service: gestoppt");}
 	
 	public void onCreate(){
 		Util.init(this);
@@ -55,15 +55,14 @@ public class MyService extends Service{
 			logo = BitmapFactory.decodeResource(c.getResources(), R.drawable.logo);
 		}
 		
-		System.out.println("SERVICE: create boot="+login+"");
+		System.out.println("Service: start von boot="+login+"");
 		
 		if(login){
-			System.out.println("SERVICE: try to login after boot");
 			login = false;
 			m = Save.mail;
 			p = Save.passwort;
 			if(m == null || p == null){
-				System.out.println("SERVICE: account-daten nicht vorhanden");
+				System.out.println("Service: account-daten nicht vorhanden");
 				stopSelf();
 			} else{
 				h = new Handler(){
@@ -89,7 +88,7 @@ public class MyService extends Service{
 	}
 	
 	private void login(){
-		System.out.println("SERVICE: login");
+		System.out.println("Service: versuche einzuloggen");
 		
 		Sitzung.login(m, p, true, new LoginListener(){
 			public void ok(UserInfo info){
@@ -97,10 +96,10 @@ public class MyService extends Service{
 			}
 
 			public void fail(int e){
-				System.out.println("SERVICE: login fail ("+c+")");
+				System.out.println("Service: login fehlgeschlagen!");
 
 				if(e != LoginError.Passwort){
-					System.out.println("SERVICE: try to login in "+loginTimeout+" ms");
+					System.out.println("Service: versuche es nocheinmal in "+loginTimeout+" ms");
 					h.sendEmptyMessageDelayed(0, loginTimeout);
 				} else{
 					stopSelf();
@@ -118,7 +117,7 @@ public class MyService extends Service{
 			nachricht(n);
 			workF();
 		} else{
-			ProfilManager.get(n.id, new InfoListener(){
+			ProfilManager.get(n.id, false, new InfoListener(){
 				public void ok(UserInfo info){
 					n.info = info;
 					nachricht(n);
@@ -203,7 +202,7 @@ public class MyService extends Service{
 	
 	private static void check(){
 		if(id == -1){
-			System.out.println("SERVICE: get id from save");
+			System.out.println("Service: hole Benutzer-ID...");
 			id = Save.id;
 		}
 		if(aktivID != -1){

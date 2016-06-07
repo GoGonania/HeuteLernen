@@ -55,7 +55,7 @@ public class ScreenMain extends Screen{
                     case 0:
                         return "Chats";
                     case 1:
-                        return "Startmenu";
+                        return "Nachhilfe";
                     case 2:
                         return Sitzung.info.vname;
                 }

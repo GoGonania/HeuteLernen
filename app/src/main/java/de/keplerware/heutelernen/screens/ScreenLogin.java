@@ -55,8 +55,7 @@ public class ScreenLogin extends Screen{
 		Sitzung.login(m, p, false, new LoginListener(){
 			public void ok(UserInfo info){
 				Util.toast("Eingeloggt als "+info.name+"!");
-				new Starter(ScreenMain.class).send();
-				finish();
+				new Starter(ScreenMain.class).replace();
 			}
 
 			public void fail(int e) {

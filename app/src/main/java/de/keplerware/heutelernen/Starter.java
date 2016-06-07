@@ -16,6 +16,11 @@ public class Starter{
         intent = new Intent(HeuteLernen.context, screen);
     }
 
+    public void replace(){
+        Util.screen.finish();
+        send();
+    }
+
     public void send(){
         c.startActivity(intent);
     }

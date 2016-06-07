@@ -16,7 +16,7 @@ import de.keplerware.heutelernen.io.Datei;
 import de.keplerware.heutelernen.screens.ScreenMain;
 
 public class NachrichtenManager{
-	public static class Chat{
+	public static class Chat implements Comparable<Chat>{
 		public UserInfo info;
 		public Datei dir;
 		public Datei read;
@@ -64,6 +64,17 @@ public class NachrichtenManager{
 				}
 			});
 		}
+
+		public int compareTo(Chat another){
+			long t = another.last().time;
+			long tt = last().time;
+
+			if(t == tt){
+				return 0;
+			} else{
+				return t > tt ? 1 : -1;
+			}
+		}
 	}
 	
 	public static class Message{
@@ -93,7 +104,7 @@ public class NachrichtenManager{
 		l = li;
 		Datei[] n = main.createF(""+id).list();
 		p = n.length;
-		System.out.println("FOUND "+p+" CHAT(s)");
+		System.out.println("NachrichtenManager: "+p+" Chats gefunden");
 		if(p == 0){
 			li.ok(null);
 		} else{
@@ -104,7 +115,7 @@ public class NachrichtenManager{
 					c.delete();
 				} else{
 					if(c.info == null){
-						ProfilManager.get(c.partner, new InfoListener(){
+						ProfilManager.get(c.partner, true, new InfoListener(){
 							public void ok(UserInfo info){
 								c.info = info;
 								loadC();
@@ -120,6 +131,7 @@ public class NachrichtenManager{
 					}
 				}
 			}
+            Collections.sort(chats);
 		}
 	}
 	
@@ -127,8 +139,10 @@ public class NachrichtenManager{
 		p--;
 		if(p == 0){
 			if(f){
+                System.out.println("NachrichtenManager: Fehler beim Laden der Chats!");
 				l.fail(null);
 			} else{
+                System.out.println("NachrichtenManager: Chats wurden geladen!");
 				l.ok(null);
 			}
 		}
@@ -159,7 +173,7 @@ public class NachrichtenManager{
 		try{
 			c.readTime = Long.parseLong(c.read.read());
 		}catch(Exception e){
-			System.out.println("CHAT WITH "+partner+" never read??");
+			System.out.println("NachrichtenManager: Chat wird erstellt mit "+partner+"");
 		}
 		
 		for(Datei d : c.dir.list()){

@@ -1,5 +1,6 @@
 package de.keplerware.heutelernen;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,13 +12,15 @@ import de.keplerware.heutelernen.screens.ScreenMain;
 public abstract class Screen extends AppCompatActivity{
     public static LayoutInflater inflater;
     public Toolbar bar;
+    public boolean aktiv;
 
     public abstract int getLayout();
     public abstract void show();
     public abstract String getTitel();
 
     protected void onCreate(Bundle savedInstanceState){
-        inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        aktiv();
+        inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup base = inflate(R.layout.base);
         ViewGroup content = (ViewGroup) base.findViewById(R.id.content);
         super.onCreate(savedInstanceState);
@@ -47,13 +50,24 @@ public abstract class Screen extends AppCompatActivity{
 
     protected void onPause(){
         super.onPause();
+        aktiv = false;
         HeuteLernen.pause = true;
+    }
+
+    private void aktiv(){
+        aktiv = true;
+        Util.screen = this;
+        HeuteLernen.pause = false;
     }
 
     protected void onResume(){
         super.onResume();
-        Util.screen = this;
-        HeuteLernen.pause = false;
+        aktiv();
+    }
+
+    public void finish(){
+        aktiv = false;
+        super.finish();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

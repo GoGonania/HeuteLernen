@@ -59,6 +59,6 @@ public class Sitzung{
 		Save.setData(info.mail, null, -1);
 		reset(false);
 		Util.screen.finish();
-		new Starter(ScreenLogin.class).send();
+		new Starter(ScreenLogin.class).replace();
 	}
 }

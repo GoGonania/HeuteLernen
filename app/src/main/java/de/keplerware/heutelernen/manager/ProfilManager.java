@@ -11,14 +11,14 @@ import de.keplerware.heutelernen.Internet.UserInfo;
 public class ProfilManager{
 	private final static ArrayList<UserInfo> infos = new ArrayList<>();
 	
-	public static void get(int id, final InfoListener l){
+	public static void get(int id, boolean dialog, final InfoListener l){
 		for(int i = 0; i < infos.size(); i++){
 			if(infos.get(i).id == id){
 				l.ok(infos.get(i));
 				return;
 			}
 		}
-		Internet.info(id, new InfoListener(){
+		Internet.info(id, dialog, new InfoListener(){
 			public void ok(UserInfo info){
 				infos.add(info);
 				l.ok(info);

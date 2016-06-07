@@ -147,7 +147,6 @@ public class Internet{
 	public static void register(String vn, String nn, int jahrgang, String mail, String ort, String p, int schule, final RegisterListener l){
 		internet("register", "Registriere...", false, new Listener() {
             public void ok(String data){
-                System.out.println("Registrieren: _"+data+"_");
                 if(data.equals("X")){
                     l.fail(false);
                 } else{
@@ -161,8 +160,8 @@ public class Internet{
         }, new String[]{"vname", "nname", "jahrgang", "mail", "ort", "p", "schule"}, new String[]{vn, nn, "" + jahrgang, mail, ort, p, ""+schule});
 	}
 	
-	public static void info(final int id, final InfoListener l){
-		internet("info", "Lade Daten...", false, new Listener(){
+	public static void info(final int id, boolean dialog, final InfoListener l){
+		internet("info", dialog ? "Lade Daten..." : null, false, new Listener(){
 			public void ok(String data){
 				UserInfo i = new UserInfo();
 				i.id = id;
@@ -203,7 +202,7 @@ public class Internet{
 					if(data.equals("X")){
 						info.fail(LoginError.Bestaetigen);
 					} else {
-						ProfilManager.get(Integer.parseInt(data), new InfoListener() {
+						ProfilManager.get(Integer.parseInt(data), true, new InfoListener() {
 							public void ok(UserInfo i) {
 								info.ok(i);
 							}
@@ -277,7 +276,7 @@ public class Internet{
 						final Angebot a = new Angebot();
 						a.fach = ss[1];
 						as[i] = a;
-						ProfilManager.get(id, new InfoListener() {
+						ProfilManager.get(id, true, new InfoListener() {
 							public void ok(UserInfo info){
 								if(fail) return;
 								counter--;
