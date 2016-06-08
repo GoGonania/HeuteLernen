@@ -65,7 +65,7 @@ public class Internet{
 	}
 	
 	private static void internet(String file, String text, final boolean hidden, final Listener l, String[] pk, String[] pv){
-		final Runnable r = HeuteLernen.pause?null:Dialog.progress(text);
+		final Runnable r = Util.pause()?null:Dialog.progress(text);
 		String p = "";
 		for(int i = 0; i < pk.length; i++){
 			try{p += "&"+pk[i]+"="+URLEncoder.encode(pv[i], "UTF-8")+"";}catch (UnsupportedEncodingException e){e.printStackTrace();}
@@ -131,7 +131,7 @@ public class Internet{
 			public void fail(Exception e){
 				li.fail();
 			}
-		}, new String[]{"id"}, new String[]{""+id});
+		}, new String[]{"id", "a"}, new String[]{""+id, ""+(!Util.pause())});
 	}
 
 	public static void deleteUser(UserInfo info){
@@ -158,6 +158,10 @@ public class Internet{
                 l.fail(true);
             }
         }, new String[]{"vname", "nname", "jahrgang", "mail", "ort", "p", "schule"}, new String[]{vn, nn, "" + jahrgang, mail, ort, p, ""+schule});
+	}
+
+	public static void angebotEntfernen(String fach, int id, Listener l){
+		internet("angebot_entfernen", "Lösche '" + fach + "' als dein Nachhilfefach...", false, l, new String[]{"id", "f"}, new String[]{""+id, fach});
 	}
 	
 	public static void info(final int id, boolean dialog, final InfoListener l){

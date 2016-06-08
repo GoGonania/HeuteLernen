@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.widget.EditText;
 
+import de.keplerware.heutelernen.ui.MySpinner;
+
 public class Dialog{
 	public interface ConfirmListener{
 		void ok();
@@ -15,6 +17,10 @@ public class Dialog{
 	public interface PromptListener{
         void ok(String text);
     }
+
+	public interface FachListener{
+		void ok(String fach);
+	}
 	
 	public static void confirm(String text, ConfirmListener li){
 		confirm(-1, text, li);
@@ -78,8 +84,23 @@ public class Dialog{
 		b.create().show();
 	}
 
+	public static void fachSelect(String titel, final FachListener li){
+		AlertDialog.Builder b = new AlertDialog.Builder(Util.screen);
+		b.setTitle(titel);
+		b.setIcon(R.drawable.help);
+		final MySpinner s = new MySpinner(R.array.facher);
+        b.setPositiveButton("Auswählen", new OnClickListener(){
+			public void onClick(DialogInterface dialogInterface, int i){
+				li.ok((String) s.getSelectedItem());
+			}
+		});
+		b.setNegativeButton("Abbrechen", null);
+        b.setView(s);
+		b.create().show();
+	}
+
 	public static Runnable progress(String text){
-		if(text == null || HeuteLernen.pause) return null;
+		if(text == null || Util.pause()) return null;
 		final ProgressDialog d = new ProgressDialog(Util.screen);
 		d.setMessage(text);
 		d.setTitle(null);

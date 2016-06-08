@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.zip.Inflater;
+
 import de.keplerware.heutelernen.Dialog;
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.Internet.UserInfo;
@@ -18,12 +20,15 @@ import de.keplerware.heutelernen.Rang;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.manager.ProfilManager;
+import de.keplerware.heutelernen.ui.MyButton;
+import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MyText;
 
 public class FragmentProfil extends MyFragment {
     public UserInfo info;
     public boolean owner;
     private LinearLayout angebote;
+    private MyFragment fr;
 
     public static FragmentProfil show(UserInfo info){
         FragmentProfil f = new FragmentProfil();
@@ -31,14 +36,15 @@ public class FragmentProfil extends MyFragment {
         return f;
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View create(){
+        fr = this;
         if(getArguments() != null){
             info = ProfilManager.get(getArguments());
         } else{
             info = Sitzung.info;
             owner = true;
         }
-        View v = inflater.inflate(R.layout.profil, null);
+        View v = inflate(R.layout.profil);
         ((TextView) v.findViewById(R.id.profil_name)).setText(info.name);
         ((TextView) v.findViewById(R.id.profil_details)).setText(info.klasse+"\nWohnort: "+info.ort+"\nSchule: "+info.schuleText);
         final TextView tB = (TextView) v.findViewById(R.id.profil_beschreibung);
@@ -86,17 +92,46 @@ public class FragmentProfil extends MyFragment {
         return v;
     }
 
-    public void onResume(){
-        super.onResume();
+    public void update(){
+        angebote.removeAllViews();
+        load();
+    }
+
+    private void load(){
         Internet.angebote(info, new Internet.AngebotListener(){
             public void ok(Internet.Angebot[] as){
                 angebote.removeAllViews();
                 if(as.length == 0){
                     angebote.addView(new MyText("Keine Angebote gefunden!"));
                 } else{
-                    for(Internet.Angebot a : as){
-                        angebote.addView(new MyText(a.fach));
-                    }
+                    MyList<Internet.Angebot> liste = new MyList<Internet.Angebot>(as){
+                        public View view(final Internet.Angebot angebot){
+                            View v = fr.inflate(R.layout.myangebot);
+                            ((TextView) v.findViewById(R.id.myangebot_text)).setText(angebot.fach);
+                            if(owner){
+                                View m = v.findViewById(R.id.myangebot_minus);
+                                m.setVisibility(View.VISIBLE);
+                                m.setOnClickListener(new OnClickListener(){
+                                    public void onClick(View view){
+                                        Dialog.confirm("" + angebot.fach + " wirklich löschen?", new Dialog.ConfirmListener(){
+                                            public void ok(){
+                                                Internet.angebotEntfernen(angebot.fach, info.id, new Util.Listener(){
+                                                    public void ok(String data){
+                                                        Util.toast("Nachhilfefach wurde gelöscht!");
+                                                        update();
+                                                    }
+
+                                                    public void fail(Exception e){}
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            return v;
+                        }
+                    };
+                    angebote.addView(liste);
                 }
             }
 
@@ -105,5 +140,10 @@ public class FragmentProfil extends MyFragment {
                 angebote.addView(new MyText("Keine Internetverbindung!"));
             }
         });
+    }
+
+    public void onResume(){
+        super.onResume();
+        load();
     }
 }

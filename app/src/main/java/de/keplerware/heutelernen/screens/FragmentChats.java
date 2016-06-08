@@ -66,8 +66,8 @@ public class FragmentChats extends MyFragment {
         resume();
     }
 
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View v = inflater.inflate(R.layout.chats, null);
+    public View create(){
+        View v = inflate(R.layout.chats);
         main = (LinearLayout) v.findViewById(R.id.chats_main);
         return v;
     }

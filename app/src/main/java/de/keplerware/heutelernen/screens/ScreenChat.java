@@ -92,19 +92,30 @@ public class ScreenChat extends Screen{
 			Nachricht n = (Nachricht) d[0];
 			addContent(false, n.text);
 			scroll();
-			return !HeuteLernen.pause;
+			return !Util.pause();
 		}
 		if(t == Event.LAST){
-			MyService.aktivID = info.id;
+            MyService.aktivID = info.id;
 			if(((Integer) d[0]) == info.id){
 				Object o = d[1];
 				if(o == null){
 					bar.setSubtitle(null);
 				} else{
 					String l = (String) o;
-					bar.setSubtitle((l.length() == 1)?"online":"zuletzt online: "+(l.isEmpty()?"nie":l));
+                    if(l.startsWith("X")){
+                        boolean aktiv = true;
+                        if(l.length() > 1){
+                            try{
+                                aktiv = Boolean.parseBoolean(l.substring(1));
+                            }catch(Exception e){}
+                        }
+                        bar.setSubtitle(aktiv?"online":"erreichbar");
+                    } else{
+                        bar.setSubtitle("zuletzt online: "+(l.isEmpty()?"nie":l));
+                    }
 				}
 			}
+            return !Util.pause();
 		}
 		return false;
 	}

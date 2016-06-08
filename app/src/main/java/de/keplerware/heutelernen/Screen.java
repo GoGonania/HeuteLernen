@@ -51,13 +51,11 @@ public abstract class Screen extends AppCompatActivity{
     protected void onPause(){
         super.onPause();
         aktiv = false;
-        HeuteLernen.pause = true;
     }
 
     private void aktiv(){
         aktiv = true;
         Util.screen = this;
-        HeuteLernen.pause = false;
     }
 
     protected void onResume(){

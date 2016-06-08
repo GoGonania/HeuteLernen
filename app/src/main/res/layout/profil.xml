@@ -39,22 +39,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginTop="20dp"
             android:text="Details"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Beschreibung"
             android:id="@+id/profil_beschreibung"
             android:layout_below="@+id/profil_details"
-            android:layout_alignStart="@+id/profil_details"
-            android:layout_alignLeft="@+id/profil_details"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp" />
 
         <ImageView
             android:layout_width="35dp"
@@ -73,7 +71,7 @@
         android:layout_gravity="center"
         android:orientation="vertical"
         android:gravity="center"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="25dp">
 
         <TextView
             android:layout_width="wrap_content"

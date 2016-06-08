@@ -9,6 +9,7 @@ import android.view.MenuItem;
 
 import de.keplerware.heutelernen.Dialog;
 import de.keplerware.heutelernen.Event;
+import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
@@ -18,6 +19,7 @@ import de.keplerware.heutelernen.manager.NachrichtenManager;
 
 public class ScreenMain extends Screen{
     private FragmentChats chats;
+    private FragmentProfil profil;
     private TabLayout tabs;
 
     public static Starter show(int tab){
@@ -36,6 +38,7 @@ public class ScreenMain extends Screen{
 
     public void show(){
         chats = new FragmentChats();
+        profil = new FragmentProfil();
         ViewPager pager = (ViewPager) findViewById(R.id.app);
         FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager()){
             public Fragment getItem(int position){
@@ -45,7 +48,7 @@ public class ScreenMain extends Screen{
                     case 1:
                         return new FragmentMain();
                     case 2:
-                        return new FragmentProfil();
+                        return profil;
                 }
                 return null;
             }
@@ -75,7 +78,7 @@ public class ScreenMain extends Screen{
             int tab = getIntent().getIntExtra("tab", 0);
             pager.setCurrentItem(tab);
         } else{
-            pager.setCurrentItem(1);
+            pager.setCurrentItem(NachrichtenManager.unread() > 0 ? 0 : 1);
         }
 	}
 
@@ -116,5 +119,25 @@ public class ScreenMain extends Screen{
                 return true;
             }
         });
+        m.add("Nachhilfefach hinzufügen").setIcon(R.drawable.add).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+            public boolean onMenuItemClick(MenuItem menuItem){
+                Dialog.fachSelect("Nachhilfe geben in...", new Dialog.FachListener(){
+                    public void ok(final String fach) {
+                        Internet.angebotAufgeben(fach, Sitzung.info.klasseZahl, Sitzung.info.id, new Util.Listener() {
+                            public void ok(String data){
+                                if(!data.isEmpty()) {
+                                    Util.toast("Du hast nun '"+fach+"' als Nachhilfefach!");
+                                    profil.update();
+                                } else{
+                                    Util.toast("Du hast bereits '"+fach+"' als Nachhilfefach!");
+                                }
+                            }
+                            public void fail(Exception e){}
+                        });
+                    }
+                });
+                return true;
+            }
+        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 }

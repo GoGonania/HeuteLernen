@@ -30,7 +30,7 @@ public class MyService extends Service{
 	public static boolean login;
 	public static boolean running;
 	public static int id = -1;
-	public static int aktivID = -1;
+    public static int aktivID = -1;
 	public static NotificationManager manager;
 	
 	private static Bitmap logo;
@@ -82,7 +82,7 @@ public class MyService extends Service{
 			public void handleMessage(Message msg){
 				if(!running) return;
 				check();
-				sendEmptyMessageDelayed(0, internet?checkTimeout:checkTimeoutNI);
+				sendEmptyMessageDelayed(0, internet?(Util.pause() ? checkTimeout * 2: checkTimeout):checkTimeoutNI);
 			}
 		}.sendEmptyMessage(0);
 	}
@@ -205,10 +205,10 @@ public class MyService extends Service{
 			System.out.println("Service: hole Benutzer-ID...");
 			id = Save.id;
 		}
-		if(aktivID != -1){
-			Internet.last(aktivID);
-			aktivID = -1;
-		} 
+        if(aktivID != -1 && !Util.pause()){
+            Internet.last(aktivID);
+            aktivID = -1;
+        }
 		Internet.nachrichten(id, new NachrichtenListener(){
 			public void ok(Nachricht[] ns){
 				internet = true;

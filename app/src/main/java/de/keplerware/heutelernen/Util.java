@@ -25,6 +25,11 @@ public class Util{
 		void fail(Exception e);
 	}
 
+    public static boolean pause(){
+        if(Util.screen == null) return true;
+        return !Util.screen.aktiv;
+    }
+
 	public static void init(Context c){
 		if(Util.c == null){
 			System.out.println("UTIL: init");
@@ -58,7 +63,7 @@ public class Util{
 	}
 	
 	public static void toast(final String text){
-		if(HeuteLernen.pause) return;
+		if(pause()) return;
 		Toast tt = Toast.makeText(c, text, Toast.LENGTH_SHORT);
 		if(t != null ) t.cancel();
 		tt.show();

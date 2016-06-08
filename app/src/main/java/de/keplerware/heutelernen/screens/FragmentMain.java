@@ -20,20 +20,14 @@ import de.keplerware.heutelernen.ui.MyText;
 public class FragmentMain extends MyFragment {
     private MySpinner s;
     private LinearLayout l;
+    private MyFragment fr;
 
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View v = inflater.inflate(R.layout.main, null);
+    public View create(){
+        fr = this;
+        View v = inflate(R.layout.main);
         l = (LinearLayout) v.findViewById(R.id.liste);
         s = (MySpinner) v.findViewById(R.id.main_spinner);
         s.fill(R.array.facher);
-
-        /*Internet.angebotAufgeben(f, Sitzung.info.klasseZahl, Sitzung.info.id, new Util.Listener() {
-            public void ok(String data){
-                if(!data.isEmpty()) Util.toast("Angebot wurde aufgegeben!");
-            }
-            public void fail(Exception e){}
-        });*/
-
         v.findViewById(R.id.suchen).setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 String f = s.getSelectedItem().toString();
@@ -46,7 +40,7 @@ public class FragmentMain extends MyFragment {
                         } else{
                             MyList<Internet.Angebot> liste = new MyList<Internet.Angebot>(as){
                                 public View view(final Internet.Angebot a){
-                                    View r = inflater.inflate(R.layout.angebot_item, null);
+                                    View r = fr.inflate(R.layout.angebot_item);
                                     r.setOnClickListener(new View.OnClickListener(){
                                         public void onClick(View v){
                                             ScreenProfil.show(a.info);
