@@ -11,6 +11,7 @@ import de.keplerware.heutelernen.Internet.UserInfo;
 import de.keplerware.heutelernen.MyFragment;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Rang;
+import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.manager.ProfilManager;
@@ -37,7 +38,7 @@ public class FragmentProfil extends MyFragment {
             info = Sitzung.info;
             owner = true;
         }
-        View v = inflate(R.layout.profil);
+        View v = Screen.inflate(R.layout.profil);
         ((TextView) v.findViewById(R.id.profil_name)).setText(info.name);
         ((TextView) v.findViewById(R.id.profil_details)).setText(info.klasse+"\nWohnort: "+info.ort+"\nSchule: "+info.schuleText);
         final TextView tB = (TextView) v.findViewById(R.id.profil_beschreibung);
@@ -94,30 +95,29 @@ public class FragmentProfil extends MyFragment {
         Internet.angebote(info, new Internet.AngebotListener(){
             public void ok(Internet.Angebot[] as){
                 angebote.removeAllViews();
-                if(as.length == 0){
+                if(as == null){
                     angebote.addView(new MyText("Keine Angebote gefunden!"));
                 } else{
                     MyList<Internet.Angebot> liste = new MyList<Internet.Angebot>(as){
                         public View view(final Internet.Angebot angebot){
-                            View v = fr.inflate(R.layout.myangebot);
+                            View v = Screen.inflate(R.layout.angebot);
                             ((TextView) v.findViewById(R.id.myangebot_text)).setText(angebot.fach);
                             if(owner){
                                 View m = v.findViewById(R.id.myangebot_minus);
                                 m.setVisibility(View.VISIBLE);
                                 m.setOnClickListener(new OnClickListener(){
-                                    public void onClick(View view){
-                                        Dialog.confirm("" + angebot.fach + " wirklich löschen?", new Dialog.ConfirmListener(){
-                                            public void ok(){
-                                                Internet.angebotEntfernen(angebot.fach, info.id, new Util.Listener(){
-                                                    public void ok(String data){
-                                                        Util.toast("Nachhilfefach wurde gelöscht!");
-                                                        update();
-                                                    }
+                                    public void onClick(View view){Dialog.confirm("" + angebot.fach + " wirklich löschen?", new Dialog.ConfirmListener(){
+                                        public void ok(){
+                                            Internet.angebotEntfernen(angebot.fach, info.id, new Util.Listener(){
+                                                public void ok(String data){
+                                                    Util.toast("Nachhilfefach wurde gelöscht!");
+                                                    update();
+                                                }
 
-                                                    public void fail(Exception e){}
-                                                });
-                                            }
-                                        });
+                                                public void fail(Exception e){}
+                                            });
+                                        }
+                                    });
                                     }
                                 });
                             }

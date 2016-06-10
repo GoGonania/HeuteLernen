@@ -17,19 +17,19 @@ import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 
-public class ScreenMain extends Screen{
+public class ScreenHome extends Screen{
     private FragmentChats chats;
     private FragmentProfil profil;
     private TabLayout tabs;
 
     public static Starter show(int tab){
-        Starter s = new Starter(ScreenMain.class);
+        Starter s = new Starter(ScreenHome.class);
         s.intent.putExtra("tab", tab);
         return s;
     }
 
     public int getLayout(){
-        return R.layout.app;
+        return R.layout.home;
     }
 
     public void onBackPressed(){
@@ -119,6 +119,12 @@ public class ScreenMain extends Screen{
                 return true;
             }
         });
+        m.add("Benutzer suchen").setIcon(R.drawable.search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+            public boolean onMenuItemClick(MenuItem menuItem){
+                new Starter(ScreenSearch.class).send();
+                return true;
+            }
+        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         m.add("Nachhilfefach hinzufügen").setIcon(R.drawable.add).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
             public boolean onMenuItemClick(MenuItem menuItem){
                 Dialog.fachSelect("Nachhilfe geben in...", new Dialog.FachListener(){

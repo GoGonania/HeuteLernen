@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 public abstract class MyFragment extends Fragment{
     public boolean paused = true;
-    private LayoutInflater in;
 
     public abstract View create();
 
@@ -22,12 +21,7 @@ public abstract class MyFragment extends Fragment{
         paused = true;
     }
 
-    public View inflate(int r){
-        return in.inflate(r, null);
-    }
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        in = inflater;
         return create();
     }
 }

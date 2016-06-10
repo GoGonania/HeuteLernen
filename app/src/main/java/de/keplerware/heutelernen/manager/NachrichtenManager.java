@@ -13,7 +13,7 @@ import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.Dialog.ConfirmListener;
 import de.keplerware.heutelernen.Util.Listener;
 import de.keplerware.heutelernen.io.Datei;
-import de.keplerware.heutelernen.screens.ScreenMain;
+import de.keplerware.heutelernen.screens.ScreenHome;
 
 public class NachrichtenManager{
 	public static class Chat implements Comparable<Chat>{
@@ -60,7 +60,7 @@ public class NachrichtenManager{
 			Dialog.confirm(R.drawable.delete, "Willst du den Chat mit "+info.name+" wirklich löschen?", new ConfirmListener(){
 				public void ok() {
 					delete();
-					ScreenMain.show(NachrichtenManager.get().length == 0?1:0).send();
+					ScreenHome.show(NachrichtenManager.get().length == 0?1:0).send();
 				}
 			});
 		}

@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.*;
 
 import de.keplerware.heutelernen.screens.ScreenLogin;
-import de.keplerware.heutelernen.screens.ScreenMain;
+import de.keplerware.heutelernen.screens.ScreenHome;
 
 public abstract class Screen extends AppCompatActivity{
     private static LayoutInflater inflater;
@@ -32,7 +32,7 @@ public abstract class Screen extends AppCompatActivity{
         bar.setTitle(getTitel());
         bar.setSubtitle(null);
         setSupportActionBar(bar);
-        if(this instanceof ScreenMain || this instanceof ScreenLogin){
+        if(this instanceof ScreenHome || this instanceof ScreenLogin){
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         } else{
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

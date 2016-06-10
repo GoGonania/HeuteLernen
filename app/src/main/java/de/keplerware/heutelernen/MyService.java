@@ -55,7 +55,7 @@ public class MyService extends Service{
 			logo = BitmapFactory.decodeResource(c.getResources(), R.drawable.logo);
 		}
 		
-		System.out.println("Service: start von boot="+login+"");
+		System.out.println("Service: register von boot="+login+"");
 		
 		if(login){
 			login = false;

@@ -3,6 +3,7 @@
         <item name="colorPrimary">@color/actionbar</item>
         <item name="colorPrimaryDark">@color/actionbarDunkler</item>
         <item name="colorAccent">@color/actionbar</item>
+        <item name="android:windowBackground">@color/background</item>
     </style>
 
     <style name="TabLayoutTheme" parent="Widget.Design.TabLayout">

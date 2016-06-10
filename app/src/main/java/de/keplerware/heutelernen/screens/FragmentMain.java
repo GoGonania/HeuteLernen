@@ -6,6 +6,7 @@ import android.widget.TextView;
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.MyFragment;
 import de.keplerware.heutelernen.R;
+import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MySpinner;
@@ -14,11 +15,9 @@ import de.keplerware.heutelernen.ui.MyText;
 public class FragmentMain extends MyFragment {
     private MySpinner s;
     private LinearLayout l;
-    private MyFragment fr;
 
     public View create(){
-        fr = this;
-        View v = inflate(R.layout.main);
+        View v = Screen.inflate(R.layout.main);
         l = (LinearLayout) v.findViewById(R.id.liste);
         s = (MySpinner) v.findViewById(R.id.main_spinner);
         s.fill(R.array.facher);
@@ -29,12 +28,12 @@ public class FragmentMain extends MyFragment {
 
                 Internet.angebote(f, Sitzung.info.klasseZahl, new Internet.AngebotListener(){
                     public void ok(Internet.Angebot[] as){
-                        if(as.length == 0){
+                        if(as == null){
                             l.addView(new MyText("Es gibt für dich für dieses Fach leider keine passenden Nachhilfefächer"));
                         } else{
                             MyList<Internet.Angebot> liste = new MyList<Internet.Angebot>(as){
                                 public View view(final Internet.Angebot a){
-                                    View r = fr.inflate(R.layout.angebot_item);
+                                    View r = Screen.inflate(R.layout.user);
                                     r.setOnClickListener(new View.OnClickListener(){
                                         public void onClick(View v){
                                             ScreenProfil.show(a.info);

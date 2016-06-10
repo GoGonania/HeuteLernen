@@ -54,6 +54,7 @@ public class FragmentChats extends MyFragment {
                     return r;
                 }
             };
+            liste.customDivider();
             main.addView(liste);
         }
     }
@@ -64,7 +65,7 @@ public class FragmentChats extends MyFragment {
     }
 
     public View create(){
-        View v = inflate(R.layout.chats);
+        View v = Screen.inflate(R.layout.chats);
         main = (LinearLayout) v.findViewById(R.id.chats_main);
         return v;
     }

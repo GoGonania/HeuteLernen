@@ -17,6 +17,11 @@ public class Internet{
 		void ok(Angebot[] as);
 		void fail();
 	}
+
+    public interface SuchListener{
+        void ok(UserInfo[] infos);
+        void fail();
+    }
 	
 	public interface NachrichtenListener{
 		void ok(Nachricht[] ns);
@@ -194,9 +199,6 @@ public class Internet{
 		internet("angebot_aufgeben", "Angebot wird erstellt...", false, l, new String[]{"f", "k", "id"}, new String[]{fach, ""+klasse, ""+id});
 	}
 	
-	private static int counter;
-	private static boolean fail;
-	
 	public static void login(String m, String p, final LoginListener info){
 		internet("login", "Logge ein...", false, new Listener(){
 			public void ok(String data){
@@ -225,6 +227,40 @@ public class Internet{
 		}, new String[]{"mail", "p"}, new String[]{m, p});
 	}
 
+    public static void benutzerSuchen(String query, final boolean dialog, final SuchListener li){
+        internet("suchen", dialog ? "Suche Benutzer '" + query + "'" : null, false, new Listener(){
+            public void ok(String data){
+                if(data.isEmpty()){
+                    li.ok(null);
+                } else{
+                    String[] ps = data.split("\t");
+                    final UserInfo[] infos = new UserInfo[ps.length];
+                    InfoPool pool = new InfoPool(ps.length);
+                    for(int i = 0; i < ps.length; i++){
+                        pool.add(ps[i]);
+                    }
+                    pool.start(new InfoPool.Listener(){
+                        public void ok(){
+                            li.ok(infos);
+                        }
+
+                        public void add(UserInfo info, int id){
+                            infos[id] = info;
+                        }
+
+                        public void fail(){
+                            li.fail();
+                        }
+                    }, dialog);
+                }
+            }
+
+            public void fail(Exception e){
+                li.fail();
+            }
+        }, new String[]{"q"}, new String[]{query});
+    }
+
 	public static void nachrichtSystem(final UserInfo zu, final String text, Listener l){
 		internet("nachricht_senden", "Nachricht wird gesendet...", false, l, new String[]{"typ", "von", "zu", "text"}, new String[]{"system", ""+Sitzung.info.id, ""+zu.id, text.replace("€", "euro")});
 	}
@@ -245,7 +281,7 @@ public class Internet{
 		internet("auflistenID", null, false, new Listener(){
 			public void ok(String data){
 				if(data.isEmpty()){
-					li.ok(new Angebot[]{});
+					li.ok(null);
 				} else{
 					String[] p = data.split("\t");
 					final Angebot[] as = new Angebot[p.length];
@@ -269,32 +305,31 @@ public class Internet{
 		internet("auflisten", "Suche nach Nachhilfe...", false, new Listener(){
 			public void ok(String data){
 				if(data.isEmpty()){
-					li.ok(new Angebot[]{});
+					li.ok(null);
 				} else{
 					String[] p = data.split("\t\t");
 					final Angebot[] as = new Angebot[p.length];
-					counter = p.length;
+					InfoPool pool = new InfoPool(p.length);
 					for(int i = 0; i < p.length; i++){
 						String[] ss = p[i].split("\t");
-						int id = Integer.parseInt(ss[0]);
-						final Angebot a = new Angebot();
+						pool.add(ss[0]);
+						Angebot a = new Angebot();
 						a.fach = ss[1];
 						as[i] = a;
-						ProfilManager.get(id, true, new InfoListener() {
-							public void ok(UserInfo info){
-								if(fail) return;
-								counter--;
-								a.info = info;
-								if(counter == 0) li.ok(as);
-							}
-							
-							public void fail(){
-								if(fail) return;
-								li.fail();
-								fail = true;
-							}
-						});
 					}
+                    pool.start(new InfoPool.Listener(){
+                        public void ok(){
+                            li.ok(as);
+                        }
+
+                        public void add(UserInfo info, int id){
+                            as[id].info = info;
+                        }
+
+                        public void fail() {
+                            li.fail();
+                        }
+                    }, true);
 				}
 			}
 

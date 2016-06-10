@@ -5,4 +5,6 @@
 
     <color name="gray">#b0b0b0</color>
     <color name="grayDark">#808080</color>
+
+    <color name="background">#eeeeee</color>
 </resources>

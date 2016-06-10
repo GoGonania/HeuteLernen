@@ -28,7 +28,7 @@ public class ScreenRegistrieren extends Screen{
 	private boolean frei = true;
 
     public int getLayout(){
-        return R.layout.start;
+        return R.layout.register;
     }
 
 	public void show(){

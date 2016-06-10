@@ -3,14 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingTop="10dp">
 
     <TableLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="10dp">
+        android:layout_height="wrap_content">
 
         <TableRow
             android:layout_width="wrap_content"
@@ -67,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="20dp"
-        android:background="@android:color/darker_gray" />
+        android:background="@drawable/divider" />
 
     <Button
         android:id="@+id/login_register"
