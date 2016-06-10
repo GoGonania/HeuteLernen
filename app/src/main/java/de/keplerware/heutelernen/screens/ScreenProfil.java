@@ -48,6 +48,8 @@ public class ScreenProfil extends Screen{
                 public boolean onMenuItemClick(MenuItem item){
                     Dialog.prompt("Was willst du senden?", "", new Dialog.PromptListener(){
                         public void ok(String text){
+							text = text.trim();
+							if(text.isEmpty()) return;
                             Internet.nachrichtSystem(info, text, new Util.Listener() {
                                 public void ok(String data){
                                     Util.toast("Nachricht wurde gesendet!");

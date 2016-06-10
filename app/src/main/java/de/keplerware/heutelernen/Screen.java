@@ -10,7 +10,7 @@ import de.keplerware.heutelernen.screens.ScreenLogin;
 import de.keplerware.heutelernen.screens.ScreenMain;
 
 public abstract class Screen extends AppCompatActivity{
-    public static LayoutInflater inflater;
+    private static LayoutInflater inflater;
     public Toolbar bar;
     public boolean aktiv;
 
@@ -44,7 +44,7 @@ public abstract class Screen extends AppCompatActivity{
         return true;
     }
 
-    public ViewGroup inflate(int r){
+    public static ViewGroup inflate(int r){
         return (ViewGroup) inflater.inflate(r, null);
     }
 

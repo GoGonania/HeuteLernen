@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.view.View;
 import android.widget.EditText;
 
 import de.keplerware.heutelernen.ui.MySpinner;
@@ -88,14 +89,16 @@ public class Dialog{
 		AlertDialog.Builder b = new AlertDialog.Builder(Util.screen);
 		b.setTitle(titel);
 		b.setIcon(R.drawable.help);
-		final MySpinner s = new MySpinner(R.array.facher);
+		View v = Screen.inflate(R.layout.fachselect);
+        final MySpinner s = (MySpinner) v.findViewById(R.id.fachselect_spinner);
+        s.fill(R.array.facher);
         b.setPositiveButton("Auswählen", new OnClickListener(){
 			public void onClick(DialogInterface dialogInterface, int i){
 				li.ok((String) s.getSelectedItem());
 			}
 		});
+        b.setView(v);
 		b.setNegativeButton("Abbrechen", null);
-        b.setView(s);
 		b.create().show();
 	}
 

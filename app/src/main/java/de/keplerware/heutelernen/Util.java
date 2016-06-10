@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.view.Gravity;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Util{
@@ -26,8 +28,7 @@ public class Util{
 	}
 
     public static boolean pause(){
-        if(Util.screen == null) return true;
-        return !Util.screen.aktiv;
+        return Util.screen == null || !Util.screen.aktiv;
     }
 
 	public static void init(Context c){
@@ -65,6 +66,8 @@ public class Util{
 	public static void toast(final String text){
 		if(pause()) return;
 		Toast tt = Toast.makeText(c, text, Toast.LENGTH_SHORT);
+		TextView v = (TextView) tt.getView().findViewById(android.R.id.message);
+		if(v != null) v.setGravity(Gravity.CENTER);
 		if(t != null ) t.cancel();
 		tt.show();
 		t = tt;

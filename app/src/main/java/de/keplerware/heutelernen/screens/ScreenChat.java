@@ -111,7 +111,7 @@ public class ScreenChat extends Screen{
                         }
                         bar.setSubtitle(aktiv?"online":"erreichbar");
                     } else{
-                        bar.setSubtitle("zuletzt online: "+(l.isEmpty()?"nie":l));
+                        bar.setSubtitle("zul. erreichbar: "+(l.isEmpty()?"nie":l));
                     }
 				}
 			}

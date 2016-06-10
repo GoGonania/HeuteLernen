@@ -2,7 +2,7 @@ package de.keplerware.heutelernen.screens;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,7 +40,7 @@ public class ScreenMain extends Screen{
         chats = new FragmentChats();
         profil = new FragmentProfil();
         ViewPager pager = (ViewPager) findViewById(R.id.app);
-        FragmentStatePagerAdapter adapter = new FragmentStatePagerAdapter(getSupportFragmentManager()){
+        FragmentPagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager()){
             public Fragment getItem(int position){
                 switch(position){
                     case 0:

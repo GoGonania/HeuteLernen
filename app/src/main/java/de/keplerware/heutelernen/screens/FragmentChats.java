@@ -1,10 +1,7 @@
 package de.keplerware.heutelernen.screens;
 
-import android.os.Bundle;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,7 +25,7 @@ public class FragmentChats extends MyFragment {
         } else{
             MyList<Chat> liste = new MyList<Chat>(NachrichtenManager.get()){
                 public View view(final Chat t){
-                    View r = Screen.inflater.inflate(R.layout.chat_item, null);
+                    View r = Screen.inflate(R.layout.chat_item);
                     r.setOnClickListener(new View.OnClickListener(){
                         public void onClick(View v){
                             ScreenChat.show(t.info);

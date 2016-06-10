@@ -29,7 +29,8 @@
             android:launchMode="singleInstance"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="portrait"
-            android:name=".screens.ScreenLogin">
+            android:name=".screens.ScreenLogin"
+            android:autoRemoveFromRecents="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

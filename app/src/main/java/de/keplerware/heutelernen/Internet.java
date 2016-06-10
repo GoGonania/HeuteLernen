@@ -266,7 +266,7 @@ public class Internet{
 	}
 	
 	public static void angebote(String fach, int klasse, final AngebotListener li){
-		internet("auflisten", "Suche nach Angebote...", false, new Listener(){
+		internet("auflisten", "Suche nach Nachhilfe...", false, new Listener(){
 			public void ok(String data){
 				if(data.isEmpty()){
 					li.ok(new Angebot[]{});
