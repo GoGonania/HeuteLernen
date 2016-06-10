@@ -20,9 +20,7 @@ import de.keplerware.heutelernen.ui.MyText;
 
 public class FragmentProfil extends MyFragment {
     public UserInfo info;
-    public boolean owner;
     private LinearLayout angebote;
-    private MyFragment fr;
 
     public static FragmentProfil show(UserInfo info){
         FragmentProfil f = new FragmentProfil();
@@ -31,12 +29,10 @@ public class FragmentProfil extends MyFragment {
     }
 
     public View create(){
-        fr = this;
         if(getArguments() != null){
             info = ProfilManager.get(getArguments());
         } else{
             info = Sitzung.info;
-            owner = true;
         }
         View v = Screen.inflate(R.layout.profil);
         ((TextView) v.findViewById(R.id.profil_name)).setText(info.name);
@@ -50,7 +46,7 @@ public class FragmentProfil extends MyFragment {
         }
         angebote = (LinearLayout) v.findViewById(R.id.profil_angebote);
 
-        boolean editP = Sitzung.rang(Rang.MODERATOR) || owner;
+        boolean editP = Sitzung.rang(Rang.MODERATOR) || info.owner();
 
         ImageView editB = (ImageView) v.findViewById(R.id.profil_edit_beschreibung);
 
@@ -102,7 +98,7 @@ public class FragmentProfil extends MyFragment {
                         public View view(final Internet.Angebot angebot){
                             View v = Screen.inflate(R.layout.angebot);
                             ((TextView) v.findViewById(R.id.myangebot_text)).setText(angebot.fach);
-                            if(owner){
+                            if(info.owner()){
                                 View m = v.findViewById(R.id.myangebot_minus);
                                 m.setVisibility(View.VISIBLE);
                                 m.setOnClickListener(new OnClickListener(){

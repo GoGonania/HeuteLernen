@@ -15,7 +15,6 @@ import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
 
 public class ScreenProfil extends Screen{
-	private FragmentProfil f;
     private static UserInfo info;
 	
 	public static void show(UserInfo i){
@@ -28,10 +27,10 @@ public class ScreenProfil extends Screen{
     }
 	
 	public void menu(Menu m){
-		if(!f.owner){
+		if(!info.owner()){
 			m.add("Chat öffnen").setIcon(R.drawable.chat).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
 				public boolean onMenuItemClick(MenuItem p1){
-					ScreenChat.show(f.info);
+					ScreenChat.show(info);
 					return true;
 				}
 			}).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -40,7 +39,7 @@ public class ScreenProfil extends Screen{
 		if(Sitzung.rang(Rang.MODERATOR)){
 			m.add("Info").setOnMenuItemClickListener(new OnMenuItemClickListener() {
 				public boolean onMenuItemClick(MenuItem item){
-					Dialog.alert(f.info.name+":", "Benutzer-ID: "+f.info.id+"\nRang: "+f.info.rang+"\nMail: "+f.info.mail);
+					Dialog.alert(info.name+":", "Benutzer-ID: "+info.id+"\nRang: "+info.rang+"\nMail: "+info.mail);
 					return true;
 				}
 			});
@@ -83,8 +82,7 @@ public class ScreenProfil extends Screen{
 
     public void show(){
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-        f = FragmentProfil.show(info);
-        t.add(R.id.profil_frame, f);
+        t.add(R.id.profil_frame, FragmentProfil.show(info));
         t.commit();
 	}
 }

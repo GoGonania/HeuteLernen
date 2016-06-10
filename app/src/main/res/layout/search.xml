@@ -19,7 +19,8 @@
             android:layout_weight="0.9"
             android:inputType="text"
             android:imeOptions="actionSearch"
-            android:hint="Hier kannst du jmdn. suchen" />
+            android:hint="Hier kannst du jmdn. suchen">
+        </EditText>
 
         <ImageButton
             android:layout_width="wrap_content"
