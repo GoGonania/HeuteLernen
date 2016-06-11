@@ -64,7 +64,7 @@ public class ScreenProfil extends Screen{
 			if(Sitzung.rang(Rang.ADMIN)){
 				m.add("Benutzer löschen").setOnMenuItemClickListener(new OnMenuItemClickListener() {
 					public boolean onMenuItemClick(MenuItem item){
-						Dialog.confirm("Willst du Benutzer " + info.name + " wirklich löschen?", new Dialog.ConfirmListener(){
+						Dialog.confirm("Willst du " + info.name + " wirklich löschen?", new Dialog.ConfirmListener(){
 							public void ok(){
 								Internet.deleteUser(info);
 							}

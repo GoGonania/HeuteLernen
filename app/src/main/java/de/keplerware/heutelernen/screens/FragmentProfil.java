@@ -92,7 +92,7 @@ public class FragmentProfil extends MyFragment {
             public void ok(Internet.Angebot[] as){
                 angebote.removeAllViews();
                 if(as == null){
-                    angebote.addView(new MyText("Keine Angebote gefunden!"));
+                    angebote.addView(new MyText("Keine Nachhilfefächer gefunden!"));
                 } else{
                     MyList<Internet.Angebot> liste = new MyList<Internet.Angebot>(as){
                         public View view(final Internet.Angebot angebot){

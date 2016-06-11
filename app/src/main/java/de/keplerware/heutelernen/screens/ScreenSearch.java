@@ -1,6 +1,5 @@
 package de.keplerware.heutelernen.screens;
 
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -79,7 +78,6 @@ public class ScreenSearch extends Screen{
                                 return r;
                             }
                         };
-                        liste.customDivider();
                         content.addView(liste);
                     }
                 }

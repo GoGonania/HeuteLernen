@@ -12,16 +12,12 @@ public abstract class MyList<T> extends ListView{
 	
 	public MyList(T[] t){
 		super(Util.screen);
-        customDivider();
+		setDivider(ContextCompat.getDrawable(Util.screen, R.drawable.divider));
+		setDividerHeight(1);
 		setAdapter(new MyAdapter<T>(t) {
 			public View view(T item) {
 				return MyList.this.view(item);
 			}
 		});
 	}
-
-    public void customDivider(){
-        setDivider(ContextCompat.getDrawable(Util.screen, R.drawable.divider));
-        setDividerHeight(3);
-    }
 }

@@ -23,6 +23,7 @@ public class InfoPool{
     public void add(String id){add(Integer.parseInt(id));}
 
     public void start(final Listener li, boolean dialog){
+        if(ids.isEmpty()) li.ok();
         final Runnable d = Dialog.progress(dialog ? "Lade Daten..." : null);
         for(int i = 0; i < ids.size(); i++){
             final int id = i;

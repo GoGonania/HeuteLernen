@@ -59,20 +59,26 @@ public class NachrichtenManager{
 		public void deleteConfirm(){
 			Dialog.confirm(R.drawable.delete, "Willst du den Chat mit "+info.name+" wirklich löschen?", new ConfirmListener(){
 				public void ok() {
-					delete();
+                    delete();
 					ScreenHome.show(NachrichtenManager.get().length == 0?1:0).send();
 				}
 			});
 		}
 
 		public int compareTo(Chat another){
-			long t = another.last().time;
-			long tt = last().time;
+			int u = another.unread();
+			int uu = unread();
+			if(u == uu){
+				long t = another.last().time;
+				long tt = last().time;
 
-			if(t == tt){
-				return 0;
+				if(t == tt){
+					return 0;
+				} else{
+					return t > tt ? 1 : -1;
+				}
 			} else{
-				return t > tt ? 1 : -1;
+				return u > uu ? 1 : -1;
 			}
 		}
 	}
@@ -98,15 +104,17 @@ public class NachrichtenManager{
 		}
 		return u;
 	}
-	
+
+    private static Runnable r;
 	public static void load(int id, Util.Listener li){
 		f = false;
 		l = li;
 		Datei[] n = main.createF(""+id).list();
 		p = n.length;
+        r = Dialog.progress("Chats werden geladen...");
 		System.out.println("NachrichtenManager: "+p+" Chats gefunden");
 		if(p == 0){
-			li.ok(null);
+			loadC();
 		} else{
 			for(Datei d : n){
 				final Chat c = get(id, Integer.parseInt(""+d.name()));
@@ -115,7 +123,7 @@ public class NachrichtenManager{
 					c.delete();
 				} else{
 					if(c.info == null){
-						ProfilManager.get(c.partner, true, new InfoListener(){
+						ProfilManager.get(c.partner, false, new InfoListener(){
 							public void ok(UserInfo info){
 								c.info = info;
 								loadC();
@@ -137,7 +145,8 @@ public class NachrichtenManager{
 	
 	private static void loadC(){
 		p--;
-		if(p == 0){
+		if(p <= 0){
+            r.run();
 			if(f){
                 System.out.println("NachrichtenManager: Fehler beim Laden der Chats!");
 				l.fail(null);

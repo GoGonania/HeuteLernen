@@ -55,7 +55,7 @@ public class MyService extends Service{
 			logo = BitmapFactory.decodeResource(c.getResources(), R.drawable.logo);
 		}
 		
-		System.out.println("Service: register von boot="+login+"");
+		System.out.println("Service: login von boot="+login+"");
 		
 		if(login){
 			login = false;
@@ -163,7 +163,7 @@ public class MyService extends Service{
                         int f = 0;
 
                         for(int i = 0; f < unread; i++){
-                            NachrichtenManager.Message m = chat.ms.get(i);
+                            NachrichtenManager.Message m = chat.ms.get(chat.ms.size()-i-1);
 
                             if(!m.owner){
                                 f++;

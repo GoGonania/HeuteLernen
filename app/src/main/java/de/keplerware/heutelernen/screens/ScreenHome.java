@@ -1,5 +1,7 @@
 package de.keplerware.heutelernen.screens;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,6 +13,7 @@ import de.keplerware.heutelernen.Dialog;
 import de.keplerware.heutelernen.Event;
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.R;
+import de.keplerware.heutelernen.Rang;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Starter;
@@ -78,7 +81,7 @@ public class ScreenHome extends Screen{
             int tab = getIntent().getIntExtra("tab", 0);
             pager.setCurrentItem(tab);
         } else{
-            pager.setCurrentItem(NachrichtenManager.unread() > 0 ? 0 : 1);
+            pager.setCurrentItem(1);
         }
 	}
 
@@ -109,6 +112,16 @@ public class ScreenHome extends Screen{
     }
 
     public void menu(Menu m){
+        if(Sitzung.rang(Rang.MODERATOR)){
+            m.add("Statistik").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+                public boolean onMenuItemClick(MenuItem p1){
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse("http://www.heutelernen.de/app/statistik.php"));
+                    startActivity(i);
+                    return true;
+                }
+            });
+        }
         m.add("Ausloggen").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
             public boolean onMenuItemClick(MenuItem p1){
                 Dialog.confirm("Willst du dich wirklich ausloggen?", new Dialog.ConfirmListener() {

@@ -12,6 +12,7 @@ import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
+import de.keplerware.heutelernen.manager.NachrichtenManager;
 
 public class ScreenLogin extends Screen{
 	private EditText mail;
@@ -55,7 +56,7 @@ public class ScreenLogin extends Screen{
 		Sitzung.login(m, p, false, new LoginListener(){
 			public void ok(UserInfo info){
 				Util.toast("Eingeloggt als "+info.name+"!");
-				new Starter(ScreenHome.class).replace();
+				ScreenHome.show(NachrichtenManager.unread() > 0 ? 0 : 1).replace();
 			}
 
 			public void fail(int e) {

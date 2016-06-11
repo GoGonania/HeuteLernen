@@ -224,7 +224,7 @@ public class Internet{
 			public void fail(Exception e){
 				info.fail(LoginError.Connection);
 			}
-		}, new String[]{"mail", "p"}, new String[]{m, p});
+		}, new String[]{"mail", "p", "version"}, new String[]{m, p, ""+Util.version});
 	}
 
     public static void benutzerSuchen(String query, final boolean dialog, final SuchListener li){
@@ -301,8 +301,8 @@ public class Internet{
 		}, new String[]{"id"}, new String[]{""+info.id});
 	}
 	
-	public static void angebote(String fach, int klasse, final AngebotListener li){
-		internet("auflisten", "Suche nach Nachhilfe...", false, new Listener(){
+	public static void angebote(String fach, int klasse, boolean filter, final AngebotListener li){
+		internet("auflisten", null, false, new Listener(){
 			public void ok(String data){
 				if(data.isEmpty()){
 					li.ok(null);
@@ -329,13 +329,13 @@ public class Internet{
                         public void fail() {
                             li.fail();
                         }
-                    }, true);
+                    }, false);
 				}
 			}
 
 			public void fail(Exception e){
 				li.fail();
 			}
-		}, new String[]{"f", "k"}, new String[]{fach, ""+klasse});
+		}, new String[]{"f", "k", "nf"}, new String[]{fach, ""+klasse, ""+(!filter)});
 	}
 }

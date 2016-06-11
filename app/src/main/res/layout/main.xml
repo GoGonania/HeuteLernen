@@ -11,18 +11,20 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
 
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="mind. meine Klasse"
+            android:id="@+id/main_cb_filter"
+            android:layout_marginRight="10dp"
+            android:checked="true" />
+
         <de.keplerware.heutelernen.ui.MySpinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/main_spinner" />
+            android:id="@+id/main_spinner"
+            android:background="@drawable/button_green" />
 
-        <Button
-            android:id="@+id/suchen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_green"
-            android:text="Suchen"
-            android:layout_marginLeft="20dp" />
     </LinearLayout>
 
     <View
@@ -34,7 +36,7 @@
 
     <LinearLayout
         android:id="@+id/liste"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_horizontal">

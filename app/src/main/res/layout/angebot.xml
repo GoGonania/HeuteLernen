@@ -9,7 +9,8 @@
         android:layout_height="30dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/myangebot_text"
-        android:text="Text" />
+        android:text="Text"
+        android:layout_marginLeft="10dp" />
 
     <ImageView
         android:layout_width="30dp"

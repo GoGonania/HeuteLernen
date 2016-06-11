@@ -52,9 +52,7 @@ public class Datei{
 			BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), "UTF-8"));
 			w.write(text);
 			w.close();
-		}catch (IOException e){
-			e.printStackTrace();
-		}
+		}catch (IOException e){}
 	}
 	
 	public String read(){
@@ -69,7 +67,6 @@ public class Datei{
 			in.close();
 			return d;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 	}

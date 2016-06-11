@@ -88,11 +88,13 @@ public class ScreenChat extends Screen{
 	
 	public boolean event(int t, Object... d){
 		if(t == Event.MESSAGE){
-			c.read();
 			Nachricht n = (Nachricht) d[0];
-			addContent(false, n.text);
-			scroll();
-			return !Util.pause();
+			if(n.id == info.id){
+				c.read();
+				addContent(false, n.text);
+				scroll();
+				return !Util.pause();
+			}
 		}
 		if(t == Event.LAST){
             MyService.aktivID = info.id;

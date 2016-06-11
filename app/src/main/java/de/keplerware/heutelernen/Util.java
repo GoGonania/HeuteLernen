@@ -4,8 +4,6 @@ import java.net.URL;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.view.Gravity;
@@ -23,6 +21,7 @@ public class Util{
 	public static String appname;
 	public static Screen screen;
 	public static String[] schulen;
+	public static int version;
 
 	public interface Listener{
 		void ok(String data);
@@ -42,6 +41,7 @@ public class Util{
 			schulen = c.getResources().getStringArray(R.array.schulen);
 	        wakelock = ((PowerManager) c.getSystemService(Context.POWER_SERVICE)).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
 	        fileDir = c.getFilesDir().getAbsolutePath();
+            version = BuildConfig.VERSION_CODE;
 
 			Save.init(c);
 			
@@ -100,7 +100,6 @@ public class Util{
 						}
 						l.ok(s);
 					}catch(final Exception e){
-						e.printStackTrace();
 						l.fail(e);
 					}
 				}

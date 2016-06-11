@@ -54,7 +54,6 @@ public class FragmentChats extends MyFragment {
                     return r;
                 }
             };
-            liste.customDivider();
             main.addView(liste);
         }
     }
