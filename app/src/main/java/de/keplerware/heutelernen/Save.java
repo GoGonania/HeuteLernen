@@ -19,6 +19,10 @@ public class Save{
 		passwort = p.getString("p", null);
 		id = p.getInt("i", -1);
 	}
+
+	public static void updatePasswort(String p){
+		setData(mail, p, id);
+	}
 	
 	public static void setData(String mail, String passwort, int id){
 		Save.mail = mail;

@@ -28,7 +28,7 @@ public class FragmentMain extends MyFragment {
         Internet.angebote(f, Sitzung.info.klasseZahl, filter.isChecked(), new Internet.AngebotListener(){
             public void ok(Internet.Angebot[] as){
                 if(as == null){
-                    l.addView(new MyText("Es gibt für dich für dieses Fach leider keine passenden Nachhilfefächer"));
+                    l.addView(new MyText("Es gibt für dich für dieses Fach leider keine passenden Nachhilfelehrer"));
                 } else{
                     MyList<Internet.Angebot> liste = new MyList<Internet.Angebot>(as){
                         public View view(final Internet.Angebot a){

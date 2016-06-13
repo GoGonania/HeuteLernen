@@ -338,4 +338,8 @@ public class Internet{
 			}
 		}, new String[]{"f", "k", "nf"}, new String[]{fach, ""+klasse, ""+(!filter)});
 	}
+
+	public static void passwort(String p, int id, Listener l){
+		internet("passwort", "Passwort wird geändert...", false, l, new String[]{"p", "id"}, new String[]{p, ""+id});
+	}
 }

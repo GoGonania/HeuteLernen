@@ -14,6 +14,7 @@ import de.keplerware.heutelernen.Event;
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Rang;
+import de.keplerware.heutelernen.Save;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Starter;
@@ -122,6 +123,28 @@ public class ScreenHome extends Screen{
                 }
             });
         }
+        m.add("Passwort ändern").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+            public boolean onMenuItemClick(MenuItem p1){
+                Dialog.prompt("Passwort ändern", "", new Dialog.PromptListener(){
+                    public void ok(String text){
+                        final String t = text.trim();
+                        if(t.length() >= 6){
+                            Internet.passwort(t, Sitzung.info.id, new Util.Listener() {
+                                public void ok(String data){
+                                    Util.toast("Passwort wurde geändert!");
+                                    Save.updatePasswort(t);
+                                }
+
+                                public void fail(Exception e){}
+                            });
+                        } else{
+                            Util.toast("Dein neues Passwort muss mindestens 6 Zeichen lang sein!");
+                        }
+                    }
+                });
+                return true;
+            }
+        });
         m.add("Ausloggen").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
             public boolean onMenuItemClick(MenuItem p1){
                 Dialog.confirm("Willst du dich wirklich ausloggen?", new Dialog.ConfirmListener() {

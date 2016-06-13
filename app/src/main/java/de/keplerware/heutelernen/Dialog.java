@@ -69,7 +69,7 @@ public class Dialog{
 	}
 
 	public static void confirmClose(){
-		Dialog.confirm("Willst du die App schließen?", new ConfirmListener() {
+		Dialog.confirm("Willst du die App schließen?", new ConfirmListener(){
 			public void ok(){
 				System.exit(0);
 			}
