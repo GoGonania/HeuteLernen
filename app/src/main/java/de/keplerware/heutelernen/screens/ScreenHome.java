@@ -165,7 +165,7 @@ public class ScreenHome extends Screen{
             public boolean onMenuItemClick(MenuItem menuItem){
                 Dialog.fachSelect("Nachhilfe geben in...", new Dialog.FachListener(){
                     public void ok(final String fach) {
-                        Internet.angebotAufgeben(fach, Sitzung.info.klasseZahl, Sitzung.info.id, new Util.Listener() {
+                        Internet.angebotAufgeben(fach, Sitzung.info.klasseZahl, Sitzung.info.schule, Sitzung.info.id, new Util.Listener() {
                             public void ok(String data){
                                 if(!data.isEmpty()) {
                                     Util.toast("Du hast nun '"+fach+"' als Nachhilfefach!");

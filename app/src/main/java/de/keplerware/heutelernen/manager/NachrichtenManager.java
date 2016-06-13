@@ -118,7 +118,7 @@ public class NachrichtenManager{
 		} else{
 			for(Datei d : n){
 				final Chat c = get(id, Integer.parseInt(""+d.name()));
-				if(c.ms.isEmpty()){
+				if(c.ms.isEmpty() || c.id == id){
 					loadC();
 					c.delete();
 				} else{

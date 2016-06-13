@@ -19,13 +19,14 @@ import de.keplerware.heutelernen.ui.MyText;
 public class FragmentMain extends MyFragment {
     private MySpinner s;
     private LinearLayout l;
-    private CheckBox filter;
+    private CheckBox filterK;
+    private CheckBox filterS;
 
     public void send(){
         String f = s.getSelectedItem().toString();
         l.removeAllViews();
 
-        Internet.angebote(f, Sitzung.info.klasseZahl, filter.isChecked(), new Internet.AngebotListener(){
+        Internet.angebote(f, filterK.isChecked()?Sitzung.info.klasseZahl:0, filterS.isChecked()?Sitzung.info.schule:-1, new Internet.AngebotListener(){
             public void ok(Internet.Angebot[] as){
                 if(as == null){
                     l.addView(new MyText("Es gibt für dich für dieses Fach leider keine passenden Nachhilfelehrer"));
@@ -54,7 +55,8 @@ public class FragmentMain extends MyFragment {
         View v = Screen.inflate(R.layout.main);
         l = (LinearLayout) v.findViewById(R.id.liste);
         s = (MySpinner) v.findViewById(R.id.main_spinner);
-        filter = (CheckBox) v.findViewById(R.id.main_cb_filter);
+        filterK = (CheckBox) v.findViewById(R.id.main_filter_klasse);
+        filterS = (CheckBox) v.findViewById(R.id.main_filter_schule);
         s.fill(R.array.facher);
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long ll){
@@ -64,7 +66,12 @@ public class FragmentMain extends MyFragment {
             public void onNothingSelected(AdapterView<?> adapterView){}
         });
 
-        filter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+        filterK.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b){
+                send();
+            }
+        });
+        filterS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             public void onCheckedChanged(CompoundButton compoundButton, boolean b){
                 send();
             }

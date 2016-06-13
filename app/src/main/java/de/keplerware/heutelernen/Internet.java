@@ -195,8 +195,8 @@ public class Internet{
 		}, new String[]{"id"}, new String[]{""+id});
 	}
 	
-	public static void angebotAufgeben(String fach, int klasse, int id, Listener l){
-		internet("angebot_aufgeben", "Angebot wird erstellt...", false, l, new String[]{"f", "k", "id"}, new String[]{fach, ""+klasse, ""+id});
+	public static void angebotAufgeben(String fach, int klasse, int schule, int id, Listener l){
+		internet("angebot_aufgeben", "Angebot wird erstellt...", false, l, new String[]{"f", "k", "id", "s"}, new String[]{fach, ""+klasse, ""+id, ""+schule});
 	}
 	
 	public static void login(String m, String p, final LoginListener info){
@@ -301,7 +301,7 @@ public class Internet{
 		}, new String[]{"id"}, new String[]{""+info.id});
 	}
 	
-	public static void angebote(String fach, int klasse, boolean filter, final AngebotListener li){
+	public static void angebote(String fach, int klasse, int schule, final AngebotListener li){
 		internet("auflisten", null, false, new Listener(){
 			public void ok(String data){
 				if(data.isEmpty()){
@@ -336,7 +336,7 @@ public class Internet{
 			public void fail(Exception e){
 				li.fail();
 			}
-		}, new String[]{"f", "k", "nf"}, new String[]{fach, ""+klasse, ""+(!filter)});
+		}, new String[]{"f", "k", "s"}, new String[]{fach, ""+klasse, ""+schule});
 	}
 
 	public static void passwort(String p, int id, Listener l){
