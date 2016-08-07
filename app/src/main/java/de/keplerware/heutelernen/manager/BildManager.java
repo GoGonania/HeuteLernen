@@ -19,7 +19,10 @@ public class BildManager{
                 try{
                     Client c = new Client();
                     File f = c.download(id);
-                    if(f == null) l.fail();
+                    if(f == null) {
+                        l.fail();
+                        return;
+                    }
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                     Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
