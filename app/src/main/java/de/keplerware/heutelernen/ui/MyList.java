@@ -2,6 +2,7 @@ package de.keplerware.heutelernen.ui;
 
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import de.keplerware.heutelernen.R;
@@ -19,5 +20,7 @@ public abstract class MyList<T> extends ListView{
 				return MyList.this.view(item);
 			}
 		});
+		LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+		setLayoutParams(p);
 	}
 }

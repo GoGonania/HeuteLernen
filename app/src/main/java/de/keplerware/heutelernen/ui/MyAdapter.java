@@ -18,7 +18,7 @@ public abstract class MyAdapter<T> extends BaseAdapter{
 	}
 
 	public Object getItem(int arg0){
-		return items[arg0];
+		return null;
 	}
 
 	public long getItemId(int arg0){

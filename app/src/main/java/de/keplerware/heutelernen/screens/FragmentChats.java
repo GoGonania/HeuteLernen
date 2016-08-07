@@ -8,6 +8,7 @@ import android.widget.TextView;
 import de.keplerware.heutelernen.MyFragment;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Screen;
+import de.keplerware.heutelernen.manager.BildManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager.Chat;
 import de.keplerware.heutelernen.ui.MyList;
@@ -40,6 +41,7 @@ public class FragmentChats extends MyFragment {
                     });
                     int u = t.unread();
                     NachrichtenManager.Message last = t.last();
+                    BildManager.get(t.partner, r.findViewById(R.id.chatitem_bild), getActivity());
                     ((TextView) r.findViewById(R.id.chatitem_name)).setText(t.info.name);
                     ((TextView) r.findViewById(R.id.chatitem_detail)).setText((last.owner?"Du: ":"")+""+last.text);
 

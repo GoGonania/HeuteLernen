@@ -17,7 +17,8 @@
         android:layout_height="50dp"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/chatitem_bild"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_marginLeft="4dp">
 
         <TextView
             android:id="@+id/chatitem_name"

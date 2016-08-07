@@ -10,6 +10,7 @@ import android.widget.TextView;
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Screen;
+import de.keplerware.heutelernen.manager.BildManager;
 import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MyText;
 
@@ -73,6 +74,7 @@ public class ScreenSearch extends Screen{
                                         ScreenProfil.show(i);
                                     }
                                 });
+                                BildManager.get(i.id, r.findViewById(R.id.angeboteitem_bild), ScreenSearch.this);
                                 ((TextView) r.findViewById(R.id.angeboteitem_detail)).setText(i.klasse+" | "+i.schuleText);
                                 ((TextView) r.findViewById(R.id.angebotitem_name)).setText(i.name);
                                 return r;

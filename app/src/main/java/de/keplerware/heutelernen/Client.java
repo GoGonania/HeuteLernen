@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import de.keplerware.heutelernen.io.Datei;
+import de.keplerware.heutelernen.manager.BildManager;
 
 public class Client extends FTPClient{
     private static final String host = "s67.goserver.host";
@@ -23,51 +24,40 @@ public class Client extends FTPClient{
     public Client() throws IOException{
         connect(host, port);
         enterLocalPassiveMode();
-        log();
         login(user, p);
-        log();
         setFileType(FTP.BINARY_FILE_TYPE);
     }
 
-    public File download(int id) throws IOException {
+    private FTPFile search(int id) throws IOException{
         FTPFile[] fs = listFiles();
-        log();
-
-        FTPFile f = null;
 
         for(int i = 0; i < fs.length; i++){
-            System.out.println(fs[i].getName());
             FTPFile d = fs[i];
-            if(d.getName().startsWith(id+".")){
-                System.out.println("FOUND");
-                f = d;
-                break;
-            }
+            if(d.getName().startsWith(id+".")) return d;
         }
+        return null;
+    }
+
+    public File download(int id) throws IOException {
+       FTPFile f = search(id);
 
         if(f != null) {
-            Datei d = Datei.root("bilder").create(f.getName());
+            Datei d = BildManager.root.create(f.getName());
             d.f.getParentFile().mkdirs();
             FileOutputStream out = new FileOutputStream(d.f);
-            System.out.println(f.getName());
             retrieveFile(f.getName(), out);
-            log();
             return d.f;
         }
+
         return null;
     }
 
     public void upload(String to, InputStream in) throws IOException{
         storeFile(to, in);
-        log();
     }
 
     public void close() throws IOException{
         logout();
         disconnect();
-    }
-
-    public void log(){
-        System.out.println(getReplyString());
     }
 }

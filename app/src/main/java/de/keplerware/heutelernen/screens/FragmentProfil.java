@@ -44,6 +44,18 @@ public class FragmentProfil extends MyFragment {
         return f;
     }
 
+    public void updatePic(boolean uc){
+        BildManager.get(info.id, uc, new BildManager.Listener() {
+            public void ok(final Bitmap b) {
+                BildManager.set(b, bild, getActivity());
+            }
+
+            public void notfound(){}
+            public void fail(){
+            }
+        });
+    }
+
     public View create(){
         if(getArguments() != null){
             info = ProfilManager.get(getArguments());
@@ -62,7 +74,7 @@ public class FragmentProfil extends MyFragment {
         }
         angebote = (LinearLayout) v.findViewById(R.id.profil_angebote);
 
-        boolean editP = Sitzung.rang(Rang.MODERATOR) || info.owner();
+        final boolean editP = Sitzung.rang(Rang.MODERATOR) || info.owner();
 
         ImageView editB = (ImageView) v.findViewById(R.id.profil_edit_beschreibung);
 
@@ -70,21 +82,26 @@ public class FragmentProfil extends MyFragment {
 
         bild = (ImageView) v.findViewById(R.id.profil_bild);
 
-        BildManager.loadBild(info.id, new BildManager.Listener() {
-            public void ok(final Bitmap b) {
-                getActivity().runOnUiThread(new Runnable() {
-                    public void run() {
-                        bild.setImageBitmap(b);
-                    }
-                });
-            }
-
-            public void fail() {
-                System.out.println("FAIL");
+        bild.setLongClickable(true);
+        bild.setOnLongClickListener(new View.OnLongClickListener(){
+            public boolean onLongClick(View v){
+                updatePic(false);
+                return true;
             }
         });
 
+        updatePic(true);
+
         if(editP){
+            bild.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Profilbild hochladen"), 0);
+                }
+            });
+
             editB.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View view){
                     String b = info.beschreibung;
@@ -106,15 +123,6 @@ public class FragmentProfil extends MyFragment {
                             });
                         }
                     });
-                }
-            });
-
-            bild.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View view){
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Profilbild hochladen"), 0);
                 }
             });
         }

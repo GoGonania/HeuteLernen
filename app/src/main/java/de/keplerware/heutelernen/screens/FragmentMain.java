@@ -12,6 +12,7 @@ import de.keplerware.heutelernen.MyFragment;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
+import de.keplerware.heutelernen.manager.BildManager;
 import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MySpinner;
 import de.keplerware.heutelernen.ui.MyText;
@@ -39,6 +40,7 @@ public class FragmentMain extends MyFragment {
                                     ScreenProfil.show(a.info);
                                 }
                             });
+                            BildManager.get(a.info.id, r.findViewById(R.id.angeboteitem_bild), getActivity());
                             ((TextView) r.findViewById(R.id.angeboteitem_detail)).setText(a.info.klasse+" | "+a.info.schuleText);
                             ((TextView) r.findViewById(R.id.angebotitem_name)).setText(a.info.name);
                             return r;
