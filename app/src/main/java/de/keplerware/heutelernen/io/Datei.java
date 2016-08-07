@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter;
 import de.keplerware.heutelernen.Util;
 
 public class Datei{
-	private final File f;
+	public final File f;
 	
 	public static Datei root(String name){return new Datei(Util.fileDir+"/"+name);}
 	

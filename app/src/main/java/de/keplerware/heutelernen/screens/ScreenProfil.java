@@ -27,9 +27,9 @@ public class ScreenProfil extends Screen{
     }
 	
 	public void menu(Menu m){
-		if(!info.owner()){
-			m.add("Chat öffnen").setIcon(R.drawable.chat).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
-				public boolean onMenuItemClick(MenuItem p1){
+		if(!info.owner()) {
+			m.add("Chat öffnen").setIcon(R.drawable.chat).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+				public boolean onMenuItemClick(MenuItem p1) {
 					ScreenChat.show(info);
 					return true;
 				}

@@ -1,10 +1,24 @@
 package de.keplerware.heutelernen.screens;
 
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.apache.commons.net.ftp.FTPClient;
+
+import java.io.File;
+import java.io.FileInputStream;
+
+import de.keplerware.heutelernen.Client;
 import de.keplerware.heutelernen.Dialog;
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.Internet.UserInfo;
@@ -14,6 +28,7 @@ import de.keplerware.heutelernen.Rang;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Util;
+import de.keplerware.heutelernen.manager.BildManager;
 import de.keplerware.heutelernen.manager.ProfilManager;
 import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MyText;
@@ -21,6 +36,7 @@ import de.keplerware.heutelernen.ui.MyText;
 public class FragmentProfil extends MyFragment {
     public UserInfo info;
     private LinearLayout angebote;
+    private ImageView bild;
 
     public static FragmentProfil show(UserInfo info){
         FragmentProfil f = new FragmentProfil();
@@ -52,6 +68,22 @@ public class FragmentProfil extends MyFragment {
 
         editB.setVisibility(editP ? View.VISIBLE : View.GONE);
 
+        bild = (ImageView) v.findViewById(R.id.profil_bild);
+
+        BildManager.loadBild(info.id, new BildManager.Listener() {
+            public void ok(final Bitmap b) {
+                getActivity().runOnUiThread(new Runnable() {
+                    public void run() {
+                        bild.setImageBitmap(b);
+                    }
+                });
+            }
+
+            public void fail() {
+                System.out.println("FAIL");
+            }
+        });
+
         if(editP){
             editB.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View view){
@@ -76,10 +108,44 @@ public class FragmentProfil extends MyFragment {
                     });
                 }
             });
+
+            bild.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Profilbild hochladen"), 0);
+                }
+            });
         }
-
-
         return v;
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == 0){
+            if(resultCode == Activity.RESULT_OK){
+                final Uri s = data.getData();
+                new Thread(new Runnable(){
+                    public void run() {
+                        String d;
+                        if(s.getScheme().equals(ContentResolver.SCHEME_CONTENT)){
+                            final MimeTypeMap mime = MimeTypeMap.getSingleton();
+                            d = mime.getExtensionFromMimeType(getContext().getContentResolver().getType(s));
+                        }else{
+                            d = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(s.getPath())).toString());
+                        }
+
+                        try {
+                            Client c = new Client();
+                            c.upload(Sitzung.info.id+"."+d, getContext().getContentResolver().openInputStream(s));
+                            c.close();
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            }
+        }
     }
 
     public void update(){
