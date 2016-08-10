@@ -3,6 +3,7 @@ package de.keplerware.heutelernen.manager;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import de.keplerware.heutelernen.Client;
+import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.io.Datei;
 
 public class BildManager{
@@ -38,32 +40,51 @@ public class BildManager{
     private static final ArrayList<Cache> cache = new ArrayList<>();
     private static final ArrayList<Job> jobs = new ArrayList<Job>();
 
-    public static void set(final Bitmap b, final ImageView v, Activity a){
+    private static void set(final Bitmap b, final ImageView v, Activity a){
         a.runOnUiThread(new Runnable(){
             public void run() {
-                v.setImageBitmap(b);
+                if(b == null){
+                    v.setImageResource(R.drawable.portrait);
+                } else{
+                    v.setImageBitmap(b);
+                }
             }
         });
     }
 
-    public static void get(int id, final View v, final Activity a){
-        get(id, true, new Listener(){
+    public static void get(final int id, boolean uc, final View v, final Activity a){
+        get(id, uc, new Listener(){
             public void ok(Bitmap b){
+                System.out.println(""+id+": OK");
                 set(b, ((ImageView) v), a);
             }
 
-            public void notfound(){}
-            public void fail(){}
+            public void notfound(){
+                System.out.println(""+id+": NOTFOUND");
+                set(null, ((ImageView) v), a);
+            }
+            public void fail(){
+                System.out.println(""+id+": FAIL");
+            }
         });
     }
 
-    public static void get(final int id, boolean uc, final Listener l){
+    public static void get(int id, View v, Activity a){
+        get(id, true, v, a);
+    }
+
+    private static void get(final int id, boolean uc, final Listener l){
         if(uc){
             for(int i = 0; i < cache.size(); i++){
                 Cache c = cache.get(i);
                 if(c.id == id){
-                    System.out.println("Cache "+id);
-                    l.ok(c.b);
+                    System.out.println("got from cache: "+id);
+                    Bitmap b = c.b;
+                    if(b == null){
+                        l.notfound();
+                    } else{
+                        l.ok(b);
+                    }
                     return;
                 }
             }
@@ -71,16 +92,35 @@ public class BildManager{
 
         loadBild(id, new Listener(){
             public void ok(Bitmap b){
-                Cache c = new Cache();
-                c.id = id;
-                c.b = b;
-                cache.add(0, c);
+                cache(id, b);
                 l.ok(b);
             }
 
-            public void notfound(){l.notfound();}
-            public void fail(){c = null; l.fail();}
+            public void notfound(){
+                cache(id, null);
+                l.notfound();
+            }
+
+            public void fail(){
+                c = null;
+                l.fail();
+            }
         });
+    }
+
+    private static void cache(int id, Bitmap b){
+        System.out.println("Cache "+id);
+        for(int i = 0; i < cache.size(); i++){
+            if(cache.get(i).id == id){
+                System.out.println("Cache overwrite: "+id);
+                cache.get(i).b = b;
+                return;
+            }
+        }
+        Cache c = new Cache();
+        c.id = id;
+        c.b = b;
+        cache.add(0, c);
     }
 
     private static void run(Job j){
@@ -115,6 +155,7 @@ public class BildManager{
         j.l = l;
         jobs.add(j);
         if(t == null){
+            System.out.println("Create Thread");
             t = new Thread(new Runnable() {
                 public void run() {
                     while(!jobs.isEmpty()){
@@ -125,6 +166,8 @@ public class BildManager{
                 }
             });
             t.start();
+        } else{
+            System.out.println("Use Thread");
         }
     }
 }

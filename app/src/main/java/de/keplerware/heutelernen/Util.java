@@ -74,6 +74,14 @@ public class Util{
 		tt.show();
 		t = tt;
 	}
+
+	public static void toastUI(final String text){
+		screen.runOnUiThread(new Runnable(){
+			public void run(){
+				toast(text);
+			}
+		});
+	}
 	
 	public static void run(Runnable r){
 		if(screen != null){

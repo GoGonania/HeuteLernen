@@ -1,7 +1,9 @@
 package de.keplerware.heutelernen.screens;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -17,6 +19,7 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import de.keplerware.heutelernen.Client;
 import de.keplerware.heutelernen.Dialog;
@@ -45,15 +48,7 @@ public class FragmentProfil extends MyFragment {
     }
 
     public void updatePic(boolean uc){
-        BildManager.get(info.id, uc, new BildManager.Listener() {
-            public void ok(final Bitmap b) {
-                BildManager.set(b, bild, getActivity());
-            }
-
-            public void notfound(){}
-            public void fail(){
-            }
-        });
+        BildManager.get(info.id, uc, bild, getActivity());
     }
 
     public View create(){
@@ -95,10 +90,32 @@ public class FragmentProfil extends MyFragment {
         if(editP){
             bild.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View view){
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Profilbild hochladen"), 0);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Profilbild bearbeiten");
+                    builder.setItems(new String[]{"Bild hochladen", "Bild löschen"}, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which){
+                            if(which == 0){
+                                Intent intent = new Intent();
+                                intent.setType("image/*");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                startActivityForResult(Intent.createChooser(intent, "Profilbild hochladen"), 0);
+                            } else{
+                                new Thread(new Runnable(){
+                                    public void run(){
+                                        try{
+                                            Util.toastUI("Bild wird gelöscht...\nBitte warten...");
+                                            Client c = new Client();
+                                            c.delete(info.id);
+                                            c.close();
+                                            updatePic(false);
+                                            Util.toastUI("Bild wurde gelöscht!");
+                                        }catch (IOException e){}
+                                    }
+                                }).start();
+                            }
+                        }
+                    });
+                    builder.show();
                 }
             });
 
@@ -144,9 +161,12 @@ public class FragmentProfil extends MyFragment {
                         }
 
                         try {
+                            Util.toastUI("Bild wird hochgeladen...\nBitte warten...");
                             Client c = new Client();
-                            c.upload(Sitzung.info.id+"."+d, getContext().getContentResolver().openInputStream(s));
+                            c.upload(info.id+"."+d, getContext().getContentResolver().openInputStream(s));
                             c.close();
+                            Util.toastUI("Bild wurde hochgeladen!");
+                            updatePic(false);
                         } catch (Exception e){
                             e.printStackTrace();
                         }

@@ -52,6 +52,14 @@ public class Client extends FTPClient{
         return null;
     }
 
+    public void delete(int id) throws IOException{
+        FTPFile f = search(id);
+
+        if(f != null){
+            deleteFile(f.getName());
+        }
+    }
+
     public void upload(String to, InputStream in) throws IOException{
         storeFile(to, in);
     }
