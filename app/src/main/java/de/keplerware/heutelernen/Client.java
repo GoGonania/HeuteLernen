@@ -60,7 +60,8 @@ public class Client extends FTPClient{
         }
     }
 
-    public void upload(String to, InputStream in) throws IOException{
+    public void upload(int id, String to, InputStream in) throws IOException{
+        delete(id);
         storeFile(to, in);
     }
 

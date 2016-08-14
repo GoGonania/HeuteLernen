@@ -5,9 +5,15 @@ import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import de.keplerware.heutelernen.Dialog;
 import de.keplerware.heutelernen.Event;
@@ -19,17 +25,29 @@ import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
+import de.keplerware.heutelernen.manager.BildManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
+import de.keplerware.heutelernen.ui.MyList;
+import de.keplerware.heutelernen.ui.MyText;
 
 public class ScreenHome extends Screen{
-    private FragmentChats chats;
+    public static FragmentChats chats;
     private FragmentProfil profil;
     private TabLayout tabs;
+    private ViewPager pager;
+
+    private LinearLayout container;
+    private LinearLayout content;
+    private TextView ergebnisse;
 
     public static Starter show(int tab){
         Starter s = new Starter(ScreenHome.class);
         s.intent.putExtra("tab", tab);
         return s;
+    }
+
+    public static void tab(int t){
+        ((ScreenHome) Util.screen).item(t);
     }
 
     public int getLayout(){
@@ -41,9 +59,12 @@ public class ScreenHome extends Screen{
     }
 
     public void show(){
+        container = (LinearLayout) findViewById(R.id.home_search);
+        content = (LinearLayout) findViewById(R.id.search_content);
+        ergebnisse = (TextView) findViewById(R.id.search_ergebnisse);
         chats = new FragmentChats();
         profil = new FragmentProfil();
-        ViewPager pager = (ViewPager) findViewById(R.id.app);
+        pager = (ViewPager) findViewById(R.id.app);
         FragmentPagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager()){
             public Fragment getItem(int position){
                 switch(position){
@@ -79,12 +100,15 @@ public class ScreenHome extends Screen{
         tabs.setupWithViewPager(pager);
 
         if(getIntent().hasExtra("tab")){
-            int tab = getIntent().getIntExtra("tab", 0);
-            pager.setCurrentItem(tab);
+            item(getIntent().getIntExtra("tab", 0));
         } else{
-            pager.setCurrentItem(1);
+            item(1);
         }
 	}
+
+    public void item(int tab){
+        pager.setCurrentItem(tab);
+    }
 
     public boolean event(int t, Object... d){
         if(t == Event.MESSAGE){
@@ -155,12 +179,25 @@ public class ScreenHome extends Screen{
                 return true;
             }
         });
-        m.add("Benutzer suchen").setIcon(R.drawable.search).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
-            public boolean onMenuItemClick(MenuItem menuItem){
-                new Starter(ScreenSearch.class).send();
-                return true;
+        final SearchView search = new SearchView(this);
+        search.setQueryHint("Benutzer suchen");
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+            public boolean onQueryTextSubmit(String query){
+                return false;
             }
-        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+            public boolean onQueryTextChange(String newText){
+                search(newText.trim());
+                return false;
+            }
+        });
+        MenuItem i = m.add("Benutzer suchen");
+        i.setIcon(R.drawable.search).setActionView(search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        MenuItemCompat.setOnActionExpandListener(i, new MenuItemCompat.OnActionExpandListener() {
+            public boolean onMenuItemActionExpand(MenuItem item){return true;}
+            public boolean onMenuItemActionCollapse(MenuItem item){v(false); return true;}
+        });
+
         m.add("Nachhilfefach hinzufügen").setIcon(R.drawable.add).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
             public boolean onMenuItemClick(MenuItem menuItem){
                 Dialog.fachSelect("Nachhilfe geben in...", new Dialog.FachListener(){
@@ -170,6 +207,7 @@ public class ScreenHome extends Screen{
                                 if(!data.isEmpty()) {
                                     Util.toast("Du hast nun '"+fach+"' als Nachhilfefach!");
                                     profil.update();
+                                    item(2);
                                 } else{
                                     Util.toast("Du hast bereits '"+fach+"' als Nachhilfefach!");
                                 }
@@ -181,5 +219,59 @@ public class ScreenHome extends Screen{
                 return true;
             }
         }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        v(false);
+    }
+
+    private void set(String text){
+        content.removeAllViews();
+        content.addView(new MyText(text));
+    }
+
+    private void v(boolean s){
+        container.setVisibility(s ? View.VISIBLE : View.GONE);
+        pager.setVisibility(!s ? View.VISIBLE : View.GONE);
+        tabs.setVisibility(!s ? View.VISIBLE : View.GONE);
+    }
+
+    private String c;
+    public void search(final String text){
+        if(!text.isEmpty()){
+            c = text;
+            ergebnisse.setVisibility(View.GONE);
+            Internet.benutzerSuchen(text, false, new Internet.SuchListener(){
+                public void ok(Internet.UserInfo[] infos){
+                    if(!c.equals(text)) return;
+                    v(true);
+                    if(infos == null){
+                        set("Für '"+text+"' wurde kein Benutzer gefunden!");
+                    } else{
+                        ergebnisse.setVisibility(View.VISIBLE);
+                        ergebnisse.setText(""+infos.length+" Ergebnis"+(infos.length == 1 ? "" : "se")+":");
+                        content.removeAllViews();
+                        MyList<Internet.UserInfo> liste = new MyList<Internet.UserInfo>(infos){
+                            public View view(final Internet.UserInfo i){
+                                View r = Screen.inflate(R.layout.user);
+                                r.setOnClickListener(new View.OnClickListener(){
+                                    public void onClick(View v){
+                                        ScreenProfil.show(i);
+                                    }
+                                });
+                                BildManager.get(i.id, r.findViewById(R.id.angeboteitem_bild), ScreenHome.this);
+                                ((TextView) r.findViewById(R.id.angeboteitem_detail)).setText(i.klasse+" | "+i.schuleText);
+                                ((TextView) r.findViewById(R.id.angebotitem_name)).setText(i.name);
+                                return r;
+                            }
+                        };
+                        content.addView(liste);
+                    }
+                }
+                public void fail(){
+                    set("Keine Internetverbindung!");
+                }
+            });
+        } else{
+            v(false);
+        }
     }
 }

@@ -60,7 +60,8 @@ public class NachrichtenManager{
 			Dialog.confirm(R.drawable.delete, "Willst du den Chat mit "+info.name+" wirklich löschen?", new ConfirmListener(){
 				public void ok() {
                     delete();
-					ScreenHome.show(NachrichtenManager.get().length == 0?1:0).send();
+					ScreenHome.tab(NachrichtenManager.get().length == 0 ? 1 : 0);
+					ScreenHome.chats.resume();
 				}
 			});
 		}

@@ -88,7 +88,7 @@ public class Dialog{
 	public static void fachSelect(String titel, final FachListener li){
 		AlertDialog.Builder b = new AlertDialog.Builder(Util.screen);
 		b.setTitle(titel);
-		b.setIcon(R.drawable.help);
+		b.setIcon(R.drawable.add);
 		View v = Screen.inflate(R.layout.fachselect);
         final MySpinner s = (MySpinner) v.findViewById(R.id.fachselect_spinner);
         s.fill(R.array.facher);

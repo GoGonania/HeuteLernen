@@ -55,17 +55,13 @@ public class BildManager{
     public static void get(final int id, boolean uc, final View v, final Activity a){
         get(id, uc, new Listener(){
             public void ok(Bitmap b){
-                System.out.println(""+id+": OK");
                 set(b, ((ImageView) v), a);
             }
 
             public void notfound(){
-                System.out.println(""+id+": NOTFOUND");
                 set(null, ((ImageView) v), a);
             }
-            public void fail(){
-                System.out.println(""+id+": FAIL");
-            }
+            public void fail(){}
         });
     }
 
@@ -78,7 +74,6 @@ public class BildManager{
             for(int i = 0; i < cache.size(); i++){
                 Cache c = cache.get(i);
                 if(c.id == id){
-                    System.out.println("got from cache: "+id);
                     Bitmap b = c.b;
                     if(b == null){
                         l.notfound();
@@ -109,10 +104,8 @@ public class BildManager{
     }
 
     private static void cache(int id, Bitmap b){
-        System.out.println("Cache "+id);
         for(int i = 0; i < cache.size(); i++){
             if(cache.get(i).id == id){
-                System.out.println("Cache overwrite: "+id);
                 cache.get(i).b = b;
                 return;
             }
@@ -149,13 +142,11 @@ public class BildManager{
     }
 
     private static void loadBild(int id, Listener l){
-        System.out.println("Load bild for "+id+"");
         final Job j = new Job();
         j.id = id;
         j.l = l;
         jobs.add(j);
         if(t == null){
-            System.out.println("Create Thread");
             t = new Thread(new Runnable() {
                 public void run() {
                     while(!jobs.isEmpty()){
@@ -166,8 +157,6 @@ public class BildManager{
                 }
             });
             t.start();
-        } else{
-            System.out.println("Use Thread");
         }
     }
 }

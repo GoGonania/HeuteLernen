@@ -20,6 +20,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
 
 import de.keplerware.heutelernen.Client;
 import de.keplerware.heutelernen.Dialog;
@@ -40,6 +41,7 @@ public class FragmentProfil extends MyFragment {
     public UserInfo info;
     private LinearLayout angebote;
     private ImageView bild;
+    private boolean editP;
 
     public static FragmentProfil show(UserInfo info){
         FragmentProfil f = new FragmentProfil();
@@ -69,7 +71,7 @@ public class FragmentProfil extends MyFragment {
         }
         angebote = (LinearLayout) v.findViewById(R.id.profil_angebote);
 
-        final boolean editP = Sitzung.rang(Rang.MODERATOR) || info.owner();
+        editP = Sitzung.rang(Rang.MODERATOR) || info.owner();
 
         ImageView editB = (ImageView) v.findViewById(R.id.profil_edit_beschreibung);
 
@@ -147,32 +149,31 @@ public class FragmentProfil extends MyFragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode != Activity.RESULT_OK) return;
+        final Uri s = data.getData();
         if(requestCode == 0){
-            if(resultCode == Activity.RESULT_OK){
-                final Uri s = data.getData();
-                new Thread(new Runnable(){
-                    public void run() {
-                        String d;
-                        if(s.getScheme().equals(ContentResolver.SCHEME_CONTENT)){
-                            final MimeTypeMap mime = MimeTypeMap.getSingleton();
-                            d = mime.getExtensionFromMimeType(getContext().getContentResolver().getType(s));
-                        }else{
-                            d = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(s.getPath())).toString());
-                        }
-
-                        try {
-                            Util.toastUI("Bild wird hochgeladen...\nBitte warten...");
-                            Client c = new Client();
-                            c.upload(info.id+"."+d, getContext().getContentResolver().openInputStream(s));
-                            c.close();
-                            Util.toastUI("Bild wurde hochgeladen!");
-                            updatePic(false);
-                        } catch (Exception e){
-                            e.printStackTrace();
-                        }
+            new Thread(new Runnable(){
+                public void run() {
+                    String d;
+                    if(s.getScheme().equals(ContentResolver.SCHEME_CONTENT)){
+                        final MimeTypeMap mime = MimeTypeMap.getSingleton();
+                        d = mime.getExtensionFromMimeType(getContext().getContentResolver().getType(s));
+                    }else{
+                        d = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(s.getPath())).toString());
                     }
-                }).start();
-            }
+
+                    try {
+                        Util.toastUI("Bild wird hochgeladen...\nBitte warten...");
+                        Client c = new Client();
+                        c.upload(info.id, info.id+"."+d, getContext().getContentResolver().openInputStream(s));
+                        c.close();
+                        Util.toastUI("Bild wurde hochgeladen!");
+                        updatePic(false);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
     }
 
@@ -192,7 +193,7 @@ public class FragmentProfil extends MyFragment {
                         public View view(final Internet.Angebot angebot){
                             View v = Screen.inflate(R.layout.angebot);
                             ((TextView) v.findViewById(R.id.myangebot_text)).setText(angebot.fach);
-                            if(info.owner()){
+                            if(editP){
                                 View m = v.findViewById(R.id.myangebot_minus);
                                 m.setVisibility(View.VISIBLE);
                                 m.setOnClickListener(new OnClickListener(){
