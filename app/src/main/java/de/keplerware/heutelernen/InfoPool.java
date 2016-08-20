@@ -10,7 +10,7 @@ public class InfoPool{
         void add(Internet.UserInfo info, int id);
         void fail();
     }
-    private ArrayList<Integer> ids;
+    private final ArrayList<Integer> ids;
     private int progress;
     private boolean failed;
 

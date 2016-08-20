@@ -2,25 +2,23 @@ package de.keplerware.heutelernen.screens;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.apache.commons.net.ftp.FTPClient;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URI;
 
 import de.keplerware.heutelernen.Client;
 import de.keplerware.heutelernen.Dialog;
@@ -37,11 +35,13 @@ import de.keplerware.heutelernen.manager.ProfilManager;
 import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MyText;
 
-public class FragmentProfil extends MyFragment {
+public class FragmentProfil extends MyFragment{
     public UserInfo info;
     private LinearLayout angebote;
     private ImageView bild;
     private boolean editP;
+    private File image;
+    private Uri imageUri;
 
     public static FragmentProfil show(UserInfo info){
         FragmentProfil f = new FragmentProfil();
@@ -97,10 +97,36 @@ public class FragmentProfil extends MyFragment {
                     builder.setItems(new String[]{"Bild hochladen", "Bild löschen"}, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which){
                             if(which == 0){
-                                Intent intent = new Intent();
-                                intent.setType("image/*");
-                                intent.setAction(Intent.ACTION_GET_CONTENT);
-                                startActivityForResult(Intent.createChooser(intent, "Profilbild hochladen"), 0);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setTitle("Bild hochladen");
+                                builder.setItems(new String[]{"Vorhandenes Bild auswählen", "Neues Bild aufnehmen"}, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which){
+                                        if(image == null) {
+                                            image = new File(Environment.getExternalStorageDirectory()+"/"+Util.appname+"", "last.jpg");
+                                            if(!image.exists()) image.getParentFile().mkdirs();
+                                            imageUri = Uri.fromFile(image);
+                                        }
+                                        if(which == 0){
+                                            Intent intent = new Intent();
+                                            intent.setType("image/*");
+                                            intent.setAction(Intent.ACTION_GET_CONTENT);
+                                            try{
+                                                intent.putExtra("return-data", true);
+                                                startActivityForResult(Intent.createChooser(intent, "Bild hochladen"), 1);
+                                            }catch (ActivityNotFoundException e){}
+
+                                        } else{
+                                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                                            try{
+                                                image.delete();
+                                                intent.putExtra("return-data", true);
+                                                startActivityForResult(Intent.createChooser(intent, "Bild aufnehmen"), 2);
+                                            }catch (ActivityNotFoundException e){}
+                                        }
+                                    }
+                                });
+                                builder.show();
                             } else{
                                 new Thread(new Runnable(){
                                     public void run(){
@@ -149,32 +175,54 @@ public class FragmentProfil extends MyFragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(requestCode != Activity.RESULT_OK) return;
-        final Uri s = data.getData();
-        if(requestCode == 0){
-            new Thread(new Runnable(){
-                public void run() {
-                    String d;
-                    if(s.getScheme().equals(ContentResolver.SCHEME_CONTENT)){
-                        final MimeTypeMap mime = MimeTypeMap.getSingleton();
-                        d = mime.getExtensionFromMimeType(getContext().getContentResolver().getType(s));
-                    }else{
-                        d = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(new File(s.getPath())).toString());
-                    }
+        if(requestCode == UCrop.REQUEST_CROP){
+            if(resultCode == Activity.RESULT_OK){
+                uploadUri(UCrop.getOutput(data));
+            } else{
+                if(resultCode == UCrop.RESULT_ERROR) UCrop.getError(data).printStackTrace();
+                image.delete();
+            }
 
-                    try {
-                        Util.toastUI("Bild wird hochgeladen...\nBitte warten...");
-                        Client c = new Client();
-                        c.upload(info.id, info.id+"."+d, getContext().getContentResolver().openInputStream(s));
-                        c.close();
-                        Util.toastUI("Bild wurde hochgeladen!");
-                        updatePic(false);
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
         }
+
+        if(resultCode != Activity.RESULT_OK) return;
+
+        if(requestCode == 1) crop(data.getData());
+        if(requestCode == 2) crop(imageUri);
+    }
+
+    private void crop(Uri d){
+        UCrop u = UCrop.of(d, imageUri);
+        UCrop.Options o = new UCrop.Options();
+        o.withAspectRatio(1, 1);
+        o.withMaxResultSize(100, 100);
+        o.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+        o.setToolbarTitle("Bild zuschneiden");
+        o.setActiveWidgetColor(getResources().getColor(R.color.actionbar, null));
+        o.setToolbarColor(getResources().getColor(R.color.actionbar, null));
+        o.setStatusBarColor(getResources().getColor(R.color.actionbarDunkler, null));
+        o.setShowCropGrid(false);
+        u.withOptions(o);
+        u.start(getActivity(), this);
+    }
+
+    private void uploadUri(final Uri s){
+        new Thread(new Runnable(){
+            public void run() {
+                try {
+                    Util.toastUI("Bild wird hochgeladen...\nBitte warten...");
+                    Client c = new Client();
+                    c.upload(info.id, info.id+".jpg", getContext().getContentResolver().openInputStream(s));
+                    c.close();
+                    Util.toastUI("Bild wurde hochgeladen!");
+                    updatePic(false);
+                } catch (Exception e){
+                    Util.toastUI("Keine Internet-Verbindung!");
+                    e.printStackTrace();
+                }
+                image.delete();
+            }
+        }).start();
     }
 
     public void update(){

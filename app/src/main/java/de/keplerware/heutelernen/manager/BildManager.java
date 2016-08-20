@@ -3,7 +3,6 @@ package de.keplerware.heutelernen.manager;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.view.View;
 import android.widget.ImageView;
 
