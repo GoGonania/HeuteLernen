@@ -25,36 +25,22 @@ public class Client extends FTPClient{
         setFileType(FTP.BINARY_FILE_TYPE);
     }
 
-    private FTPFile search(int id) throws IOException{
-        FTPFile[] fs = listFiles();
-
-        for(int i = 0; i < fs.length; i++){
-            FTPFile d = fs[i];
-            if(d.getName().startsWith(id+".")) return d;
-        }
-        return null;
+    public File download(int id) throws IOException{
+        String n = build(id);
+        Datei d = BildManager.root.create(n);
+        d.f.getParentFile().mkdirs();
+        FileOutputStream out = new FileOutputStream(d.f);
+        boolean b = retrieveFile(n, out);
+        out.close();
+        return b ? d.f : null;
     }
 
-    public File download(int id) throws IOException {
-       FTPFile f = search(id);
-
-        if(f != null) {
-            Datei d = BildManager.root.create(f.getName());
-            d.f.getParentFile().mkdirs();
-            FileOutputStream out = new FileOutputStream(d.f);
-            retrieveFile(f.getName(), out);
-            return d.f;
-        }
-
-        return null;
+    private String build(int id){
+        return id+".jpg";
     }
 
     public void delete(int id) throws IOException{
-        FTPFile f = search(id);
-
-        if(f != null){
-            deleteFile(f.getName());
-        }
+        deleteFile(build(id));
     }
 
     public void upload(int id, String to, InputStream in) throws IOException{

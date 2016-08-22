@@ -43,6 +43,11 @@ public class ScreenLogin extends Screen{
 				send();
 			}
 		});
+		findViewById(R.id.login_erkunden).setOnClickListener(new View.OnClickListener(){
+			public void onClick(View v) {
+				new Starter(ScreenErkunden.class).send();
+			}
+		});
 		
 		if(MyService.running) send();
 	}

@@ -123,10 +123,9 @@ public class ScreenChat extends Screen{
 	}
 	
 	public View addContent(boolean i, final String text){
-		LinearLayout parent = new LinearLayout(HeuteLernen.context);
-		parent.setGravity(i?Gravity.END:Gravity.START);
 		LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		p.bottomMargin = p.topMargin = 5;
+		p.gravity = i ? Gravity.RIGHT : Gravity.LEFT;
 		MyText tv = new MyText(text);
 		tv.setTextSize(16);
 		tv.setTextColor(Color.BLACK);
@@ -142,9 +141,8 @@ public class ScreenChat extends Screen{
 		tv.setBackgroundResource(i?R.drawable.chat_green:R.drawable.chat_gray);
 		tv.setMaxWidth(500);
 		tv.setLayoutParams(p);
-		parent.addView(tv);
-		content.addView(parent);
-		return parent;
+		content.addView(tv);
+		return tv;
 	}
 	
 	private void scroll(){

@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -94,52 +95,44 @@ public class FragmentProfil extends MyFragment{
                 public void onClick(View view){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Profilbild bearbeiten");
-                    builder.setItems(new String[]{"Bild hochladen", "Bild löschen"}, new DialogInterface.OnClickListener() {
+                    builder.setItems(new String[]{"Vorhandenes Bild auswählen", "Neues Bild aufnehmen", "Bild löschen"}, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which){
+                            if(image == null) {
+                                image = new File(Environment.getExternalStorageDirectory()+"/"+Util.appname+"", "last.jpg");
+                                if(!image.exists()) image.getParentFile().mkdirs();
+                                imageUri = Uri.fromFile(image);
+                            }
                             if(which == 0){
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                                builder.setTitle("Bild hochladen");
-                                builder.setItems(new String[]{"Vorhandenes Bild auswählen", "Neues Bild aufnehmen"}, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which){
-                                        if(image == null) {
-                                            image = new File(Environment.getExternalStorageDirectory()+"/"+Util.appname+"", "last.jpg");
-                                            if(!image.exists()) image.getParentFile().mkdirs();
-                                            imageUri = Uri.fromFile(image);
-                                        }
-                                        if(which == 0){
-                                            Intent intent = new Intent();
-                                            intent.setType("image/*");
-                                            intent.setAction(Intent.ACTION_GET_CONTENT);
-                                            try{
-                                                intent.putExtra("return-data", true);
-                                                startActivityForResult(Intent.createChooser(intent, "Bild hochladen"), 1);
-                                            }catch (ActivityNotFoundException e){}
-
-                                        } else{
-                                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                                            try{
-                                                image.delete();
-                                                intent.putExtra("return-data", true);
-                                                startActivityForResult(Intent.createChooser(intent, "Bild aufnehmen"), 2);
-                                            }catch (ActivityNotFoundException e){}
-                                        }
-                                    }
-                                });
-                                builder.show();
+                                Intent intent = new Intent();
+                                intent.setType("image/*");
+                                intent.setAction(Intent.ACTION_GET_CONTENT);
+                                try{
+                                    intent.putExtra("return-data", true);
+                                    startActivityForResult(Intent.createChooser(intent, "Bild hochladen"), 1);
+                                }catch (ActivityNotFoundException e){}
                             } else{
-                                new Thread(new Runnable(){
-                                    public void run(){
-                                        try{
-                                            Util.toastUI("Bild wird gelöscht...\nBitte warten...");
-                                            Client c = new Client();
-                                            c.delete(info.id);
-                                            c.close();
-                                            updatePic(false);
-                                            Util.toastUI("Bild wurde gelöscht!");
-                                        }catch (IOException e){}
-                                    }
-                                }).start();
+                                if(which == 1){
+                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                                    try{
+                                        image.delete();
+                                        intent.putExtra("return-data", true);
+                                        startActivityForResult(Intent.createChooser(intent, "Bild aufnehmen"), 2);
+                                    }catch (ActivityNotFoundException e){}
+                                } else{
+                                    new Thread(new Runnable(){
+                                        public void run(){
+                                            try{
+                                                Util.toastUI("Bild wird gelöscht...\nBitte warten...");
+                                                Client c = new Client();
+                                                c.delete(info.id);
+                                                c.close();
+                                                updatePic(false);
+                                                Util.toastUI("Bild wurde gelöscht!");
+                                            }catch (IOException e){}
+                                        }
+                                    }).start();
+                                }
                             }
                         }
                     });
@@ -235,7 +228,11 @@ public class FragmentProfil extends MyFragment{
             public void ok(Internet.Angebot[] as){
                 angebote.removeAllViews();
                 if(as == null){
-                    angebote.addView(new MyText("Keine Nachhilfefächer gefunden!"));
+                    if(info.owner()){
+                        angebote.addView(new MyText("Du hast zurzeit keine Nachhilfefächer\nKlicke auf das '+' um welche hinzuzufügen!"){{setGravity(Gravity.CENTER);}});
+                    } else{
+                        angebote.addView(new MyText("Keine Nachhilfefächer gefunden!"));
+                    }
                 } else{
                     MyList<Internet.Angebot> liste = new MyList<Internet.Angebot>(as){
                         public View view(final Internet.Angebot angebot){

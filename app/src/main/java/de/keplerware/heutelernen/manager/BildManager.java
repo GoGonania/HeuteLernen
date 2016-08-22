@@ -37,7 +37,7 @@ public class BildManager{
     }
 
     private static final ArrayList<Cache> cache = new ArrayList<>();
-    private static final ArrayList<Job> jobs = new ArrayList<Job>();
+    private static final ArrayList<Job> jobs = new ArrayList<>();
 
     private static void set(final Bitmap b, final ImageView v, Activity a){
         a.runOnUiThread(new Runnable(){
