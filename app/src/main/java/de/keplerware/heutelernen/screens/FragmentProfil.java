@@ -205,7 +205,7 @@ public class FragmentProfil extends MyFragment{
                 try {
                     Util.toastUI("Bild wird hochgeladen...\nBitte warten...");
                     Client c = new Client();
-                    c.upload(info.id, info.id+".jpg", getContext().getContentResolver().openInputStream(s));
+                    c.upload(info.id, getContext().getContentResolver().openInputStream(s));
                     c.close();
                     Util.toastUI("Bild wurde hochgeladen!");
                     updatePic(false);

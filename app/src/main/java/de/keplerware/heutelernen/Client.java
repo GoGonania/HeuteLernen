@@ -43,9 +43,8 @@ public class Client extends FTPClient{
         deleteFile(build(id));
     }
 
-    public void upload(int id, String to, InputStream in) throws IOException{
-        delete(id);
-        storeFile(to, in);
+    public void upload(int id, InputStream in) throws IOException{
+        storeFile(build(id), in);
     }
 
     public void close() throws IOException{
