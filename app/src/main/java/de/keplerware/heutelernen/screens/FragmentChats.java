@@ -22,7 +22,7 @@ public class FragmentChats extends MyFragment {
         main.removeAllViews();
         Chat[] c = NachrichtenManager.get();
         if(c.length == 0){
-            main.addView(new MyText("Du hast gerade keine aktive Chats"){{setGravity(Gravity.CENTER);}});
+            main.addView(new MyText("Du hast gerade keine aktive Chats\n\nUm zu schreiben, gehe auf das Profil eines Benutzers und klicke oben rechts auf Chat"){{setGravity(Gravity.CENTER);}});
         } else{
             MyList<Chat> liste = new MyList<Chat>(NachrichtenManager.get()){
                 public View view(final Chat t){

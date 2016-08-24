@@ -199,9 +199,9 @@ public class FragmentProfil extends MyFragment{
         o.withMaxResultSize(100, 100);
         o.setCompressionFormat(Bitmap.CompressFormat.JPEG);
         o.setToolbarTitle("Bild zuschneiden");
-        o.setActiveWidgetColor(getResources().getColor(R.color.actionbar, null));
-        o.setToolbarColor(getResources().getColor(R.color.actionbar, null));
-        o.setStatusBarColor(getResources().getColor(R.color.actionbarDunkler, null));
+        o.setActiveWidgetColor(ContextCompat.getColor(getActivity(), R.color.actionbar));
+        o.setToolbarColor(ContextCompat.getColor(getActivity(), R.color.actionbar));
+        o.setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.actionbarDunkler));
         o.setShowCropGrid(false);
         u.withOptions(o);
         u.start(getActivity(), this);

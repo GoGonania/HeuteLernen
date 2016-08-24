@@ -80,7 +80,6 @@ public class Dialog{
 		AlertDialog.Builder b = new AlertDialog.Builder(Util.screen);
 		b.setTitle(titel);
 		b.setMessage(text);
-		b.setIcon(R.drawable.logo);
 		b.setPositiveButton("OK", null);
 		b.create().show();
 	}
