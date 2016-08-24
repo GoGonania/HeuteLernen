@@ -1,15 +1,19 @@
 package de.keplerware.heutelernen.screens;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -102,36 +106,40 @@ public class FragmentProfil extends MyFragment{
                                 if(!image.exists()) image.getParentFile().mkdirs();
                                 imageUri = Uri.fromFile(image);
                             }
-                            if(which == 0){
-                                Intent intent = new Intent();
-                                intent.setType("image/*");
-                                intent.setAction(Intent.ACTION_GET_CONTENT);
-                                try{
-                                    intent.putExtra("return-data", true);
-                                    startActivityForResult(Intent.createChooser(intent, "Bild hochladen"), 1);
-                                }catch (ActivityNotFoundException e){}
+                            if(which != 2 && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 8000);
                             } else{
-                                if(which == 1){
-                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                                if(which == 0){
+                                    Intent intent = new Intent();
+                                    intent.setType("image/*");
+                                    intent.setAction(Intent.ACTION_GET_CONTENT);
                                     try{
-                                        image.delete();
                                         intent.putExtra("return-data", true);
-                                        startActivityForResult(Intent.createChooser(intent, "Bild aufnehmen"), 2);
+                                        startActivityForResult(Intent.createChooser(intent, "Bild hochladen"), 1);
                                     }catch (ActivityNotFoundException e){}
                                 } else{
-                                    new Thread(new Runnable(){
-                                        public void run(){
-                                            try{
-                                                Util.toastUI("Bild wird gelöscht...\nBitte warten...");
-                                                Client c = new Client();
-                                                c.delete(info.id);
-                                                c.close();
-                                                updatePic(false);
-                                                Util.toastUI("Bild wurde gelöscht!");
-                                            }catch (IOException e){}
-                                        }
-                                    }).start();
+                                    if(which == 1){
+                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                                        try{
+                                            image.delete();
+                                            intent.putExtra("return-data", true);
+                                            startActivityForResult(Intent.createChooser(intent, "Bild aufnehmen"), 2);
+                                        }catch (ActivityNotFoundException e){}
+                                    } else{
+                                        new Thread(new Runnable(){
+                                            public void run(){
+                                                try{
+                                                    Util.toastUI("Bild wird gelöscht...\nBitte warten...");
+                                                    Client c = new Client();
+                                                    c.delete(info.id);
+                                                    c.close();
+                                                    updatePic(false);
+                                                    Util.toastUI("Bild wurde gelöscht!");
+                                                }catch (IOException e){}
+                                            }
+                                        }).start();
+                                    }
                                 }
                             }
                         }
