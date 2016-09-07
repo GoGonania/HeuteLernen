@@ -5,9 +5,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.EditText;
 
+import de.keplerware.heutelernen.manager.DataManager;
 import de.keplerware.heutelernen.ui.MySpinner;
 
 public class Dialog{
@@ -20,9 +22,9 @@ public class Dialog{
     }
 
 	public interface FachListener{
-		void ok(String fach);
+		void ok(int fach);
 	}
-	
+
 	public static void confirm(String text, ConfirmListener li){
 		confirm(-1, text, li);
 	}
@@ -48,7 +50,7 @@ public class Dialog{
 
         b.create().show();
     }
-	
+
 	public static void confirm(int icon, String text, final ConfirmListener l){
 		AlertDialog.Builder b = new AlertDialog.Builder(Util.screen);
 		b.setTitle(Util.appname);
@@ -61,10 +63,10 @@ public class Dialog{
 		});
 		b.setNegativeButton("Nein", new OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				
+
 			}
 		});
-		
+
 		b.create().show();
 	}
 
@@ -75,7 +77,7 @@ public class Dialog{
 			}
 		});
 	}
-	
+
 	public static void alert(String titel, String text){
 		AlertDialog.Builder b = new AlertDialog.Builder(Util.screen);
 		b.setTitle(titel);
@@ -90,10 +92,10 @@ public class Dialog{
 		b.setIcon(R.drawable.add);
 		View v = Screen.inflate(R.layout.fachselect);
         final MySpinner s = (MySpinner) v.findViewById(R.id.fachselect_spinner);
-        s.fill(R.array.facher);
+        s.fill(DataManager.faecher);
         b.setPositiveButton("Auswählen", new OnClickListener(){
 			public void onClick(DialogInterface dialogInterface, int i){
-				li.ok((String) s.getSelectedItem());
+				li.ok(s.getSelectedItemPosition());
 			}
 		});
         b.setView(v);

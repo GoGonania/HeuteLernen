@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -154,15 +155,12 @@ public class FragmentProfil extends MyFragment{
                     Dialog.prompt(b.isEmpty() ? "Wähle deine Beschreibung" : "Ändere deine Beschreibung", b, new Dialog.PromptListener(){
                         public void ok(String text){
                             if(text.isEmpty()) return;
-                            if(text.length() > 100){
-                                Util.toast("Deine Beschreibung wurde auf 100 Zeichen gekürzt");
-                                text = text.substring(0, 100);
-                            }
                             final String text2 = text;
                             Internet.beschreibung(info.id, text, new Util.Listener(){
                                 public void ok(String data){
                                     info.beschreibung = text2;
                                     tB.setText(text2);
+                                    Util.toast("Beschreibung wurde geändert!");
                                 }
 
                                 public void fail(Exception e){}
@@ -233,7 +231,7 @@ public class FragmentProfil extends MyFragment{
 
     private void load(){
         Internet.angebote(info, new Internet.AngebotListener(){
-            public void ok(Internet.Angebot[] as){
+            public void ok(final Internet.Angebot[] as){
                 angebote.removeAllViews();
                 if(as == null){
                     if(info.owner()){
@@ -252,7 +250,7 @@ public class FragmentProfil extends MyFragment{
                                 m.setOnClickListener(new OnClickListener(){
                                     public void onClick(View view){Dialog.confirm("" + angebot.fach + " wirklich löschen?", new Dialog.ConfirmListener(){
                                         public void ok(){
-                                            Internet.angebotEntfernen(angebot.fach, info.id, new Util.Listener(){
+                                            Internet.angebotEntfernen(angebot.fachID, info.id, new Util.Listener(){
                                                 public void ok(String data){
                                                     Util.toast("Nachhilfefach wurde gelöscht!");
                                                     update();
@@ -268,6 +266,15 @@ public class FragmentProfil extends MyFragment{
                             return v;
                         }
                     };
+                    if(!info.owner()){
+                        liste.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                                Internet.Angebot a = as[position];
+                                ScreenChat.message = "Hallo "+a.info.vname+". Könntest du mir in "+a.fach+" helfen?";
+                                ScreenChat.show(a.info);
+                            }
+                        });
+                    }
                     angebote.addView(liste);
                 }
             }

@@ -10,13 +10,13 @@ public class MySpinner extends Spinner{
 		super(c, attribs);
 	}
 
-    public MySpinner(int contents){
+    public MySpinner(String[] contents){
         super(Util.screen);
         fill(contents);
     }
 
-	public void fill(int contents){
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(Util.screen, contents, android.R.layout.simple_spinner_item);
+	public void fill(String[] contents){
+		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(Util.screen, android.R.layout.simple_list_item_1, android.R.id.text1, contents);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		setAdapter(adapter);
 	}

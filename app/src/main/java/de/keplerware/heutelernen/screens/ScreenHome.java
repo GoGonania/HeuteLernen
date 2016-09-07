@@ -25,6 +25,7 @@ import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.manager.BildManager;
+import de.keplerware.heutelernen.manager.DataManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MyText;
@@ -152,7 +153,7 @@ public class ScreenHome extends Screen{
                     public void ok(String text){
                         final String t = text.trim();
                         if(t.length() >= 6){
-                            Internet.passwort(t, Sitzung.info.id, new Util.Listener() {
+                            Internet.passwort(t, new Util.Listener() {
                                 public void ok(String data){
                                     Util.toast("Passwort wurde geändert!");
                                     Save.updatePasswort(t);
@@ -200,15 +201,15 @@ public class ScreenHome extends Screen{
         m.add("Nachhilfefach hinzufügen").setIcon(R.drawable.add).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
             public boolean onMenuItemClick(MenuItem menuItem){
                 Dialog.fachSelect("Nachhilfe geben in...", new Dialog.FachListener(){
-                    public void ok(final String fach) {
-                        Internet.angebotAufgeben(fach, Sitzung.info.klasseZahl, Sitzung.info.schule, Sitzung.info.id, new Util.Listener() {
+                    public void ok(final int fach){
+                        Internet.angebotAufgeben(fach, new Util.Listener() {
                             public void ok(String data){
                                 if(!data.isEmpty()) {
-                                    Util.toast("Du hast nun '"+fach+"' als Nachhilfefach!");
+                                    Util.toast("Du hast nun '"+ DataManager.fach(fach)+"' als Nachhilfefach!");
                                     profil.update();
                                     item(2);
                                 } else{
-                                    Util.toast("Du hast bereits '"+fach+"' als Nachhilfefach!");
+                                    Util.toast("Du hast bereits '"+DataManager.fach(fach)+"' als Nachhilfefach!");
                                 }
                             }
                             public void fail(Exception e){}

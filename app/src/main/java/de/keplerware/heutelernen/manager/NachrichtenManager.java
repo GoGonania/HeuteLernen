@@ -60,7 +60,6 @@ public class NachrichtenManager{
 			Dialog.confirm(R.drawable.delete, "Willst du den Chat mit "+info.name+" wirklich löschen?", new ConfirmListener(){
 				public void ok() {
                     delete();
-					ScreenHome.tab(NachrichtenManager.get().length == 0 ? 1 : 0);
 					ScreenHome.chats.resume();
 				}
 			});
@@ -152,7 +151,7 @@ public class NachrichtenManager{
                 System.out.println("NachrichtenManager: Fehler beim Laden der Chats!");
 				l.fail(null);
 			} else{
-                System.out.println("NachrichtenManager: Chats wurden geladen!");
+                System.out.println("NachrichtenManager: "+chats.size()+" Chats wurden geladen!");
 				l.ok(null);
 			}
 		}

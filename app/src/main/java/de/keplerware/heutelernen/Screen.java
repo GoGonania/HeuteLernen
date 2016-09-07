@@ -31,6 +31,7 @@ public abstract class Screen extends AppCompatActivity{
         show();
         bar.setTitle(getTitel());
         bar.setSubtitle(null);
+        bar.setElevation(this instanceof ScreenHome ? 0 : 10);
         setSupportActionBar(bar);
         if(this instanceof ScreenHome || this instanceof ScreenLogin){
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);

@@ -1,9 +1,12 @@
 package de.keplerware.heutelernen;
 
+import android.provider.ContactsContract;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import de.keplerware.heutelernen.Util.Listener;
+import de.keplerware.heutelernen.manager.DataManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 import de.keplerware.heutelernen.manager.ProfilManager;
 
@@ -58,7 +61,7 @@ public class Internet{
 	}
 	
 	public static class Nachricht{
-        public String typ;
+        public int typ;
 		public String text;
 		public int id;
 		public UserInfo info;
@@ -66,7 +69,8 @@ public class Internet{
 	
 	public static class Angebot{
 		public UserInfo info;
-		public String fach;
+		public int fachID;
+        public String fach;
 	}
 	
 	private static void internet(String file, String text, final boolean hidden, final Listener l, String[] pk, String[] pv){
@@ -124,7 +128,7 @@ public class Internet{
 					for(int i = 0; i < p.length; i++){
 						String[] s = p[i].split("\t");
 						Nachricht n = new Nachricht();
-                        n.typ = s[0];
+                        n.typ = Integer.parseInt(s[0]);
 						n.id = Integer.parseInt(s[1]);
 						n.text = s[2].replace("euro", "€");
 						ns[i] = n;
@@ -136,13 +140,13 @@ public class Internet{
 			public void fail(Exception e){
 				li.fail();
 			}
-		}, new String[]{"id", "a"}, new String[]{""+id, ""+(!Util.pause())});
+		}, new String[]{"id", "a"}, new String[]{""+id, ""+(Util.pause()?0:1)});
 	}
 
 	public static void deleteUser(UserInfo info){
 		internet("delete", "Lösche Benutzer...", false, new Listener() {
 			public void ok(String data){
-				Util.toast("Benutzer wurde gelöscht!");
+                Util.toast("Benutzer wurde gelöscht!");
 			}
 
 			public void fail(Exception e) {}
@@ -165,8 +169,8 @@ public class Internet{
         }, new String[]{"vname", "nname", "jahrgang", "mail", "ort", "p", "schule"}, new String[]{vn, nn, "" + jahrgang, mail, ort, p, ""+schule});
 	}
 
-	public static void angebotEntfernen(String fach, int id, Listener l){
-		internet("angebot_entfernen", "Lösche '" + fach + "' als dein Nachhilfefach...", false, l, new String[]{"id", "f"}, new String[]{""+id, fach});
+	public static void angebotEntfernen(int fach, int id, Listener l){
+		internet("angebot_entfernen", "Entferne '" + fach + "' als Nachhilfefach...", false, l, new String[]{"id", "f"}, new String[]{""+id, ""+fach});
 	}
 	
 	public static void info(final int id, boolean dialog, final InfoListener l){
@@ -185,7 +189,7 @@ public class Internet{
 				i.rang = Integer.parseInt(s[5]);
                 try{i.beschreibung = s[6];}catch(Exception e){i.beschreibung = "";}
 				i.schule = Integer.parseInt(s[7]);
-				try{i.schuleText = Util.schulen[i.schule];}catch(Exception e){i.schuleText = "Unbekannte Schule!";}
+				try{i.schuleText = DataManager.schule(i.schule);}catch(Exception e){i.schuleText = "Unbekannte Schule!";}
 				l.ok(i);
 			}
 			
@@ -195,8 +199,8 @@ public class Internet{
 		}, new String[]{"id"}, new String[]{""+id});
 	}
 	
-	public static void angebotAufgeben(String fach, int klasse, int schule, int id, Listener l){
-		internet("angebot_aufgeben", "Angebot wird erstellt...", false, l, new String[]{"f", "k", "id", "s"}, new String[]{fach, ""+klasse, ""+id, ""+schule});
+	public static void angebotAufgeben(int fach, Listener l){
+		internet("angebot_aufgeben", "Nachhilfefach wird hinzugefügt...", false, l, new String[]{"f", "id", }, new String[]{""+fach, ""+Sitzung.info.id});
 	}
 	
 	public static void login(String m, String p, final LoginListener info){
@@ -224,7 +228,7 @@ public class Internet{
 			public void fail(Exception e){
 				info.fail(LoginError.Connection);
 			}
-		}, new String[]{"mail", "p", "version"}, new String[]{m, p, ""+Util.version});
+		}, new String[]{"mail", "p"}, new String[]{m, p});
 	}
 
     public static void benutzerSuchen(String query, final boolean dialog, final SuchListener li){
@@ -262,7 +266,10 @@ public class Internet{
     }
 
 	public static void nachrichtSystem(final UserInfo zu, final String text, Listener l){
-		internet("nachricht_senden", "Nachricht wird gesendet...", false, l, new String[]{"typ", "von", "zu", "text"}, new String[]{"system", ""+Sitzung.info.id, ""+zu.id, text.replace("€", "euro")});
+		internet("nachricht_senden", "Nachricht wird gesendet...", false, l,
+				new String[]{"typ", "von", "zu", "text"},
+				new String[]{"1", ""+Sitzung.info.id, ""+zu.id, text.replace("€", "euro")}
+		);
 	}
 	
 	public static void nachricht(final UserInfo zu, final String text, final Listener l){
@@ -274,7 +281,7 @@ public class Internet{
 
 			public void fail(Exception e){
 				l.fail(e);
-			}}, new String[]{"typ", "von", "zu", "text"}, new String[]{"chat", ""+Sitzung.info.id, ""+zu.id, text.replace("€", "euro")});
+			}}, new String[]{"typ", "von", "zu", "text"}, new String[]{"0", ""+Sitzung.info.id, ""+zu.id, text.replace("€", "euro")});
 	}
 	
 	public static void angebote(final UserInfo info, final AngebotListener li){
@@ -287,7 +294,8 @@ public class Internet{
 					final Angebot[] as = new Angebot[p.length];
 					for(int i = 0; i < p.length; i++){
 						Angebot a = new Angebot();
-						a.fach = p[i];
+						a.fachID = Integer.parseInt(p[i]);
+                        a.fach = DataManager.fach(a.fachID);
 						a.info = info;
 						as[i] = a;
 					}
@@ -301,20 +309,18 @@ public class Internet{
 		}, new String[]{"id"}, new String[]{""+info.id});
 	}
 	
-	public static void angebote(String fach, int klasse, int schule, final AngebotListener li){
+	public static void angebote(final int fach, int klasse, int schule, final AngebotListener li){
 		internet("auflisten", null, false, new Listener(){
 			public void ok(String data){
 				if(data.isEmpty()){
 					li.ok(null);
 				} else{
-					String[] p = data.split("\t\t");
+					String[] p = data.split("\t");
 					final Angebot[] as = new Angebot[p.length];
 					InfoPool pool = new InfoPool(p.length);
 					for(int i = 0; i < p.length; i++){
-						String[] ss = p[i].split("\t");
-						pool.add(ss[0]);
+						pool.add(p[i]);
 						Angebot a = new Angebot();
-						a.fach = ss[1];
 						as[i] = a;
 					}
                     pool.start(new InfoPool.Listener(){
@@ -336,10 +342,10 @@ public class Internet{
 			public void fail(Exception e){
 				li.fail();
 			}
-		}, new String[]{"f", "k", "s"}, new String[]{fach, ""+klasse, ""+schule});
+		}, new String[]{"f", "k", "s"}, new String[]{""+fach, ""+klasse, ""+schule});
 	}
 
-	public static void passwort(String p, int id, Listener l){
-		internet("passwort", "Passwort wird geändert...", false, l, new String[]{"p", "id"}, new String[]{p, ""+id});
+	public static void passwort(String p, Listener l){
+		internet("passwort", "Passwort wird geändert...", false, l, new String[]{"p", "id"}, new String[]{p, ""+Sitzung.info.id});
 	}
 }

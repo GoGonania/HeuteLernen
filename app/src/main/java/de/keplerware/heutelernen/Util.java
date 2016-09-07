@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Util{
-	private static final String host = "http://www.heutelernen.de/app/";
+	private static final String host = "http://www.heutelernen.de/app/v0/";
 	private static Context c;
 	private static WakeLock wakelock;
 	private static Toast t;
@@ -20,8 +20,6 @@ public class Util{
 	public static String fileDir;
 	public static String appname;
 	public static Screen screen;
-	public static String[] schulen;
-	public static int version;
 
 	public interface Listener{
 		void ok(String data);
@@ -38,10 +36,8 @@ public class Util{
 			Util.c = c;
 
 			appname = c.getResources().getString(R.string.app_name);
-			schulen = c.getResources().getStringArray(R.array.schulen);
 	        wakelock = ((PowerManager) c.getSystemService(Context.POWER_SERVICE)).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
 	        fileDir = c.getFilesDir().getAbsolutePath();
-            version = BuildConfig.VERSION_CODE;
 
 			Save.init(c);
 			
@@ -108,6 +104,7 @@ public class Util{
 						}
 						l.ok(s);
 					}catch(final Exception e){
+                        e.printStackTrace();
 						l.fail(e);
 					}
 				}

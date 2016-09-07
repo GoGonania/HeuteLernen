@@ -12,6 +12,7 @@ import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
+import de.keplerware.heutelernen.manager.DataManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 
 public class ScreenLogin extends Screen{
@@ -34,7 +35,15 @@ public class ScreenLogin extends Screen{
 		
 		findViewById(R.id.login_register).setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v){
-				new Starter(ScreenRegistrieren.class).send();
+                DataManager.load(new Util.Listener(){
+                    public void ok(String data){
+                        new Starter(ScreenRegistrieren.class).send();
+                    }
+
+                    public void fail(Exception e){
+
+                    }
+                });
 			}
 		});
 		
@@ -45,7 +54,15 @@ public class ScreenLogin extends Screen{
 		});
 		findViewById(R.id.login_erkunden).setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v) {
-				new Starter(ScreenErkunden.class).send();
+                DataManager.load(new Util.Listener(){
+                    public void ok(String data){
+                        new Starter(ScreenErkunden.class).send();
+                    }
+
+                    public void fail(Exception e){
+
+                    }
+                });
 			}
 		});
 		
@@ -53,22 +70,28 @@ public class ScreenLogin extends Screen{
 	}
 	
 	private void send(){
-		String m = mail.getText().toString();
-		String p = passwort.getText().toString();
+		final String m = mail.getText().toString();
+		final String p = passwort.getText().toString();
 		
 		if(m.isEmpty() || p.isEmpty()) return;
-		
-		Sitzung.login(m, p, false, new LoginListener(){
-			public void ok(UserInfo info){
-				Util.toast("Eingeloggt als "+info.name+"!");
-				ScreenHome.show(NachrichtenManager.unread() > 0 ? 0 : 1).replace();
-			}
 
-			public void fail(int e) {
-				if(e == LoginError.Passwort) Util.toast("Fehler beim Einloggen!\nFalsches Passwort ?");
-				if(e == LoginError.Bestaetigen) Util.toast("Du hast deine E-Mail noch nicht bestätigt!");
-			}
-		});
+        DataManager.load(new Util.Listener(){
+            public void ok(String data){
+                Sitzung.login(m, p, false, new LoginListener(){
+                    public void ok(UserInfo info){
+                        Util.toast("Eingeloggt als "+info.name+"!");
+                        ScreenHome.show(NachrichtenManager.unread() > 0 ? 0 : 1).replace();
+                    }
+
+                    public void fail(int e) {
+                        if(e == LoginError.Passwort) Util.toast("Fehler beim Einloggen!\nFalsches Passwort ?");
+                        if(e == LoginError.Bestaetigen) Util.toast("Du hast deine E-Mail noch nicht bestätigt!");
+                    }
+                });
+            }
+            public void fail(Exception e){}
+        });
+
 	}
 
     public String getTitel(){

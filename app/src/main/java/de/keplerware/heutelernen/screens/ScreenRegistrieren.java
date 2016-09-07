@@ -1,5 +1,6 @@
 package de.keplerware.heutelernen.screens;
 
+import android.provider.ContactsContract;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import de.keplerware.heutelernen.Save;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Starter;
 import de.keplerware.heutelernen.Util;
+import de.keplerware.heutelernen.manager.DataManager;
 import de.keplerware.heutelernen.ui.MySpinner;
 
 public class ScreenRegistrieren extends Screen{
@@ -38,8 +40,6 @@ public class ScreenRegistrieren extends Screen{
 				findViewById(R.id.start_klasse).setActivated(isChecked);
 			}
 		});
-		schule = new MySpinner(R.array.schulen);
-		((ViewGroup) findViewById(R.id.start_schule)).addView(schule);
 		v_vname = (EditText) findViewById(R.id.start_vname);
 		v_nname = (EditText) findViewById(R.id.start_nname);
 		v_passwort1 = (EditText) findViewById(R.id.login_passwort);
@@ -47,14 +47,17 @@ public class ScreenRegistrieren extends Screen{
 		v_ort = (EditText) findViewById(R.id.start_ort);
 		v_mail = (EditText) findViewById(R.id.login_email);
 		v_klasse = (EditText) findViewById(R.id.start_klasse);
+        schule = (MySpinner) findViewById(R.id.register_schule);
         RadioButton klasseFrei = (RadioButton) findViewById(R.id.start_alterfrei);
 
-        klasseFrei.setChecked(true);
+		schule.fill(DataManager.schulen);
 
+        klasseFrei.setChecked(true);
         klasseFrei.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b){
                 frei = b;
                 v_klasse.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
+				schule.setEnabled(b);
             }
         });
 		

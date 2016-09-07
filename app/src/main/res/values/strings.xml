@@ -1,39 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">HeuteLernen</string>
-	
-    <string-array name="facher">
-        <item>Mathe</item>
-        <item>Physik</item>
-        <item>Latein</item>
-        <item>Englisch</item>
-        <item>Französisch</item>
-        <item>Spanisch</item>
-        <item>Italienisch</item>
-        <item>Chemie</item>
-        <item>Biologie</item>
-        <item>Wirtschaft</item>
-        <item>Deutsch</item>
-        <item>Geographie</item>
-        <item>Informatik</item>
-        <item>Religion</item>
-        <item>Geschichte</item>
-        <item>Sozialkunde</item>
-        <item>Musik</item>
-        <item>Kunst</item>
-        <item>Sport</item>
-    </string-array>
-
-    <string-array name="schulen">
-        <item>Kepler Gym. Weiden</item>
-        <item>Augustinus Weiden</item>
-        <item>FOS/BOS Weiden</item>
-        <item>HAW Weiden</item>
-        <item>OTH Weiden</item>
-        <item>Hans-Scholl Reals.</item>
-        <item>Sophie-Scholl Reals.</item>
-        <item>Elly Heuss Weiden</item>
-        <item>Stiftland Gym. Tirschenr.</item>
-    </string-array>
 </resources>

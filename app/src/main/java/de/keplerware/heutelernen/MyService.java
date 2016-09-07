@@ -138,7 +138,7 @@ public class MyService extends Service{
 	
 	private static void nachricht(Nachricht n){
         switch (n.typ){
-            case "chat":
+            case 0:
                 Chat chat = NachrichtenManager.add(id, n.id, false, n.text, n.info);
 
                 if(!Util.event(Event.MESSAGE, n)){
@@ -185,7 +185,7 @@ public class MyService extends Service{
                     manager.notify(n.id, b.build());
                 }
                 break;
-            case "system":
+            case 1:
                 NotificationCompat.Builder b = new NotificationCompat.Builder(c);
                 b.setSmallIcon(R.drawable.logo_form);
                 b.setLargeIcon(logo);

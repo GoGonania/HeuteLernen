@@ -13,6 +13,7 @@ import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Screen;
 import de.keplerware.heutelernen.Sitzung;
 import de.keplerware.heutelernen.manager.BildManager;
+import de.keplerware.heutelernen.manager.DataManager;
 import de.keplerware.heutelernen.ui.MyList;
 import de.keplerware.heutelernen.ui.MySpinner;
 import de.keplerware.heutelernen.ui.MyText;
@@ -24,10 +25,9 @@ public class FragmentMain extends MyFragment {
     private CheckBox filterS;
 
     public void send(){
-        String f = s.getSelectedItem().toString();
         l.removeAllViews();
 
-        Internet.angebote(f, filterK.isChecked()?Sitzung.info.klasseZahl:0, filterS.isChecked()?Sitzung.info.schule:-1, new Internet.AngebotListener(){
+        Internet.angebote(s.getSelectedItemPosition(), filterK.isChecked()?Sitzung.info.klasseZahl:0, filterS.isChecked()?Sitzung.info.schule:-1, new Internet.AngebotListener(){
             public void ok(Internet.Angebot[] as){
                 if(as == null){
                     l.addView(new MyText("Es gibt für dich für dieses Fach leider keine passenden Nachhilfelehrer"){{setGravity(Gravity.CENTER);}});
@@ -59,7 +59,7 @@ public class FragmentMain extends MyFragment {
         s = (MySpinner) v.findViewById(R.id.main_spinner);
         filterK = (CheckBox) v.findViewById(R.id.main_filter_klasse);
         filterS = (CheckBox) v.findViewById(R.id.main_filter_schule);
-        s.fill(R.array.facher);
+        s.fill(DataManager.faecher);
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long ll){
                 send();

@@ -1,8 +1,11 @@
 package de.keplerware.heutelernen;
 
+import android.provider.ContactsContract;
+
 import de.keplerware.heutelernen.Internet.LoginListener;
 import de.keplerware.heutelernen.Internet.UserInfo;
 import de.keplerware.heutelernen.Util.Listener;
+import de.keplerware.heutelernen.manager.DataManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 import de.keplerware.heutelernen.screens.ScreenLogin;
 
@@ -15,19 +18,19 @@ public class Sitzung{
 				if(service){
 					setup(m, p, info, service, l);
 				} else{
-					NachrichtenManager.load(info.id, new Listener(){
-						public void ok(String data){
-							setup(m, p, info, service, l);
-						}
-						
-						public void fail(Exception e){
-							reset(service);
-							l.fail(LoginError.Connection);
-						}
-					});
+                    NachrichtenManager.load(info.id, new Listener(){
+                        public void ok(String data){
+                            setup(m, p, info, service, l);
+                        }
+
+                        public void fail(Exception e){
+                            reset(service);
+                            l.fail(LoginError.Connection);
+                        }
+                    });
 				}
 			}
-			
+
 			public void fail(int e){
 				reset(service);
 				l.fail(e);
