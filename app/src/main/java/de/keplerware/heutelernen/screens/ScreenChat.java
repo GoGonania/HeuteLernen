@@ -109,7 +109,7 @@ public class ScreenChat extends Screen{
                         boolean aktiv = true;
                         if(l.length() > 1){
                             try{
-                                aktiv = Boolean.parseBoolean(l.substring(1));
+                                aktiv = Integer.parseInt(l.substring(1)) == 1;
                             }catch(Exception e){}
                         }
                         bar.setSubtitle(aktiv?"online":"erreichbar");

@@ -1,7 +1,5 @@
 package de.keplerware.heutelernen;
 
-import android.provider.ContactsContract;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 

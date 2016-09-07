@@ -1,11 +1,8 @@
 package de.keplerware.heutelernen;
 
-import android.provider.ContactsContract;
-
 import de.keplerware.heutelernen.Internet.LoginListener;
 import de.keplerware.heutelernen.Internet.UserInfo;
 import de.keplerware.heutelernen.Util.Listener;
-import de.keplerware.heutelernen.manager.DataManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 import de.keplerware.heutelernen.screens.ScreenLogin;
 

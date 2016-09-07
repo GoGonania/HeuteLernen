@@ -1,9 +1,7 @@
 package de.keplerware.heutelernen.screens;
 
-import android.provider.ContactsContract;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
