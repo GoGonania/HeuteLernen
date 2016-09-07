@@ -20,7 +20,7 @@ public class ProfilManager{
 		}
 		Internet.info(id, dialog, new InfoListener(){
 			public void ok(UserInfo info){
-				infos.add(info);
+				if(info != null ) infos.add(info);
 				l.ok(info);
 			}
 			

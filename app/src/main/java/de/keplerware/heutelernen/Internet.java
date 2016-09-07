@@ -174,21 +174,25 @@ public class Internet{
 	public static void info(final int id, boolean dialog, final InfoListener l){
 		internet("info", dialog ? "Lade Daten..." : null, false, new Listener(){
 			public void ok(String data){
-				UserInfo i = new UserInfo();
-				i.id = id;
-				String[] s = data.split("\t");
-				i.vname = s[0];
-				i.nname = s[1];
-				i.name = ""+i.vname+" "+i.nname+"";
-				i.klasseZahl = Integer.parseInt(s[2]);
-				i.klasse = (i.klasseZahl == 13 ? "Schule geschafft" : i.klasseZahl+". Klasse");
-				i.mail = s[3];
-				i.ort = s[4];
-				i.rang = Integer.parseInt(s[5]);
-                try{i.beschreibung = s[6];}catch(Exception e){i.beschreibung = "";}
-				i.schule = Integer.parseInt(s[7]);
-				try{i.schuleText = DataManager.schule(i.schule);}catch(Exception e){i.schuleText = "Unbekannte Schule!";}
-				l.ok(i);
+                try{
+                    UserInfo i = new UserInfo();
+                    i.id = id;
+                    String[] s = data.split("\t");
+                    i.vname = s[0];
+                    i.nname = s[1];
+                    i.name = ""+i.vname+" "+i.nname+"";
+                    i.klasseZahl = Integer.parseInt(s[2]);
+                    i.klasse = (i.klasseZahl == 13 ? "Schule geschafft" : i.klasseZahl+". Klasse");
+                    i.mail = s[3];
+                    i.ort = s[4];
+                    i.rang = Integer.parseInt(s[5]);
+                    try{i.beschreibung = s[6];}catch(Exception e){i.beschreibung = "";}
+                    i.schule = Integer.parseInt(s[7]);
+                    i.schuleText = DataManager.schule(i.schule);
+                    l.ok(i);
+                }catch (Exception e){
+                    l.ok(null);
+                }
 			}
 			
 			public void fail(Exception e) {

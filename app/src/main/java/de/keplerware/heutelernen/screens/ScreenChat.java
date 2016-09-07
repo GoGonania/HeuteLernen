@@ -80,7 +80,7 @@ public class ScreenChat extends Screen{
 		if(!c.ms.isEmpty()){
 			m.add("Chat löschen").setIcon(R.drawable.delete).setOnMenuItemClickListener(new OnMenuItemClickListener(){
 				public boolean onMenuItemClick(MenuItem item){
-					c.deleteConfirm();
+					c.deleteConfirm(true);
 					return true;
 				}
 			}).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);

@@ -35,7 +35,7 @@ public class FragmentChats extends MyFragment {
                     r.setLongClickable(true);
                     r.setOnLongClickListener(new OnLongClickListener(){
                         public boolean onLongClick(View v){
-                            t.deleteConfirm();
+                            t.deleteConfirm(false);
                             return true;
                         }
                     });

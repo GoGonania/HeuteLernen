@@ -46,10 +46,6 @@ public class ScreenHome extends Screen{
         return s;
     }
 
-    public static void tab(int t){
-        ((ScreenHome) Util.screen).item(t);
-    }
-
     public int getLayout(){
         return R.layout.home;
     }

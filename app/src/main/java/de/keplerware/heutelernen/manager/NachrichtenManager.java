@@ -56,11 +56,15 @@ public class NachrichtenManager{
 			chats.remove(this);
 		}
 		
-		public void deleteConfirm(){
+		public void deleteConfirm(final boolean chat){
 			Dialog.confirm(R.drawable.delete, "Willst du den Chat mit "+info.name+" wirklich löschen?", new ConfirmListener(){
 				public void ok() {
                     delete();
-					ScreenHome.chats.resume();
+                    if(chat){
+                        Util.screen.finish();
+                    } else{
+                        ScreenHome.chats.resume();
+                    }
 				}
 			});
 		}
@@ -125,7 +129,12 @@ public class NachrichtenManager{
 					if(c.info == null){
 						ProfilManager.get(c.partner, false, new InfoListener(){
 							public void ok(UserInfo info){
-								c.info = info;
+								if(info == null){
+                                    System.out.println("NachrichtenManager: Chat mit gelöschtem Benutzer!");
+									c.delete();
+								} else{
+									c.info = info;
+								}
 								loadC();
 							}
 							
