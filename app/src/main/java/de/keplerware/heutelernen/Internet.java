@@ -152,9 +152,9 @@ public class Internet{
 	}
 	
 	public static void register(String vn, String nn, int jahrgang, String mail, String ort, String p, int schule, final RegisterListener l){
-		internet("register", "Registriere...", false, new Listener() {
+		internet("registerHash", "Registriere...", false, new Listener() {
             public void ok(String data){
-                if(data.equals("X")){
+                if(data.endsWith("X")){
                     l.fail(false);
                 } else{
                     l.ok();
@@ -164,7 +164,7 @@ public class Internet{
             public void fail(Exception e){
                 l.fail(true);
             }
-        }, new String[]{"vname", "nname", "jahrgang", "mail", "ort", "p", "schule"}, new String[]{vn, nn, "" + jahrgang, mail, ort, p, ""+schule});
+        }, new String[]{"vname", "nname", "jahrgang", "mail", "ort", "p", "schule"}, new String[]{vn, nn, "" + jahrgang, mail, ort, Util.hash(p), ""+schule});
 	}
 
 	public static void angebotEntfernen(int fach, int id, Listener l){
@@ -206,7 +206,7 @@ public class Internet{
 	}
 	
 	public static void login(String m, String p, final LoginListener info){
-		internet("login", "Logge ein...", false, new Listener(){
+		internet("loginHash", "Logge ein...", false, new Listener(){
 			public void ok(String data){
 				if(data.isEmpty()){
 					info.fail(LoginError.Passwort);
@@ -230,7 +230,7 @@ public class Internet{
 			public void fail(Exception e){
 				info.fail(LoginError.Connection);
 			}
-		}, new String[]{"mail", "p"}, new String[]{m, p});
+		}, new String[]{"mail", "p"}, new String[]{m, Util.hash(p)});
 	}
 
     public static void benutzerSuchen(String query, final boolean dialog, final SuchListener li){
@@ -348,6 +348,6 @@ public class Internet{
 	}
 
 	public static void passwort(String p, Listener l){
-		internet("passwort", "Passwort wird geändert...", false, l, new String[]{"p", "id"}, new String[]{p, ""+Sitzung.info.id});
+		internet("passwortHash", "Passwort wird geändert...", false, l, new String[]{"p", "id"}, new String[]{Util.hash(p), ""+Sitzung.info.id});
 	}
 }

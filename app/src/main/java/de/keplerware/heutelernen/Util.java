@@ -1,6 +1,8 @@
 package de.keplerware.heutelernen;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import android.content.Context;
 import android.content.Intent;
@@ -91,12 +93,24 @@ public class Util{
 		return screen != null && screen.event(type, d);
 	}
 
+    public static String hash(String text){
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(text.getBytes());
+            byte[] digest = md.digest();
+            return String.format("%064x", new java.math.BigInteger(1, digest));
+        } catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 	public static void internet(final String name, final String p, final Listener l){
 		new Thread(new Runnable(){
 				public void run(){
 					try{
-						InputStream in = new URL(""+host+""+name+".php?"+p+"").openStream();
-
+                        String url = ""+host+""+name+".php?"+p+"";
+						InputStream in = new URL(url).openStream();
 						String s = "";
 						int b;
 						while((b = in.read()) != -1){
