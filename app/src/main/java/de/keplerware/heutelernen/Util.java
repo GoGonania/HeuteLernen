@@ -1,5 +1,5 @@
 package de.keplerware.heutelernen;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -113,7 +113,7 @@ public class Util{
 				public void run(){
 					try{
                         String url = ""+host+""+name+".php?"+p+"";
-						InputStreamReader in = new InputStreamReader(new URL(url).openStream(), "ISO-8859-1");
+						InputStream in = new URL(url).openStream();
 						String s = "";
 						int b;
 						while((b = in.read()) != -1){
