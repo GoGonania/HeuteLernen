@@ -1,14 +1,17 @@
 package de.keplerware.heutelernen;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -110,12 +113,13 @@ public class Util{
 				public void run(){
 					try{
                         String url = ""+host+""+name+".php?"+p+"";
-						InputStream in = new URL(url).openStream();
+						InputStreamReader in = new InputStreamReader(new URL(url).openStream(), "ISO-8859-1");
 						String s = "";
 						int b;
 						while((b = in.read()) != -1){
 							s += (char) b;
 						}
+                        in.close();
 						l.ok(s);
 					}catch(final Exception e){
                         e.printStackTrace();
@@ -124,4 +128,13 @@ public class Util{
 				}
 		}).start();
 	}
+
+    public static void setBackground(View v, Bitmap b){
+        if (android.os.Build.VERSION.SDK_INT >= 16){
+            v.setBackground(new BitmapDrawable(screen.getResources(), b));
+        }
+        else{
+            v.setBackground(new BitmapDrawable(b));
+        }
+    }
 }

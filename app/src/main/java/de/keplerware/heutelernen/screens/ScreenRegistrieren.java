@@ -6,6 +6,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.RadioButton;
+
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.R;
 import de.keplerware.heutelernen.Save;
@@ -91,8 +92,8 @@ public class ScreenRegistrieren extends Screen{
 								if(!frei || (klasse >= 5 && klasse <= 12)){
 									Internet.register(vname, nname, klasse, mail, ort, p1, schule.getSelectedItemPosition(), new Internet.RegisterListener(){
 										public void ok(){
-											Util.toast("Registriert!");
 											Save.setData(mail, p1, -1);
+                                            ScreenLogin.first = true;
 											new Starter(ScreenLogin.class).send();
 										}
 										

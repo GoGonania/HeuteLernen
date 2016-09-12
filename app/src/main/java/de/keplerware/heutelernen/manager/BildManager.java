@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 
 import de.keplerware.heutelernen.Client;
 import de.keplerware.heutelernen.R;
+import de.keplerware.heutelernen.Util;
 import de.keplerware.heutelernen.io.Datei;
 
 public class BildManager{
@@ -39,26 +41,42 @@ public class BildManager{
     private static final ArrayList<Cache> cache = new ArrayList<>();
     private static final ArrayList<Job> jobs = new ArrayList<>();
 
-    private static void set(final Bitmap b, final ImageView v, Activity a){
+    private static void set(final Bitmap b, final View v, Activity a, final String emptyText){
         a.runOnUiThread(new Runnable(){
             public void run() {
                 if(b == null){
-                    v.setImageResource(R.drawable.portrait);
+                    if(v instanceof  ImageView){
+                        ((ImageView) v).setImageResource(R.drawable.portrait);
+                    } else{
+                        v.setBackgroundResource(R.drawable.portrait);
+                        ((TextView) v).setText(emptyText);
+                    }
+
                 } else{
-                    v.setImageBitmap(b);
+                    if(v instanceof ImageView){
+                        ((ImageView) v).setImageBitmap(b);
+                    } else{
+                        Util.setBackground(v, b);
+                        ((TextView) v).setText("");
+                    }
+
                 }
             }
         });
     }
 
-    public static void get(final int id, boolean uc, final View v, final Activity a){
+    public static void get(int id, boolean uc, View v, Activity a){
+        get(id, uc, v, a, null);
+    }
+
+    public static void get(final int id, boolean uc, final View v, final Activity a, final String emptyText){
         get(id, uc, new Listener(){
             public void ok(Bitmap b){
-                set(b, ((ImageView) v), a);
+                set(b, v, a, emptyText);
             }
 
             public void notfound(){
-                set(null, ((ImageView) v), a);
+                set(null, v, a, emptyText);
             }
             public void fail(){}
         });

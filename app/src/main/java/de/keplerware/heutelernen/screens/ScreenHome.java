@@ -188,7 +188,7 @@ public class ScreenHome extends Screen{
             }
         });
         MenuItem i = m.add("Benutzer suchen");
-        i.setIcon(R.drawable.search).setActionView(search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        i.setIcon(R.drawable.search).setActionView(search).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
         MenuItemCompat.setOnActionExpandListener(i, new MenuItemCompat.OnActionExpandListener() {
             public boolean onMenuItemActionExpand(MenuItem item){return true;}
             public boolean onMenuItemActionCollapse(MenuItem item){v(false); return true;}
@@ -214,7 +214,7 @@ public class ScreenHome extends Screen{
                 });
                 return true;
             }
-        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
         v(false);
     }

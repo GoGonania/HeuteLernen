@@ -154,7 +154,7 @@ public class Internet{
 	public static void register(String vn, String nn, int jahrgang, String mail, String ort, String p, int schule, final RegisterListener l){
 		internet("registerHash", "Registriere...", false, new Listener() {
             public void ok(String data){
-                if(data.endsWith("X")){
+                if(!data.isEmpty()){
                     l.fail(false);
                 } else{
                     l.ok();

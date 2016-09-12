@@ -33,7 +33,7 @@ public class ScreenProfil extends Screen{
 					ScreenChat.show(info);
 					return true;
 				}
-			}).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+			}).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
 		
 		if(Sitzung.rang(Rang.MODERATOR)){

@@ -12,11 +12,14 @@
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp">
 
-        <ImageView
+        <TextView
             android:id="@+id/profil_bild"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/portrait" />
+            android:background="@drawable/portrait"
+            android:gravity="center"
+            android:textColor="#ff0000"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/profil_name"

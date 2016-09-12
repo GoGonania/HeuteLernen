@@ -2,6 +2,8 @@ package de.keplerware.heutelernen.screens;
 
 import android.view.View;
 import android.widget.EditText;
+
+import de.keplerware.heutelernen.Dialog;
 import de.keplerware.heutelernen.Internet.LoginListener;
 import de.keplerware.heutelernen.Internet.UserInfo;
 import de.keplerware.heutelernen.LoginError;
@@ -16,6 +18,7 @@ import de.keplerware.heutelernen.manager.DataManager;
 import de.keplerware.heutelernen.manager.NachrichtenManager;
 
 public class ScreenLogin extends Screen{
+    public static boolean first;
 	private EditText mail;
 	private EditText passwort;
 
@@ -65,6 +68,11 @@ public class ScreenLogin extends Screen{
                 });
 			}
 		});
+
+        if(first){
+            Dialog.alert("Konto wurde erstellt!", "Wir freuen uns dich bei HeuteLernen begrüßen zu dürfen. Bei Rückmeldung stehen wir gerne unter der E-Mail auf unserer Internetseite bereit");
+            first = false;
+        }
 		
 		if(MyService.running) send();
 	}

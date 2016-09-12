@@ -3,7 +3,6 @@ package de.keplerware.heutelernen.screens;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -44,7 +43,7 @@ import de.keplerware.heutelernen.ui.MyText;
 public class FragmentProfil extends MyFragment{
     public UserInfo info;
     private LinearLayout angebote;
-    private ImageView bild;
+    private TextView bild;
     private boolean editP;
     private File image;
     private Uri imageUri;
@@ -56,7 +55,7 @@ public class FragmentProfil extends MyFragment{
     }
 
     public void updatePic(boolean uc){
-        BildManager.get(info.id, uc, bild, getActivity());
+        BildManager.get(info.id, uc, bild, getActivity(), "Kein\nProfilbild");
     }
 
     public View create(){
@@ -83,7 +82,7 @@ public class FragmentProfil extends MyFragment{
 
         editB.setVisibility(editP ? View.VISIBLE : View.GONE);
 
-        bild = (ImageView) v.findViewById(R.id.profil_bild);
+        bild = (TextView) v.findViewById(R.id.profil_bild);
 
         bild.setLongClickable(true);
         bild.setOnLongClickListener(new View.OnLongClickListener(){
@@ -114,19 +113,15 @@ public class FragmentProfil extends MyFragment{
                                     Intent intent = new Intent();
                                     intent.setType("image/*");
                                     intent.setAction(Intent.ACTION_GET_CONTENT);
-                                    try{
-                                        intent.putExtra("return-data", true);
-                                        startActivityForResult(Intent.createChooser(intent, "Bild hochladen"), 1);
-                                    }catch (ActivityNotFoundException e){}
+                                    intent.putExtra("return-data", true);
+                                    startActivityForResult(Intent.createChooser(intent, "Bild hochladen"), 1);
                                 } else{
                                     if(which == 1){
                                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                                        try{
-                                            image.delete();
-                                            intent.putExtra("return-data", true);
-                                            startActivityForResult(Intent.createChooser(intent, "Bild aufnehmen"), 2);
-                                        }catch (ActivityNotFoundException e){}
+                                        image.delete();
+                                        intent.putExtra("return-data", true);
+                                        startActivityForResult(Intent.createChooser(intent, "Bild aufnehmen"), 2);
                                     } else{
                                         new Thread(new Runnable(){
                                             public void run(){

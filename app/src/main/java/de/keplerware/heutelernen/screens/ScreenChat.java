@@ -83,7 +83,7 @@ public class ScreenChat extends Screen{
 					c.deleteConfirm(true);
 					return true;
 				}
-			}).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+			}).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		}
 	}
 	
