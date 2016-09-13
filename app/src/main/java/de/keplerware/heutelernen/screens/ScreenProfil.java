@@ -1,6 +1,5 @@
 package de.keplerware.heutelernen.screens;
 
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;

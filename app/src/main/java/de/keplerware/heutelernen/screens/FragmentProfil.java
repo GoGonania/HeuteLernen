@@ -11,7 +11,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -48,7 +47,6 @@ public class FragmentProfil extends MyFragment{
     private boolean editP;
     private File image;
     private Uri imageUri;
-    private int which;
 
     public static FragmentProfil show(UserInfo info){
         FragmentProfil f = new FragmentProfil();
@@ -103,7 +101,6 @@ public class FragmentProfil extends MyFragment{
                     builder.setTitle("Profilbild bearbeiten");
                     builder.setItems(new String[]{"Vorhandenes Bild auswählen", "Neues Bild aufnehmen", "Bild löschen"}, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which){
-                            FragmentProfil.this.which = which;
                             if(image == null) {
                                 image = new File(Environment.getExternalStorageDirectory()+"/"+Util.appname+"", "last.jpg");
                                 if(!image.exists()) image.getParentFile().mkdirs();
@@ -112,7 +109,7 @@ public class FragmentProfil extends MyFragment{
                             if(which != 2 && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
                                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 8000);
                             } else{
-                                select();
+                                select(which);
                             }
                         }
                     });
@@ -144,7 +141,7 @@ public class FragmentProfil extends MyFragment{
         return v;
     }
 
-    public void select(){
+    public void select(int which){
         if(which == 0){
             Intent intent = new Intent();
             intent.setType("image/*");

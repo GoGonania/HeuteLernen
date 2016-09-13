@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 public class Util{
 	private static final String host = "http://www.heutelernen.de/app/v0/";
