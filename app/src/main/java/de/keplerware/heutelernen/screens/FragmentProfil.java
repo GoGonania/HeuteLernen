@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
@@ -47,6 +48,7 @@ public class FragmentProfil extends MyFragment{
     private boolean editP;
     private File image;
     private Uri imageUri;
+    private int which;
 
     public static FragmentProfil show(UserInfo info){
         FragmentProfil f = new FragmentProfil();
@@ -55,7 +57,7 @@ public class FragmentProfil extends MyFragment{
     }
 
     public void updatePic(boolean uc){
-        BildManager.get(info.id, uc, bild, getActivity(), "Kein\nProfilbild");
+        BildManager.get(info.id, uc, bild, getActivity(), editP ? "Kein\nProfilbild" : "");
     }
 
     public View create(){
@@ -101,6 +103,7 @@ public class FragmentProfil extends MyFragment{
                     builder.setTitle("Profilbild bearbeiten");
                     builder.setItems(new String[]{"Vorhandenes Bild auswählen", "Neues Bild aufnehmen", "Bild löschen"}, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which){
+                            FragmentProfil.this.which = which;
                             if(image == null) {
                                 image = new File(Environment.getExternalStorageDirectory()+"/"+Util.appname+"", "last.jpg");
                                 if(!image.exists()) image.getParentFile().mkdirs();
@@ -109,34 +112,7 @@ public class FragmentProfil extends MyFragment{
                             if(which != 2 && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
                                 ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 8000);
                             } else{
-                                if(which == 0){
-                                    Intent intent = new Intent();
-                                    intent.setType("image/*");
-                                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                                    intent.putExtra("return-data", true);
-                                    startActivityForResult(Intent.createChooser(intent, "Bild hochladen"), 1);
-                                } else{
-                                    if(which == 1){
-                                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                                        image.delete();
-                                        intent.putExtra("return-data", true);
-                                        startActivityForResult(Intent.createChooser(intent, "Bild aufnehmen"), 2);
-                                    } else{
-                                        new Thread(new Runnable(){
-                                            public void run(){
-                                                try{
-                                                    Util.toastUI("Bild wird gelöscht...\nBitte warten...");
-                                                    Client c = new Client();
-                                                    c.delete(info.id);
-                                                    c.close();
-                                                    updatePic(false);
-                                                    Util.toastUI("Bild wurde gelöscht!");
-                                                }catch (IOException e){}
-                                            }
-                                        }).start();
-                                    }
-                                }
+                                select();
                             }
                         }
                     });
@@ -168,7 +144,39 @@ public class FragmentProfil extends MyFragment{
         return v;
     }
 
+    public void select(){
+        if(which == 0){
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent.putExtra("return-data", true);
+            startActivityForResult(Intent.createChooser(intent, "Bild hochladen"), 1);
+        } else{
+            if(which == 1){
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                image.delete();
+                intent.putExtra("return-data", true);
+                startActivityForResult(Intent.createChooser(intent, "Bild aufnehmen"), 2);
+            } else{
+                new Thread(new Runnable(){
+                    public void run(){
+                        try{
+                            Util.toastUI("Bild wird gelöscht...\nBitte warten...");
+                            Client c = new Client();
+                            c.delete(info.id);
+                            c.close();
+                            updatePic(false);
+                            Util.toastUI("Bild wurde gelöscht!");
+                        }catch (IOException e){}
+                    }
+                }).start();
+            }
+        }
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent data){
+        System.out.println(requestCode+": "+resultCode);
         if(requestCode == UCrop.REQUEST_CROP){
             if(resultCode == Activity.RESULT_OK){
                 uploadUri(UCrop.getOutput(data));

@@ -43,9 +43,7 @@ public class ScreenLogin extends Screen{
                         new Starter(ScreenRegistrieren.class).send();
                     }
 
-                    public void fail(Exception e){
-
-                    }
+                    public void fail(Exception e){}
                 });
 			}
 		});
@@ -62,9 +60,7 @@ public class ScreenLogin extends Screen{
                         new Starter(ScreenErkunden.class).send();
                     }
 
-                    public void fail(Exception e){
-
-                    }
+                    public void fail(Exception e){}
                 });
 			}
 		});
@@ -74,7 +70,11 @@ public class ScreenLogin extends Screen{
             first = false;
         }
 		
-		if(MyService.running) send();
+		if(MyService.running) {
+            send();
+        } else{
+            Util.checkUpdate();
+        }
 	}
 	
 	private void send(){
@@ -92,7 +92,7 @@ public class ScreenLogin extends Screen{
                     }
 
                     public void fail(int e) {
-                        if(e == LoginError.Passwort) Util.toast("Fehler beim Einloggen!\nFalsches Passwort ?");
+                        if(e == LoginError.Passwort) Util.toast("Fehler beim Einloggen!\nFalsches Passwort?");
                         if(e == LoginError.Bestaetigen) Util.toast("Du hast deine E-Mail noch nicht bestätigt!");
                     }
                 });

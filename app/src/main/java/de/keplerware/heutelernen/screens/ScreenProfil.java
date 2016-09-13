@@ -1,5 +1,6 @@
 package de.keplerware.heutelernen.screens;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +26,7 @@ public class ScreenProfil extends Screen{
     public String getTitel(){
         return info.owner()?"Dein Profil":"Profil";
     }
-	
+
 	public void menu(Menu m){
 		if(!info.owner()) {
 			m.add("Chat öffnen").setIcon(R.drawable.chat).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
