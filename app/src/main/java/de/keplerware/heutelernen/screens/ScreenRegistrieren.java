@@ -1,11 +1,15 @@
 package de.keplerware.heutelernen.screens;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.R;
@@ -24,48 +28,67 @@ public class ScreenRegistrieren extends Screen{
 	private EditText v_passwort2;
 	private EditText v_mail;
 	private EditText v_ort;
-	private EditText v_klasse;
-	
-	private boolean frei = true;
+	private TextView v_klasse;
+    private Button klassePlus;
+    private Button klasseMinus;
+
+    private View schulContainer;
+
+    private int klasse = 8;
 
     public int getLayout(){
         return R.layout.register;
     }
 
 	public void show(){
-		((RadioButton) findViewById(R.id.start_alterfrei)).setOnCheckedChangeListener(new OnCheckedChangeListener(){
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-				frei = isChecked;
-				findViewById(R.id.start_klasse).setActivated(isChecked);
-			}
-		});
 		v_vname = (EditText) findViewById(R.id.start_vname);
 		v_nname = (EditText) findViewById(R.id.start_nname);
 		v_passwort1 = (EditText) findViewById(R.id.login_passwort);
 		v_passwort2 = (EditText) findViewById(R.id.start_passwort2);
 		v_ort = (EditText) findViewById(R.id.start_ort);
 		v_mail = (EditText) findViewById(R.id.login_email);
-		v_klasse = (EditText) findViewById(R.id.start_klasse);
+		v_klasse = (TextView) findViewById(R.id.register_klasse);
         schule = (MySpinner) findViewById(R.id.register_schule);
+        klassePlus = (Button) findViewById(R.id.register_klassePlus);
+        klasseMinus = (Button) findViewById(R.id.register_klasseMinus);
+        schulContainer = findViewById(R.id.register_nochInSchule);
         RadioButton klasseFrei = (RadioButton) findViewById(R.id.start_alterfrei);
 
 		schule.fill(DataManager.schulen);
 
-        klasseFrei.setChecked(true);
         klasseFrei.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b){
-                frei = b;
-                v_klasse.setVisibility(b ? View.VISIBLE : View.INVISIBLE);
-				schule.setEnabled(b);
+                if(b){
+                    if(schulContainer.getAlpha() != 1){
+                        schulContainer.animate().alpha(1).translationY(0).setDuration(400).setListener(new AnimatorListenerAdapter() {
+                            public void onAnimationStart(Animator animation){
+                                schulContainer.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
+                } else{
+                    schulContainer.animate().alpha(0).translationY(-schulContainer.getHeight()).setDuration(400).setListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animation){
+                            schulContainer.setVisibility(View.GONE);
+                        }
+                    });
+                }
             }
         });
-		
-		findViewById(R.id.login_register).setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				finish();
-			}
-		});
-		
+
+        klassePlus.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                klasse++;
+                updateKlasse();
+            }
+        });
+
+        klasseMinus.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                klasse--;
+                updateKlasse();
+            }
+        });
 		findViewById(R.id.login_login).setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				String vname = v_vname.getEditableText().toString().trim();
@@ -74,14 +97,6 @@ public class ScreenRegistrieren extends Screen{
 				String p2 = v_passwort2.getEditableText().toString().trim();
 				String ort = v_ort.getEditableText().toString().trim();
 				final String mail = v_mail.getEditableText().toString().trim();
-				int klasse = 0;
-				if(frei){
-					try{
-						klasse = Integer.parseInt(v_klasse.getEditableText().toString());
-					}catch(Exception e){}
-				} else{
-					klasse = 13;
-				}
 				
 				if(vname.isEmpty() || nname.isEmpty() || p1.isEmpty() || p2.isEmpty() || ort.isEmpty() || mail.isEmpty()){
 					Util.toast("Bitte fülle alle Felder aus!");
@@ -89,21 +104,17 @@ public class ScreenRegistrieren extends Screen{
 					if(p1.length() >= 6){
 						if(p1.equals(p2)){
 							if(mail.contains("@")){
-								if(!frei || (klasse >= 5 && klasse <= 12)){
-									Internet.register(vname, nname, klasse, mail, ort, p1, schule.getSelectedItemPosition(), new Internet.RegisterListener(){
-										public void ok(){
-											Save.setData(mail, p1, -1);
-                                            ScreenLogin.first = true;
-											new Starter(ScreenLogin.class).send();
-										}
+                                Internet.register(vname, nname, klasse, mail, ort, p1, schule.getSelectedItemPosition(), new Internet.RegisterListener(){
+                                    public void ok(){
+                                        Save.setData(mail, p1, -1);
+                                        ScreenLogin.first = true;
+                                        new Starter(ScreenLogin.class).send();
+                                    }
 										
-										public void fail(boolean c){
-                                            if(!c) Util.toast("Diese E-Mail wurde bereits verwendet!");
-                                        }
-									});
-								} else{
-									Util.toast("Erlaubte Klasse: 5-12");
-								}
+                                    public void fail(boolean c){
+                                        if(!c) Util.toast("Diese E-Mail wurde bereits verwendet!");
+                                    }
+                                });
 							} else{
 								Util.toast("Bitte gib eine gültige E-Mail an!");
 							}
@@ -116,7 +127,15 @@ public class ScreenRegistrieren extends Screen{
 				}
 			}
 		});
+
+        updateKlasse();
 	}
+
+    public void updateKlasse(){
+        klasseMinus.setEnabled(klasse > 5);
+        klassePlus.setEnabled(klasse < 12);
+        v_klasse.setText(klasse+". Klasse");
+    }
 
     public String getTitel(){
         return "Konto erstellen";

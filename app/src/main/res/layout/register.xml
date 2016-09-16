@@ -10,7 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="6dp"
-        android:paddingRight="6dp">
+        android:paddingRight="6dp"
+        android:id="@+id/register_daten_base">
 
         <TableRow
             android:layout_width="wrap_content"
@@ -84,7 +85,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="z.B. Weiden-West"
                 android:inputType="textPersonName" />
 
         </TableRow>
@@ -126,71 +126,96 @@
 
         </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    </TableLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Schule:" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/register_daten_schule"
+        android:background="@drawable/container"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
+
+        <RadioGroup
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal"
+            android:gravity="center">
+
+             <RadioButton
+                 android:id="@+id/start_alterfrei"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="In der Schule"
+                 android:checked="true" />
+
+             <RadioButton
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="Keine Schule"
+                 android:checked="false" />
+
+         </RadioGroup>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/register_nochInSchule"
+            android:gravity="center_horizontal"
+            android:padding="5dp"
+            android:layout_marginLeft="10dp">
 
             <de.keplerware.heutelernen.ui.MySpinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/register_schule"
-                android:layout_column="1"
-                android:background="@drawable/button_green" />
-        </TableRow>
+                android:background="@drawable/spinner_background" />
 
-        <TableRow
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-            android:paddingTop="10dp">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="10dp">
 
-            <RadioGroup
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:orientation="vertical">
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:id="@+id/register_klasseMinus"
+                    android:background="@drawable/button_gray"
+                    android:textStyle="bold" />
 
-                 <RadioButton
-                     android:id="@+id/start_alterfrei"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:text="Deine Klasse:" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Fehler"
+                    android:layout_marginLeft="10dp"
+                    android:singleLine="false"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/register_klasse" />
 
-                 <RadioButton
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:text="Schule geschafft" />
+                <Button
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+"
+                    android:id="@+id/register_klassePlus"
+                    android:background="@drawable/button_gray"
+                    android:textStyle="bold" />
 
-             </RadioGroup>
+            </LinearLayout>
+        </LinearLayout>
 
-             <EditText
-                 android:id="@+id/start_klasse"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_weight="1"
-                 android:ems="10"
-                 android:inputType="number"
-                 android:layout_marginLeft="10dp">
-             </EditText>
+    </LinearLayout>
 
-         </TableRow>
-
-    </TableLayout>
-
-    <Button
-        android:id="@+id/login_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/button_green"
-        android:text="Konto erstellen"
-        android:width="300dp" />
-    
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -198,12 +223,12 @@
         android:background="@drawable/divider" />
 
     <Button
-        android:id="@+id/login_register"
+        android:id="@+id/login_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/button_gray"
-        android:text="Bereits ein Konto? Einloggen >>"
-        android:width="260dp" />
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_green"
+        android:text="Konto erstellen"
+        android:width="300dp" />
 
 </LinearLayout>
