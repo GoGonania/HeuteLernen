@@ -59,14 +59,15 @@ public class ScreenRegistrieren extends Screen{
         klasseFrei.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b){
                 if(b){
-                    if(schulContainer.getAlpha() != 1){
-                        schulContainer.animate().alpha(1).translationY(0).setDuration(400).setListener(new AnimatorListenerAdapter() {
-                            public void onAnimationStart(Animator animation){
-                                schulContainer.setVisibility(View.VISIBLE);
-                            }
-                        });
-                    }
+                    klasse = 8;
+                    updateKlasse();
+                    schulContainer.animate().alpha(1).translationY(0).setDuration(400).setListener(new AnimatorListenerAdapter() {
+                        public void onAnimationStart(Animator animation){
+                            schulContainer.setVisibility(View.VISIBLE);
+                        }
+                    });
                 } else{
+                    klasse = 13;
                     schulContainer.animate().alpha(0).translationY(-schulContainer.getHeight()).setDuration(400).setListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animation){
                             schulContainer.setVisibility(View.GONE);
