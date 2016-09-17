@@ -1,5 +1,9 @@
 package de.keplerware.heutelernen.screens;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -75,9 +79,20 @@ public class ScreenLogin extends Screen{
         } else{
             Util.checkUpdate();
         }
+
+        ScreenTutorial.showCheck();
 	}
-	
-	private void send(){
+
+    public void menu(Menu m) {
+        m.add("Tutorial").setIcon(R.drawable.help).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+            public boolean onMenuItemClick(MenuItem p1){
+                ScreenTutorial.show();
+                return true;
+            }
+        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    }
+
+    private void send(){
 		final String m = mail.getText().toString();
 		final String p = passwort.getText().toString();
 		

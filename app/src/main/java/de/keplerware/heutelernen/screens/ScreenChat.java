@@ -128,7 +128,7 @@ public class ScreenChat extends Screen{
 		p.bottomMargin = p.topMargin = 5;
 		p.gravity = i ? Gravity.RIGHT : Gravity.LEFT;
 		MyText tv = new MyText(text);
-		tv.setElevation(2);
+		try{tv.setElevation(2);}catch(NoSuchMethodError e){}
 		tv.setTextSize(16);
 		tv.setTextColor(Color.BLACK);
 		tv.setPadding(10, 4, 10, 4);

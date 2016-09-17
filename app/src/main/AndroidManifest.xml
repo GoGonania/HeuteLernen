@@ -78,5 +78,11 @@
             android:screenOrientation="portrait"
             android:name=".screens.ScreenErkunden">
         </activity>
+
+        <activity
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait"
+            android:name=".screens.ScreenTutorial">
+        </activity>
     </application>
 </manifest>

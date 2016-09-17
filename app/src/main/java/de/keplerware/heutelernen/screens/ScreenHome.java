@@ -165,6 +165,12 @@ public class ScreenHome extends Screen{
                 return true;
             }
         });
+        m.add("Tutorial").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
+            public boolean onMenuItemClick(MenuItem p1){
+                ScreenTutorial.show();
+                return true;
+            }
+        });
         m.add("Ausloggen").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener(){
             public boolean onMenuItemClick(MenuItem p1){
                 Dialog.confirm("Willst du dich wirklich ausloggen?", new Dialog.ConfirmListener() {

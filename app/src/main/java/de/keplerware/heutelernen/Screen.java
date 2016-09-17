@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.NoSuchPropertyException;
 import android.view.*;
 
 import de.keplerware.heutelernen.screens.ScreenLogin;
@@ -31,7 +32,7 @@ public abstract class Screen extends AppCompatActivity{
         show();
         bar.setTitle(getTitel());
         bar.setSubtitle(null);
-        bar.setElevation(this instanceof ScreenHome ? 0 : 10);
+        try{bar.setElevation(this instanceof ScreenHome ? 0 : 10);}catch(NoSuchMethodError e){}
         setSupportActionBar(bar);
         if(this instanceof ScreenHome || this instanceof ScreenLogin){
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);

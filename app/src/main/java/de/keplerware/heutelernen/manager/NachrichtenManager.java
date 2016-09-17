@@ -155,7 +155,7 @@ public class NachrichtenManager{
 	private static void loadC(){
 		p--;
 		if(p <= 0){
-            r.run();
+            if(r != null) r.run();
 			if(f){
                 System.out.println("NachrichtenManager: Fehler beim Laden der Chats!");
 				l.fail(null);

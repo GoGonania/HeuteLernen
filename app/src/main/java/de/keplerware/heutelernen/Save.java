@@ -10,6 +10,7 @@ public class Save{
 	public static String mail;
 	public static String passwort;
 	public static int id;
+	public static boolean tutorial;
 	
 	public static void init(Context c){
 		if(p != null) return;
@@ -18,11 +19,13 @@ public class Save{
 		mail = p.getString("m", null);
 		passwort = p.getString("p", null);
 		id = p.getInt("i", -1);
+		tutorial = p.getBoolean("t", false);
 	}
 
 	public static void updatePasswort(String p){
 		setData(mail, p, id);
 	}
+    public static void updateTutorial(){pe.putBoolean("t", tutorial); pe.commit();}
 	
 	public static void setData(String mail, String passwort, int id){
 		Save.mail = mail;
