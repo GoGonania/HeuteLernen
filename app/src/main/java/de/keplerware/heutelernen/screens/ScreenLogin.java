@@ -1,7 +1,5 @@
 package de.keplerware.heutelernen.screens;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;

@@ -40,10 +40,10 @@ public class ScreenTutorial extends AppIntro {
         setFlowAnimation();
 
         showSkipButton(false);
-        setDoneText("OK");
+        setDoneText("Los geht's!");
 
         setVibrate(true);
-        setVibrateIntensity(30);
+        setVibrateIntensity(25);
     }
 
     public void onDonePressed(Fragment currentFragment){

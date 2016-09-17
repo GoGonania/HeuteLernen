@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.NoSuchPropertyException;
 import android.view.*;
 
 import de.keplerware.heutelernen.screens.ScreenLogin;

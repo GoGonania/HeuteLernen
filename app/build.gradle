@@ -8,8 +8,8 @@ android {
         applicationId "de.keplerware.heutelernen"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 18
-        versionName "1.5.4"
+        versionCode 19
+        versionName "1.6.0"
     }
     buildTypes {
         release {
