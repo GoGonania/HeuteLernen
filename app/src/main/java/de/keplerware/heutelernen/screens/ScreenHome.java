@@ -100,6 +100,8 @@ public class ScreenHome extends Screen{
         } else{
             item(1);
         }
+
+        Util.checkUpdate();
 	}
 
     public void item(int tab){

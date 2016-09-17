@@ -72,7 +72,12 @@ public class ScreenLogin extends Screen{
             first = false;
         }
 
-        Util.checkUpdate();
+		if(MyService.running) {
+            send();
+        } else{
+            Util.checkUpdate();
+        }
+
         ScreenTutorial.showCheck();
 	}
 
