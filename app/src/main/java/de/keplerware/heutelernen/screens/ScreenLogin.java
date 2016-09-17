@@ -71,13 +71,8 @@ public class ScreenLogin extends Screen{
             Dialog.alert("Konto wurde erstellt!", "Wir freuen uns dich bei HeuteLernen begrüßen zu dürfen. Bei Rückmeldung stehen wir gerne unter der E-Mail auf unserer Internetseite bereit");
             first = false;
         }
-		
-		if(MyService.running) {
-            send();
-        } else{
-            Util.checkUpdate();
-        }
 
+        Util.checkUpdate();
         ScreenTutorial.showCheck();
 	}
 

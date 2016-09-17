@@ -57,6 +57,7 @@ public class Util{
 	}
 
 	public static void startService(){
+		stopService();
 		c.startService(serviceIntent);
 	}
 	
