@@ -41,7 +41,7 @@ public class FragmentMain extends MyFragment {
                                 }
                             });
                             BildManager.get(a.info.id, r.findViewById(R.id.angeboteitem_bild), getActivity());
-                            ((TextView) r.findViewById(R.id.angeboteitem_detail)).setText(a.info.klasse+" | "+a.info.schuleText);
+                            ((TextView) r.findViewById(R.id.angeboteitem_detail)).setText(a.info.schulInfo);
                             ((TextView) r.findViewById(R.id.angebotitem_name)).setText(a.info.name);
                             return r;
                         }

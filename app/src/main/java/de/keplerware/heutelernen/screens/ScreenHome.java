@@ -262,7 +262,7 @@ public class ScreenHome extends Screen{
                                     }
                                 });
                                 BildManager.get(i.id, r.findViewById(R.id.angeboteitem_bild), ScreenHome.this);
-                                ((TextView) r.findViewById(R.id.angeboteitem_detail)).setText(i.klasse+" | "+i.schuleText);
+                                ((TextView) r.findViewById(R.id.angeboteitem_detail)).setText(i.schulInfo);
                                 ((TextView) r.findViewById(R.id.angebotitem_name)).setText(i.name);
                                 return r;
                             }

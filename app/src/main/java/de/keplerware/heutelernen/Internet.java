@@ -52,6 +52,7 @@ public class Internet{
         public String beschreibung;
 		public int schule;
 		public String schuleText;
+		public String schulInfo;
 
 		public boolean owner(){
 			return id == Sitzung.info.id;
@@ -183,13 +184,14 @@ public class Internet{
                     i.nname = s[1];
                     i.name = ""+i.vname+" "+i.nname+"";
                     i.klasseZahl = Integer.parseInt(s[2]);
-                    i.klasse = (i.hatSchule() ? i.klasseZahl+". Klasse": "Schule geschafft");
+                    i.klasse = (i.hatSchule() ? i.klasseZahl+". Klasse": "Besucht keine Schule mehr");
                     i.mail = s[3];
                     i.ort = s[4];
                     i.rang = Integer.parseInt(s[5]);
                     try{i.beschreibung = s[6];}catch(Exception e){i.beschreibung = "";}
                     i.schule = Integer.parseInt(s[7]);
                     i.schuleText = DataManager.schule(i.schule);
+					i.schulInfo = i.hatSchule() ? i.klasse+" | "+i.schuleText+"" : i.klasse;
                     l.ok(i);
                 }catch (Exception e){
                     l.ok(null);
