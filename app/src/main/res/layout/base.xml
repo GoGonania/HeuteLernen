@@ -9,14 +9,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@color/actionbar"/>
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true">
-    </LinearLayout>
+        android:layout_alignParentLeft="true"
+        android:fillViewport="true"
+        android:paddingBottom="5dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/content"
+            android:orientation="vertical"/>
+    </ScrollView>
 </RelativeLayout>

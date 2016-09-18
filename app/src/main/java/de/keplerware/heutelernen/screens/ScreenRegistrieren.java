@@ -109,7 +109,7 @@ public class ScreenRegistrieren extends Screen{
                                     public void ok(){
                                         Save.setData(mail, p1, -1);
                                         ScreenLogin.first = true;
-                                        new Starter(ScreenLogin.class).send();
+                                        new Starter(ScreenLogin.class).replace();
                                     }
 										
                                     public void fail(boolean c){

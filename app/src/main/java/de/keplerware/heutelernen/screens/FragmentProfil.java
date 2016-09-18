@@ -66,7 +66,7 @@ public class FragmentProfil extends MyFragment{
         }
         View v = Screen.inflate(R.layout.profil);
         ((TextView) v.findViewById(R.id.profil_name)).setText(info.name);
-        ((TextView) v.findViewById(R.id.profil_details)).setText(info.klasse+"\nWohnort: "+info.ort+"\nSchule: "+info.schuleText);
+        ((TextView) v.findViewById(R.id.profil_details)).setText(info.klasse+"\nWohnort: "+info.ort+""+(info.hatSchule() ? "\nSchule: "+info.schuleText+"" : "")+"");
         final TextView tB = (TextView) v.findViewById(R.id.profil_beschreibung);
         if(info.beschreibung.isEmpty()){
             tB.setTypeface(null, Typeface.ITALIC);

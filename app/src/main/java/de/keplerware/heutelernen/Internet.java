@@ -56,6 +56,7 @@ public class Internet{
 		public boolean owner(){
 			return id == Sitzung.info.id;
 		}
+		public boolean hatSchule(){return klasseZahl < 13;}
 	}
 	
 	public static class Nachricht{
@@ -182,7 +183,7 @@ public class Internet{
                     i.nname = s[1];
                     i.name = ""+i.vname+" "+i.nname+"";
                     i.klasseZahl = Integer.parseInt(s[2]);
-                    i.klasse = (i.klasseZahl == 13 ? "Schule geschafft" : i.klasseZahl+". Klasse");
+                    i.klasse = (i.hatSchule() ? i.klasseZahl+". Klasse": "Schule geschafft");
                     i.mail = s[3];
                     i.ort = s[4];
                     i.rang = Integer.parseInt(s[5]);
