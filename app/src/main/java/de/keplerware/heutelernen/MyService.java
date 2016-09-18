@@ -98,7 +98,7 @@ public class MyService extends Service{
 			public void fail(int e){
 				System.out.println("Service: login fehlgeschlagen!");
 
-				if(e != LoginError.Passwort){
+				if(e == LoginError.Connection){
 					System.out.println("Service: versuche es nocheinmal in "+loginTimeout+" ms");
 					h.sendEmptyMessageDelayed(0, loginTimeout);
 				} else{
