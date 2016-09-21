@@ -173,7 +173,6 @@ public class FragmentProfil extends MyFragment{
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data){
-        System.out.println(requestCode+": "+resultCode);
         if(requestCode == UCrop.REQUEST_CROP){
             if(resultCode == Activity.RESULT_OK){
                 uploadUri(UCrop.getOutput(data));
