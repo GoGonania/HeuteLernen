@@ -1,5 +1,7 @@
 package de.keplerware.heutelernen;
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -21,12 +23,14 @@ import android.widget.Toast;
 import org.jsoup.Jsoup;
 
 public class Util{
-	private static final String host = "http://www.heutelernen.de/app/v0/";
+	private static final String host = "http://heutelernen.de/app/v0/";
     private static final String packageName = "de.keplerware.heutelernen";
 	private static Context c;
 	private static WakeLock wakelock;
 	private static Toast t;
 	private static Intent serviceIntent;
+	private static String newLine = System.getProperty("line.seperator");
+    private static String charset = "ISO-8859-1";
 	
 	public static String fileDir;
 	public static String appname;
@@ -120,13 +124,20 @@ public class Util{
 				public void run(){
 					try{
                         InputStream in = new URL(host+""+name+".php?"+p).openStream();
-                        String s = "";
-                        int b;
-                        while((b = in.read()) != -1){
-                            s += (char) b;
-                        }
+						BufferedReader r = new BufferedReader(new InputStreamReader(in, charset));
+                        StringBuilder s = new StringBuilder();
+                        String line;
+						boolean f = false;
+                        while((line = r.readLine()) != null){
+							if(f) {
+                                s.append(newLine);
+                            } else{
+                                f = true;
+                            }
+                            s.append(line);
+						}
                         in.close();
-                        l.ok(s);
+                        l.ok(s.toString());
 					}catch(final Exception e){
                         e.printStackTrace();
 						l.fail(e);

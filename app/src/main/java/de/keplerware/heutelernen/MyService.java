@@ -89,7 +89,6 @@ public class MyService extends Service{
 	
 	private void login(){
 		System.out.println("Service: versuche einzuloggen");
-		
 		Sitzung.login(m, p, true, new LoginListener(){
 			public void ok(UserInfo info){
 				checkLoop();

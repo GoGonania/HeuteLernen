@@ -96,23 +96,17 @@ public class ScreenLogin extends Screen{
 		
 		if(m.isEmpty() || p.isEmpty()) return;
 
-        DataManager.load(new Util.Listener(){
-            public void ok(String data){
-                Sitzung.login(m, p, false, new LoginListener(){
-                    public void ok(UserInfo info){
-                        Util.toast("Eingeloggt als "+info.name+"!");
-                        ScreenHome.show(NachrichtenManager.unread() > 0 ? 0 : 1).replace();
-                    }
-
-                    public void fail(int e) {
-                        if(e == LoginError.Passwort) Util.toast("Fehler beim Einloggen!\nFalsches Passwort?");
-                        if(e == LoginError.Bestaetigen) Util.toast("Du hast deine E-Mail noch nicht bestätigt!");
-                    }
-                });
+        Sitzung.login(m, p, false, new LoginListener(){
+            public void ok(UserInfo info){
+                Util.toast("Eingeloggt als "+info.name+"!");
+                ScreenHome.show(NachrichtenManager.unread() > 0 ? 0 : 1).replace();
             }
-            public void fail(Exception e){}
-        });
 
+            public void fail(int e) {
+                if(e == LoginError.Passwort) Util.toast("Fehler beim Einloggen!\nFalsches Passwort?");
+                if(e == LoginError.Bestaetigen) Util.toast("Du hast deine E-Mail noch nicht bestätigt!");
+            }
+        });
 	}
 
     public String getTitel(){

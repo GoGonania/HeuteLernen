@@ -18,16 +18,20 @@ public class DataManager{
                 String[] parts = data.split("\t\t");
                 schulen = parts[0].split("\t");
                 faecher = parts[1].substring(1).split("\t");
-                Util.screen.runOnUiThread(new Runnable(){
-                    public void run(){
-                        r.run();
-                        l.ok(null);
-                    }
-                });
+                if(Util.screen == null){
+                    l.ok(null);
+                } else{
+                    Util.screen.runOnUiThread(new Runnable(){
+                        public void run(){
+                            if(r != null) r.run();
+                            l.ok(null);
+                        }
+                    });
+                }
             }
 
             public void fail(Exception e){
-                r.run();
+                if(r != null) r.run();
                 l.fail(e);
             }
         });

@@ -194,6 +194,7 @@ public class Internet{
 					i.schulInfo = i.hatSchule() ? i.klasse+" | "+i.schuleText+"" : i.klasse;
                     l.ok(i);
                 }catch (Exception e){
+                    e.printStackTrace();
                     l.ok(null);
                 }
 			}
