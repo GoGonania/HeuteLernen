@@ -79,7 +79,7 @@ public class Internet{
 		for(int i = 0; i < pk.length; i++){
 			try{p += "&"+pk[i]+"="+URLEncoder.encode(pv[i], "UTF-8")+"";}catch (UnsupportedEncodingException e){e.printStackTrace();}
 		}
-		Util.internet(file, p.substring(1), new Util.Listener() {
+		Util.internet(file, pk, pv, new Util.Listener() {
 			public void ok(final String data){
 				Util.run(new Runnable(){
 					public void run() {

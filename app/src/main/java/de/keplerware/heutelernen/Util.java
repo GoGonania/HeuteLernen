@@ -1,8 +1,12 @@
 package de.keplerware.heutelernen;
 import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.BufferedWriter;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -19,19 +23,19 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.jsoup.Jsoup;
 
 public class Util{
-	private static final String host = "http://heutelernen.de/app/v0/";
+	private static final String host = "http://heutelernen.de/app/v1/";
     private static final String packageName = "de.keplerware.heutelernen";
 	private static Context c;
 	private static WakeLock wakelock;
 	private static Toast t;
 	private static Intent serviceIntent;
 	private static String newLine = System.getProperty("line.seperator");
-    private static String charset = "ISO-8859-1";
-	
+    private static String charset = "UTF-8";
+	private static String httpMethod = "POST";
+
 	public static String fileDir;
 	public static String appname;
 	public static Screen screen;
@@ -55,7 +59,7 @@ public class Util{
 	        fileDir = c.getFilesDir().getAbsolutePath();
 
 			Save.init(c);
-			
+
 			serviceIntent = new Intent(c, MyService.class);
 		}
 	}
@@ -64,11 +68,11 @@ public class Util{
 		stopService();
 		c.startService(serviceIntent);
 	}
-	
+
 	public static void stopService(){
 		c.stopService(serviceIntent);
 	}
-	
+
 	public static void wakeLock(boolean a){
 		if(a){
 			if(!wakelock.isHeld()) wakelock.acquire();
@@ -76,7 +80,7 @@ public class Util{
 			if(wakelock.isHeld()) wakelock.release();
 		}
 	}
-	
+
 	public static void toast(final String text){
 		if(pause()) return;
 		Toast tt = Toast.makeText(c, text, Toast.LENGTH_SHORT);
@@ -94,7 +98,7 @@ public class Util{
 			}
 		});
 	}
-	
+
 	public static void run(Runnable r){
 		if(screen != null){
 			screen.runOnUiThread(r);
@@ -102,7 +106,7 @@ public class Util{
 			r.run();
 		}
 	}
-	
+
 	public static boolean event(int type, Object... d){
 		return screen != null && screen.event(type, d);
 	}
@@ -119,25 +123,41 @@ public class Util{
         return null;
     }
 
-	public static void internet(final String name, final String p, final Listener l){
+	public static void internet(final String name, final String[] pk, final String[] pv, final Listener l){
 		new Thread(new Runnable(){
 				public void run(){
 					try{
-                        InputStream in = new URL(host+""+name+".php?"+p).openStream();
-						BufferedReader r = new BufferedReader(new InputStreamReader(in, charset));
-                        StringBuilder s = new StringBuilder();
-                        String line;
-						boolean f = false;
-                        while((line = r.readLine()) != null){
-							if(f) {
-                                s.append(newLine);
-                            } else{
-                                f = true;
-                            }
-                            s.append(line);
+						HttpURLConnection con = (HttpURLConnection) new URL(host+""+name+".php").openConnection();
+						con.setRequestMethod(httpMethod);
+						con.setDoInput(true);
+
+						if(pk != null) {
+							con.setDoOutput(true);
+							BufferedWriter w = new BufferedWriter(new OutputStreamWriter(con.getOutputStream(), charset));
+							for (int i = 0; i < pk.length; i++) {
+								if (i != 0) w.append("&");
+								w.append(URLEncoder.encode(pk[i], charset));
+								w.append("=");
+								w.append(URLEncoder.encode(pv[i], charset));
+							}
+							w.flush();
+							w.close();
 						}
-                        in.close();
-                        l.ok(s.toString());
+
+						BufferedReader r = new BufferedReader(new InputStreamReader(con.getInputStream(), charset));
+						StringBuilder s = new StringBuilder();
+						String line;
+						boolean f = false;
+						while((line = r.readLine()) != null){
+							if(f) {
+								s.append(newLine);
+							} else{
+								f = true;
+							}
+							s.append(line);
+						}
+						r.close();
+						l.ok(s.toString());
 					}catch(final Exception e){
                         e.printStackTrace();
 						l.fail(e);

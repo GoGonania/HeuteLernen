@@ -13,7 +13,7 @@ public class DataManager{
             return;
         }
         final Runnable r = Dialog.progress("Lade Schulen & Fächer");
-        Util.internet("daten", "", new Util.Listener(){
+        Util.internet("daten", null, null, new Util.Listener(){
             public void ok(String data){
                 String[] parts = data.split("\t\t");
                 schulen = parts[0].split("\t");

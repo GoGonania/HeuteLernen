@@ -52,6 +52,7 @@ public class NachrichtenManager{
 		}
 		
 		public void delete(){
+			MyService.manager.cancel(partner);
 			dir.delete();
 			chats.remove(this);
 		}
