@@ -19,6 +19,7 @@ public abstract class Screen extends AppCompatActivity{
     public abstract String getTitel();
 
     protected void onCreate(Bundle savedInstanceState){
+        Util.init(this);
         aktiv();
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup base = inflate(R.layout.base);

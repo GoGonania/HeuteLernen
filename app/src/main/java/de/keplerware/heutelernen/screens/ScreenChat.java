@@ -20,7 +20,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import de.keplerware.heutelernen.Event;
-import de.keplerware.heutelernen.HeuteLernen;
 import de.keplerware.heutelernen.Internet;
 import de.keplerware.heutelernen.Internet.Nachricht;
 import de.keplerware.heutelernen.Internet.UserInfo;
@@ -135,7 +134,7 @@ public class ScreenChat extends Screen{
 		tv.setLongClickable(true);
 		tv.setOnLongClickListener(new OnLongClickListener(){
 			public boolean onLongClick(View v){
-				((ClipboardManager) HeuteLernen.context.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Nachricht von "+info.name+"", text));
+				((ClipboardManager) Util.screen.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("Nachricht von "+info.name+"", text));
 				Util.toast("Nachricht wurde kopiert!");
 				return true;
 			}

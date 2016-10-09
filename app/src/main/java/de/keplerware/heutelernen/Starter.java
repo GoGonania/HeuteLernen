@@ -13,7 +13,7 @@ public class Starter{
 
     public Starter(Class screen, Context c){
         this.c = c;
-        intent = new Intent(HeuteLernen.context, screen);
+        intent = new Intent(c, screen);
     }
 
     public void replace(){

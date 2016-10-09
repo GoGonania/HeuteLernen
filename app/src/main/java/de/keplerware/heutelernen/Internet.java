@@ -130,7 +130,7 @@ public class Internet{
 						Nachricht n = new Nachricht();
                         n.typ = Integer.parseInt(s[0]);
 						n.id = Integer.parseInt(s[1]);
-						n.text = s[2].replace("euro", "€");
+						n.text = s[2];
 						ns[i] = n;
 					}
 					li.ok(ns);
@@ -274,7 +274,7 @@ public class Internet{
 	public static void nachrichtSystem(final UserInfo zu, final String text, Listener l){
 		internet("nachricht_senden", "Nachricht wird gesendet...", false, l,
 				new String[]{"typ", "von", "zu", "text"},
-				new String[]{"1", ""+Sitzung.info.id, ""+zu.id, text.replace("€", "euro")}
+				new String[]{"1", ""+Sitzung.info.id, ""+zu.id, text}
 		);
 	}
 	
@@ -287,7 +287,7 @@ public class Internet{
 
 			public void fail(Exception e){
 				l.fail(e);
-			}}, new String[]{"typ", "von", "zu", "text"}, new String[]{"0", ""+Sitzung.info.id, ""+zu.id, text.replace("€", "euro")});
+			}}, new String[]{"typ", "von", "zu", "text"}, new String[]{"0", ""+Sitzung.info.id, ""+zu.id, text});
 	}
 	
 	public static void angebote(final UserInfo info, final AngebotListener li){
